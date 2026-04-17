@@ -2,12 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BY_ID,
-  COMBOS,
-  generateDynamic,
-  lookupCombo,
   type Combo,
   type IntelligenceId,
 } from "@/data/intelligences";
+import { lookupProfileCombo, PROFILE_COMBOS } from "@/data/profileCombos";
 import { INTEL_ORDER } from "@/data/profileQuestions";
 
 interface ProfileScore {
@@ -140,17 +138,17 @@ export const ProfileResult = ({ answers }: Props) => {
     return () => clearTimeout(t);
   }, []);
 
-  // Combos
+  // Combos — uses PROFILE_COMBOS (personal voice), distinct from the Map's COMBOS
   const combos = useMemo(() => {
     const ids2 = [sorted[0].intelligence, sorted[1].intelligence];
     const k2 = [...ids2].sort().join("+");
-    const c2 = COMBOS[k2] ?? generateDynamic(ids2);
+    const c2 = PROFILE_COMBOS[k2] ?? lookupProfileCombo(ids2);
     const out: { combo: Combo; ids: IntelligenceId[] }[] = [
       { combo: c2, ids: ids2 },
     ];
     if (sorted[2] && sorted[2].percent >= 70) {
       const ids3 = [sorted[0].intelligence, sorted[1].intelligence, sorted[2].intelligence];
-      const c3 = lookupCombo(ids3);
+      const c3 = lookupProfileCombo(ids3);
       out.push({ combo: c3, ids: ids3 });
     }
     return out;
