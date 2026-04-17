@@ -4,6 +4,7 @@ import { IntelligenceGrid } from "@/components/IntelligenceGrid";
 import { StatusBar } from "@/components/StatusBar";
 import { ComposeTrigger } from "@/components/ComposeTrigger";
 import { ResultPanel } from "@/components/ResultPanel";
+import { AppNav } from "@/components/AppNav";
 
 const Index = () => {
   const [selected, setSelected] = useState<IntelligenceId[]>([]);
@@ -36,6 +37,33 @@ const Index = () => {
     }
   }, [result]);
 
+  // Persist manual selection for the Profile comparison view
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("manualSelection", JSON.stringify(selected));
+    } catch {
+      // ignore
+    }
+  }, [selected]);
+
+  // Read ?selected=a,b,c on first mount and auto-analyze
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("selected");
+    if (!raw) return;
+    const ids = raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s): s is IntelligenceId => s in BY_ID) as IntelligenceId[];
+    if (ids.length >= 2) {
+      setSelected(ids);
+      const combo = lookupCombo(ids);
+      setResult(combo);
+      setResultIds(ids);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const background = useMemo(() => {
     if (selected.length === 0) return "hsl(var(--background))";
     const colors = selected.map((id) => BY_ID[id].hue);
@@ -52,6 +80,7 @@ const Index = () => {
       className="min-h-screen app-bg-transition"
       style={{ background }}
     >
+      <AppNav />
       <StatusBar selected={selected} onClear={clear} />
 
       <main className="mx-auto max-w-[1400px] px-6 py-16">

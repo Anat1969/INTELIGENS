@@ -142,3 +142,18 @@
 .reveal-3 { animation: textReveal 400ms ease 300ms both; }
 .reveal-4 { animation: textReveal 400ms ease 400ms both; }
 .reveal-5 { animation: textReveal 400ms ease 500ms both; }
+
+/* Profile question transitions */
+@keyframes questionIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.question-block.enter { animation: questionIn 240ms ease forwards; }
+
+/* Profile result section reveals */
+.result-section { animation: resultReveal 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.dominant-card  { animation: textReveal 400ms ease 100ms both; }
+.bar-chart      { animation: textReveal 400ms ease 200ms both; }
+.combos         { animation: textReveal 400ms ease 350ms both; }
+.comparison     { animation: textReveal 400ms ease 500ms both; }
+.action         { animation: textReveal 400ms ease 650ms both; }
