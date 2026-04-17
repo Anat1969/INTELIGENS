@@ -97,7 +97,7 @@ export const PROFILE_COMBOS: Record<string, Combo> = {
     roles: ["מפתח/ת", "אנליסט/ית נתונים", "CTO", "חוקר/ת AI", "יזם/ית טכנולוגי/ת"],
     quote: "קוד טוב — אצלך — הוא חשיבה שהפקדת למכונה.",
   },
-  [k(" existentional", "intrapersonal")]: {
+  [k("existential", "intrapersonal")]: {
     name: "אתה חי מתוך כיוון",
     type: "הפרופיל שלך · משמעות שמתורגמת ליום-יום",
     essence:
@@ -137,7 +137,7 @@ export const PROFILE_COMBOS: Record<string, Combo> = {
     roles: ["מנהל/ת פרויקטים בכיר/ה", "אסטרטג/ית", "CTO", "ארכיטקט/ית פתרונות", "מנצח/ת"],
     quote: "אתה יודע שתזמורת לא מנגנת בו-זמנית — היא יודעת מתי לא לנגן.",
   },
-  [k(" existentional", "linguistic")]: {
+  [k("existential", "linguistic")]: {
     name: "אתה כותב משמעות",
     type: "הפרופיל שלך · שפה שמוצאת תחתית",
     essence:
