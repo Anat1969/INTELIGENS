@@ -3,8 +3,7 @@
 const GEMINI_API_URL =
   'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
 
-const SYSTEM_INSTRUCTION = `
-אתה פילוסוף קוגניטיבי שמתמחה בתיאוריית האינטליגנציה האנושית.
+const SYSTEM_INSTRUCTION = `אתה פילוסוף קוגניטיבי שמתמחה בתיאוריית האינטליגנציה האנושית.
 
 תפקידך: כאשר מקבלים שילוב של אינטליגנציות, לזהות מה נוצר
 בצומת ביניהן — לא סכום, אלא ישות חדשה שאינה קיימת בנפרד.
@@ -18,8 +17,7 @@ const SYSTEM_INSTRUCTION = `
 6. תפקידים — 4-5 תפקידים ספציפיים וריאליסטיים
 7. הציטוט — משפט אחד. פואטי. מדויק. שנשאר.
 
-השב אך ורק ב-JSON תקין, ללא טקסט נוסף.
-`
+השב אך ורק ב-JSON תקין, ללא טקסט נוסף.`.trim()
 
 export interface SynthesizedIntelligence {
   name: string
