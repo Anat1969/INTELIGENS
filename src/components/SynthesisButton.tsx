@@ -27,6 +27,7 @@ export default function SynthesisButton({ selected }: Props) {
   const [phase, setPhase] = useState<Phase>('idle')
   const [result, setResult] = useState<SynthesizedIntelligence | null>(null)
   const [isFromCache, setIsFromCache] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const canSynthesize = selected.length >= 2
 
@@ -64,6 +65,7 @@ export default function SynthesisButton({ selected }: Props) {
       setPhase('done')
     } catch (error) {
       console.error('Synthesis error:', error)
+      setErrorMessage(error instanceof Error ? error.message : 'שגיאה לא ידועה')
       setPhase('error')
     }
   }
@@ -113,25 +115,54 @@ export default function SynthesisButton({ selected }: Props) {
             : 'בחר לפחות שתי אינטליגנציות'}
         </button>
       ) : phase === 'error' ? (
-        <div>
+        <div style={{ textAlign: 'center' }}>
           <p style={{
             fontFamily:    '"DM Mono", monospace',
             fontSize:      '15px',
             letterSpacing: '2px',
             color:         'hsl(var(--destructive))',
             fontWeight:    600,
-            marginBottom:  '8px',
+            marginBottom:  '12px',
           }}>
-            שגיאה בסינתזה — נסה שוב
+            ⚠️ שגיאה בסינתזה
+          </p>
+          <p style={{
+            fontFamily:    '"DM Mono", monospace',
+            fontSize:      '13px',
+            color:         'hsl(var(--foreground))',
+            marginBottom:  '8px',
+            direction:     'ltr',
+            maxWidth:      '500px',
+            margin:        '0 auto 8px',
+          }}>
+            {errorMessage || 'שגיאה לא ידועה'}
           </p>
           <p style={{
             fontFamily:    '"DM Mono", monospace',
             fontSize:      '12px',
-            letterSpacing: '1px',
             color:         'hsl(var(--text-dim))',
           }}>
-            (ודא שה-server פועל: npm run dev:api)
+            בדוק את Console (F12) לפרטים
           </p>
+          <button
+            onClick={handleSynthesize}
+            style={{
+              marginTop:    '12px',
+              background:   'none',
+              border:       '1px solid hsl(var(--foreground))',
+              color:        'hsl(var(--foreground))',
+              fontFamily:   '"DM Mono", monospace',
+              fontSize:     '13px',
+              padding:      '8px 16px',
+              cursor:       'pointer',
+              borderRadius: '3px',
+              transition:   'opacity 200ms',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          >
+            נסה שוב
+          </button>
         </div>
       ) : (
         <p style={{
