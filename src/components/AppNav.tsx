@@ -1,11 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const links = [
   { to: "/", label: "מפת האינטליגנציות" },
   { to: "/profile", label: "הפרופיל שלך" },
 ];
+
+const ThemeToggle = () => {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+  const isDark = theme === "dark";
+
+  return (
+    <button
+      type="button"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      aria-label={isDark ? "Light mode" : "Dark mode"}
+      className="p-2 hover:opacity-70 transition-opacity"
+      style={{ color: "hsl(var(--text-dim))" }}
+    >
+      {isDark ? <Sun size={18} /> : <Moon size={18} />}
+    </button>
+  );
+};
 
 export const AppNav = () => {
   const { pathname } = useLocation();
@@ -43,6 +70,7 @@ export const AppNav = () => {
               </Link>
             );
           })}
+          <ThemeToggle />
         </div>
 
         {/* Mobile toggle */}
@@ -76,6 +104,9 @@ export const AppNav = () => {
                 </Link>
               );
             })}
+            <div className="pt-2 border-t border-border flex justify-start">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       )}
