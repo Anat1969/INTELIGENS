@@ -98,7 +98,9 @@ export async function synthesizeIntelligence(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      system_instruction: SYSTEM_INSTRUCTION,
+      system_instruction: {
+        parts: [{ text: SYSTEM_INSTRUCTION }]
+      },
       contents: [
         {
           role: 'user',
