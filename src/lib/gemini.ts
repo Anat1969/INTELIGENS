@@ -49,12 +49,15 @@ interface Intelligence {
 }
 
 function buildUserPrompt(intelligences: Intelligence[]): string {
+  if (!intelligences || intelligences.length === 0) {
+    throw new Error('At least one intelligence is required to synthesize')
+  }
+
   const list = intelligences
     .map(i => `— ${i.name} (תחום: ${i.domain})\n  ${i.description}`)
     .join('\n\n')
 
-  return `
-הנה ${intelligences.length} אינטליגנציות שנבחרו:
+  const prompt = `הנה ${intelligences.length} אינטליגנציות שנבחרו:
 
 ${list}
 
@@ -69,8 +72,9 @@ ${list}
   "power": "פסקה אחת על מה שהופך אפשרי",
   "roles": ["תפקיד", "תפקיד", "תפקיד", "תפקיד"],
   "quote": "משפט אחד שנשאר"
-}
-`
+}`
+
+  return prompt.trim()
 }
 
 export async function synthesizeIntelligence(
@@ -84,6 +88,12 @@ export async function synthesizeIntelligence(
 
   console.log('🧠 Synthesizing:', intelligences.map(i => i.name).join(' + '))
 
+  const userPrompt = buildUserPrompt(intelligences)
+
+  if (!userPrompt || userPrompt.trim().length === 0) {
+    throw new Error('User prompt cannot be empty')
+  }
+
   const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -92,7 +102,7 @@ export async function synthesizeIntelligence(
       contents: [
         {
           role: 'user',
-          parts: [{ text: buildUserPrompt(intelligences) }]
+          parts: [{ text: userPrompt }]
         }
       ],
       generation_config: {
