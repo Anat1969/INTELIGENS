@@ -2,6 +2,7 @@
 
 ## ✅ Status
 - ✅ Gemini API key: **already added** ✨
+- ✅ Components: **all upgraded** 🎉
 - ⏳ Supabase credentials: **waiting for you**
 - ⏳ Database table: **needs to be created**
 
@@ -9,7 +10,7 @@
 
 ## 📋 Three Simple Steps
 
-### Step 1: Get Supabase Credentials from Lovable
+### Step 1️⃣ Get Supabase Credentials from Lovable
 
 **In Lovable Dashboard:**
 1. Open your project settings
@@ -25,7 +26,7 @@
 
 ---
 
-### Step 2: Update `.env.local`
+### Step 2️⃣ Update `.env.local`
 
 Run this command with your actual values:
 
@@ -46,7 +47,7 @@ Replace:
 
 ---
 
-### Step 3: Create Database Table
+### Step 3️⃣ Create Database Table
 
 **In Supabase Dashboard:**
 
@@ -58,7 +59,7 @@ Replace:
 6. Paste into the SQL Editor
 7. Click **Run** (or ⌘/Ctrl + Enter)
 
-**Wait for success message** ✅
+**You should see:** `CREATE TABLE ... CREATE INDEX ... CREATE POLICY` messages ✅
 
 ---
 
@@ -71,8 +72,10 @@ npm run dev
 Then in browser:
 1. Select 2+ intelligences (cards light up)
 2. Button appears: "סנתז אינטליגנציה חדשה →"
-3. Click it
-4. Watch it synthesize! ✨
+3. Click it → synthesis begins!
+4. Results display with copy button
+5. Scroll down to "ספריית הגילויים" to see library
+6. Click any card to expand and see details
 
 ---
 
@@ -80,30 +83,56 @@ Then in browser:
 
 ### "VITE_SUPABASE_URL is not defined"
 → Check `.env.local` exists in project **root** (not in `src/`)
-→ Restart dev server: Stop and `npm run dev` again
+→ Restart dev server: Stop with Ctrl+C and run `npm run dev` again
 
 ### "Cannot connect to Supabase"
 → Check URL and key are **exactly copied** (no spaces)
-→ Verify Supabase project is **active**
-→ Try running SQL again in SQL Editor
+→ Verify Supabase project is **active** (green indicator)
+→ Check your network connection
 
-### "Table does not exist"
+### "Table does not exist" error when synthesizing
 → Go to Supabase → SQL Editor
-→ Copy **entire** `supabase-schema.sql`
+→ Copy **entire content** of `supabase-schema.sql`
 → Execute it
-→ Check: Tables → `synthesized_intelligences` appears
+→ Verify: Tables → `synthesized_intelligences` should appear
 
 ### Button doesn't appear even with 2+ selected
-→ Open browser console: F12
-→ Look for red errors
-→ Check all three env vars are set correctly
+→ Open browser console: F12 → Console tab
+→ Look for red error messages
+→ Check all three env vars are set: `cat .env.local`
+
+### "TypeError: Cannot read property 'map' of undefined"
+→ Wait 1 second for library to load
+→ First synthesis may take 5-10 seconds (Gemini API)
+→ Check console for actual error
+
+---
+
+## 📋 What Was Included
+
+### Components ✨
+- **SynthesisButton** — Triggers synthesis, shows loading states
+- **SynthesisResult** — Full-page display of new synthesis
+- **SynthesisLibrary** — Gallery of all past syntheses
+- **LibraryCard** — Click to expand/collapse individual cards
+
+### Backend 🔌
+- **gemini.ts** — Calls Gemini 1.5-Flash API
+- **synthesis-store.ts** — Handles Supabase CRUD operations
+- **supabase-schema.sql** — Database schema with RLS policies
+
+### Database 🗄️
+- Table: `synthesized_intelligences` (UUID primary key)
+- Index: Fast lookups by source_key
+- RLS: Everyone can read/insert (perfect for public demo)
+- Function: `increment_times_found()` for popularity tracking
 
 ---
 
 ## 📞 Quick Command Reference
 
 ```bash
-# Check env is correct
+# Check env file
 cat .env.local
 
 # Run dev server
@@ -112,19 +141,33 @@ npm run dev
 # Build for production
 npm run build
 
-# Check TypeScript errors
+# Check for TypeScript errors
 npx tsc --noEmit
+
+# Run helper script (if needed)
+node setup-supabase.js <URL> <KEY>
 ```
 
 ---
 
-## ✨ Once Working
+## ✨ Features Once Working
 
-The app now has:
-- **Synthesis**: Combine any 2+ intelligences → AI generates new one
-- **Caching**: Same combination? Returns instantly from library
-- **Library**: Browse all discovered combinations
-- **Copy**: Share synthesized intelligences as formatted text
+- **Synthesis Engine**: Select 2+ intelligences → AI creates new one
+- **Smart Caching**: Same combo? Returns instantly from library
+- **Library View**: Browse all discovered syntheses
+- **Expandable Cards**: Click to see full details + copy button
+- **popularity Tracking**: Most-generated syntheses appear first
+- **Hebrew-First**: All UI in Hebrew with proper typography
+
+---
+
+## 🎯 Next Steps
+
+1. **Get your credentials** from Supabase/Lovable
+2. **Update `.env.local`** with the two values
+3. **Run the SQL** in Supabase SQL Editor
+4. **Start dev server**: `npm run dev`
+5. **Enjoy! 🎉**
 
 ---
 
