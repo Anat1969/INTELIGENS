@@ -25,3 +25,4 @@ dist-ssr
 
 # Local SQLite database
 db/
+*.timestamp-*.mjs
