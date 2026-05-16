@@ -1,49 +1,47 @@
--- Create synthesized_intelligences table
-CREATE TABLE IF NOT EXISTS synthesized_intelligences (
-  id BIGSERIAL PRIMARY KEY,
-  source_key TEXT NOT NULL UNIQUE,
-  source_ids TEXT[] NOT NULL,
-  name TEXT NOT NULL,
-  type TEXT NOT NULL,
-  essence TEXT NOT NULL,
-  power TEXT NOT NULL,
-  roles TEXT[] NOT NULL,
-  quote TEXT NOT NULL,
-  source TEXT NOT NULL DEFAULT 'synthesized',
-  times_found INTEGER DEFAULT 1,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+-- supabase-schema.sql
+-- הרץ את הקובץ הזה ב-Supabase SQL Editor
+-- אל תשנה שום טבלה קיימת
+
+create table if not exists synthesized_intelligences (
+  id           uuid primary key default gen_random_uuid(),
+  created_at   timestamptz default now(),
+
+  -- הצירוף שיצר אותה
+  source_ids   text[] not null,        -- ['linguistic', 'logical', 'spatial']
+  source_key   text not null unique,   -- 'linguistic+logical+spatial' (ממוין)
+
+  -- תוכן האינטליגנציה החדשה
+  name         text not null,
+  type         text not null,
+  essence      text not null,
+  power        text not null,
+  roles        text[] not null,
+  quote        text not null,
+
+  -- מטא-דאטה
+  times_found  integer default 1,      -- כמה פעמים נוצר אותו צירוף
+  source       text default 'synthesized'
 );
 
--- Create index on source_key for faster lookups
-CREATE INDEX IF NOT EXISTS idx_source_key ON synthesized_intelligences(source_key);
+-- אינדקס לחיפוש מהיר לפי מפתח הצירוף
+create index if not exists idx_source_key
+  on synthesized_intelligences (source_key);
 
--- Create function to increment times_found
-CREATE OR REPLACE FUNCTION increment_times_found(key TEXT)
-RETURNS void AS $$
-BEGIN
-  UPDATE synthesized_intelligences
-  SET times_found = times_found + 1,
-      updated_at = NOW()
-  WHERE source_key = key;
-END;
-$$ LANGUAGE plpgsql;
+-- Row Level Security — כולם יכולים לקרוא, כולם יכולים להוסיף
+alter table synthesized_intelligences enable row level security;
 
--- Create trigger to update updated_at timestamp
-CREATE OR REPLACE FUNCTION update_synthesized_intelligences_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+create policy "כולם קוראים"
+  on synthesized_intelligences for select
+  using (true);
 
-DROP TRIGGER IF EXISTS synthesized_intelligences_updated_at_trigger ON synthesized_intelligences;
-CREATE TRIGGER synthesized_intelligences_updated_at_trigger
-BEFORE UPDATE ON synthesized_intelligences
-FOR EACH ROW
-EXECUTE FUNCTION update_synthesized_intelligences_updated_at();
+create policy "כולם מוסיפים"
+  on synthesized_intelligences for insert
+  with check (true);
 
--- Grant permissions for authenticated users
-GRANT SELECT, INSERT, UPDATE ON synthesized_intelligences TO anon, authenticated;
-GRANT EXECUTE ON FUNCTION increment_times_found(TEXT) TO anon, authenticated;
+-- עדכון מונה כאשר צירוף כבר קיים
+create or replace function increment_times_found(key text)
+returns void as $$
+  update synthesized_intelligences
+  set times_found = times_found + 1
+  where source_key = key;
+$$ language sql;

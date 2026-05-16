@@ -1,4 +1,5 @@
 // src/components/SynthesisLibrary.tsx
+// ספריית האינטליגנציות החדשות — מתחת לכל האפליקציה
 
 import { useEffect, useState } from 'react'
 import { fetchLibrary } from '@/lib/synthesis-store'
@@ -8,103 +9,85 @@ import LibraryCard from './LibraryCard'
 export default function SynthesisLibrary() {
   const [library, setLibrary] = useState<SynthesizedIntelligence[]>([])
   const [loading, setLoading] = useState(true)
+  const [expanded, setExpanded] = useState<string | null>(null)
 
   useEffect(() => {
-    async function load() {
-      setLoading(true)
-      const items = await fetchLibrary()
-      setLibrary(items)
+    fetchLibrary().then(data => {
+      setLibrary(data)
       setLoading(false)
-    }
-    load()
+    })
   }, [])
 
-  if (loading) {
-    return (
-      <section style={{
-        marginTop: '80px',
-        paddingTop: '40px',
-        borderTop: '1px solid hsl(var(--border))',
-      }}>
-        <h3 style={{
-          fontFamily: '"DM Serif Display", serif',
-          fontSize: '32px',
-          color: 'hsl(var(--foreground))',
-          marginBottom: '24px',
-        }}>
-          ספריית הגילויים
-        </h3>
-        <p style={{
-          fontFamily: '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-          fontSize: '14px',
-          color: 'hsl(var(--text-dim))',
-        }}>
-          טוען ···
-        </p>
-      </section>
-    )
-  }
-
-  if (library.length === 0) {
-    return (
-      <section style={{
-        marginTop: '80px',
-        paddingTop: '40px',
-        borderTop: '1px solid hsl(var(--border))',
-      }}>
-        <h3 style={{
-          fontFamily: '"DM Serif Display", serif',
-          fontSize: '32px',
-          color: 'hsl(var(--foreground))',
-          marginBottom: '24px',
-        }}>
-          ספריית הגילויים
-        </h3>
-        <p style={{
-          fontFamily: '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-          fontSize: '14px',
-          color: 'hsl(var(--text-dim))',
-        }}>
-          עדיין אין אינטליגנציות שנוצרו. סנתז את הראשונה שלך.
-        </p>
-      </section>
-    )
-  }
+  if (loading || library.length === 0) return null
 
   return (
     <section style={{
-      marginTop: '80px',
-      paddingTop: '40px',
-      borderTop: '1px solid hsl(var(--border))',
+      marginTop:    '80px',
+      paddingTop:   '48px',
+      borderTop:    '1px solid var(--border)',
     }}>
-      <h3 style={{
-        fontFamily: '"DM Serif Display", serif',
-        fontSize: '32px',
-        color: 'hsl(var(--foreground))',
-        marginBottom: '24px',
+
+      {/* כותרת סקשן */}
+      <div style={{
+        display:        'flex',
+        justifyContent: 'space-between',
+        alignItems:     'baseline',
+        marginBottom:   '32px',
       }}>
-        ספריית הגילויים
-      </h3>
+        <h2 style={{
+          fontFamily:    '"DM Serif Display", serif',
+          fontSize:      '24px',
+          color:         'var(--text)',
+          fontWeight:    400,
+          letterSpacing: '-0.5px',
+        }}>
+          ספריית הגילויים
+        </h2>
+        <span style={{
+          fontFamily:    '"DM Mono", monospace',
+          fontSize:      '10px',
+          letterSpacing: '2px',
+          color:         'var(--text-muted)',
+          textTransform: 'uppercase',
+        }}>
+          אינטליגנציות שנוצרו בסינתזה — מחוץ לתיאוריה המקורית
+        </span>
+      </div>
+
+      {/* הסבר */}
       <p style={{
-        fontFamily: '"DM Mono", monospace',
-        fontSize: '11px',
-        letterSpacing: '2px',
-        color: 'hsl(var(--text-dim))',
+        fontFamily:   '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
+        fontSize:     '13px',
+        color:        'var(--text-muted)',
+        lineHeight:   1.7,
         marginBottom: '32px',
-        textTransform: 'uppercase',
+        maxWidth:     '600px',
+        fontWeight:   300,
       }}>
-        {library.length} אינטליגנציות שנוצרו עד כה
+        כל אינטליגנציה שמופיעה כאן נוצרה על-ידי משתמש שבחר צירוף ספציפי.
+        היא לא חלק מתיאוריית גארדנר — היא נוצרה בשיחה בין כישורים קיימים.
       </p>
 
+      {/* גריד הספריה — קטן יותר מהגריד הראשי */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-        gap: '24px',
+        display:             'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gap:                 '10px',
       }}>
         {library.map(item => (
-          <LibraryCard key={item.source_ids.join('+')} synthesis={item} />
+          <LibraryCard
+            key={item.source_ids.join('+')}
+            intelligence={item}
+            isExpanded={expanded === item.source_ids.join('+')}
+            onToggle={() => setExpanded(
+              expanded === item.source_ids.join('+')
+                ? null
+                : item.source_ids.join('+')
+            )}
+          />
         ))}
       </div>
+
     </section>
   )
 }

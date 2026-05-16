@@ -1,176 +1,166 @@
 // src/components/LibraryCard.tsx
+// כרטיס קטן לספריה — לחיצה מרחיבה לפרטים מלאים
 
 import { SynthesizedIntelligence } from '@/lib/gemini'
 
 interface Props {
-  synthesis: SynthesizedIntelligence
+  intelligence: SynthesizedIntelligence
+  isExpanded: boolean
+  onToggle: () => void
 }
 
-export default function LibraryCard({ synthesis }: Props) {
-  const handleCopy = () => {
-    const text = `
-${synthesis.name}
-${synthesis.type}
-
-הגרעין:
-${synthesis.essence}
-
-העוצמה:
-${synthesis.power}
-
-תפקידים: ${synthesis.roles.join(' · ')}
-
-"${synthesis.quote}"
-    `.trim()
-    navigator.clipboard.writeText(text)
-  }
+export default function LibraryCard({ intelligence, isExpanded, onToggle }: Props) {
+  const { name, type, essence, roles, quote, source_ids } = intelligence
 
   return (
-    <div style={{
-      background: 'hsl(var(--background))',
-      border: '1px solid hsl(var(--border))',
-      borderRadius: '8px',
-      padding: '24px',
-      position: 'relative',
-      overflow: 'hidden',
-      transition: 'all 200ms ease',
-      cursor: 'pointer',
-    }}
-    onMouseEnter={(e) => {
-      (e.currentTarget as HTMLDivElement).style.borderColor = 'hsl(var(--accent))'
-      ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'
-    }}
-    onMouseLeave={(e) => {
-      (e.currentTarget as HTMLDivElement).style.borderColor = 'hsl(var(--border))'
-      ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
-    }}>
-      {/* פס עליון */}
-      <div style={{
-        position: 'absolute',
-        top: 0, right: 0, left: 0,
-        height: '2px',
-        background: 'linear-gradient(90deg, hsl(var(--accent)), hsl(var(--accent2)))',
-      }} />
+    <div
+      onClick={onToggle}
+      style={{
+        background:    'var(--surface)',
+        border:        '1px dashed var(--border)',
+        borderRadius:  '4px',
+        padding:       isExpanded ? '24px 20px' : '18px 16px',
+        cursor:        'pointer',
+        transition:    'all 300ms ease',
+        position:      'relative',
+        overflow:      'hidden',
+      }}
+      onMouseEnter={e => {
+        const el = e.currentTarget as HTMLDivElement
+        el.style.borderColor = 'rgba(124,106,247,0.4)'
+        el.style.borderStyle = 'solid'
+      }}
+      onMouseLeave={e => {
+        if (!isExpanded) {
+          const el = e.currentTarget as HTMLDivElement
+          el.style.borderColor = 'var(--border)'
+          el.style.borderStyle = 'dashed'
+        }
+      }}
+    >
+      {/* תגית סינתזה */}
+      <span style={{
+        fontFamily:    '"DM Mono", monospace',
+        fontSize:      '9px',
+        letterSpacing: '2px',
+        color:         'var(--text-muted)',
+        textTransform: 'uppercase',
+        display:       'block',
+        marginBottom:  '10px',
+      }}>
+        סינתזה
+      </span>
 
       {/* שם */}
       <h3 style={{
-        fontFamily: '"DM Serif Display", serif',
-        fontSize: '20px',
-        color: 'hsl(var(--foreground))',
-        marginBottom: '4px',
-        marginTop: '8px',
-        lineHeight: 1.2,
+        fontFamily:   '"DM Serif Display", serif',
+        fontSize:     '16px',
+        color:        'var(--text)',
+        marginBottom: '6px',
+        lineHeight:   1.3,
+        fontWeight:   400,
       }}>
-        {synthesis.name}
+        {name}
       </h3>
 
       {/* תת-כותרת */}
       <p style={{
-        fontFamily: '"DM Mono", monospace',
-        fontSize: '9px',
+        fontFamily:    '"DM Mono", monospace',
+        fontSize:      '9px',
         letterSpacing: '1.5px',
-        color: 'hsl(var(--accent))',
-        marginBottom: '12px',
+        color:         'var(--text-muted)',
         textTransform: 'uppercase',
+        marginBottom:  isExpanded ? '20px' : 0,
       }}>
-        {synthesis.type}
+        {type}
       </p>
 
-      <div style={{
-        height: '1px',
-        background: 'hsl(var(--border))',
-        marginBottom: '12px',
-      }} />
+      {/* תוכן מורחב */}
+      {isExpanded && (
+        <div style={{ animation: 'resultReveal 300ms ease forwards' }}>
 
-      {/* גרעין קצר */}
-      <p style={{
-        fontFamily: '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-        fontSize: '13px',
-        color: 'hsl(var(--text-dim))',
-        lineHeight: 1.6,
-        marginBottom: '12px',
-        display: '-webkit-box',
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
-      }}>
-        {synthesis.essence}
-      </p>
+          <div style={{
+            height:       '1px',
+            background:   'var(--border)',
+            marginBottom: '16px',
+          }} />
 
-      {/* תפקידים */}
-      <div style={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '6px',
-        marginBottom: '12px',
-      }}>
-        {synthesis.roles.slice(0, 2).map(role => (
-          <span key={role} style={{
-            fontFamily: '"DM Mono", monospace',
-            fontSize: '9px',
-            letterSpacing: '0.5px',
-            color: 'hsl(var(--accent3))',
-            borderBottom: '1px solid hsl(var(--accent3))',
-            paddingBottom: '1px',
-            opacity: 0.8,
+          <p style={{
+            fontFamily:   '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
+            fontSize:     '12px',
+            color:        'var(--text-dim)',
+            lineHeight:   1.75,
+            fontWeight:   300,
+            marginBottom: '16px',
           }}>
-            {role}
-          </span>
-        ))}
-        {synthesis.roles.length > 2 && (
-          <span style={{
-            fontFamily: '"DM Mono", monospace',
-            fontSize: '9px',
-            letterSpacing: '0.5px',
-            color: 'hsl(var(--text-dim))',
-            opacity: 0.6,
+            {essence}
+          </p>
+
+          {/* תפקידים */}
+          <div style={{
+            display:      'flex',
+            flexWrap:     'wrap',
+            gap:          '8px',
+            marginBottom: '16px',
           }}>
-            +{synthesis.roles.length - 2}
-          </span>
-        )}
-      </div>
+            {roles.map(role => (
+              <span key={role} style={{
+                fontFamily:    '"DM Mono", monospace',
+                fontSize:      '9px',
+                letterSpacing: '1px',
+                color:         'var(--accent3)',
+                borderBottom:  '1px solid var(--accent3)',
+                paddingBottom: '1px',
+                opacity:       0.7,
+              }}>
+                {role}
+              </span>
+            ))}
+          </div>
 
-      {/* ציטוט */}
-      <p style={{
-        fontFamily: '"DM Serif Display", serif',
-        fontSize: '12px',
-        color: 'hsl(var(--text-dim))',
-        lineHeight: 1.5,
-        fontStyle: 'italic',
-        fontWeight: 300,
-        marginBottom: '12px',
-        display: '-webkit-box',
-        WebkitLineClamp: 1,
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
+          {/* ציטוט */}
+          <p style={{
+            fontFamily:  '"DM Serif Display", serif',
+            fontSize:    '13px',
+            color:       'var(--text-dim)',
+            fontStyle:   'italic',
+            lineHeight:  1.6,
+            borderRight: '2px solid var(--border)',
+            paddingRight: '12px',
+          }}>
+            {quote}
+          </p>
+
+          {/* מקורות */}
+          <p style={{
+            fontFamily:    '"DM Mono", monospace',
+            fontSize:      '9px',
+            letterSpacing: '1px',
+            color:         'var(--text-muted)',
+            marginTop:     '14px',
+            opacity:       0.5,
+          }}>
+            {source_ids.join(' + ')}
+          </p>
+
+        </div>
+      )}
+
+      {/* חץ מצב */}
+      <span style={{
+        position:   'absolute',
+        bottom:     '14px',
+        left:       '14px',
+        fontFamily: '"DM Mono", monospace',
+        fontSize:   '10px',
+        color:      'var(--text-muted)',
+        opacity:    0.4,
+        transition: 'transform 200ms ease',
+        transform:  isExpanded ? 'rotate(180deg)' : 'none',
       }}>
-        "{synthesis.quote}"
-      </p>
+        ↓
+      </span>
 
-      {/* כפתור העתקה */}
-      <button
-        onClick={handleCopy}
-        style={{
-          background: 'none',
-          border: 'none',
-          fontFamily: '"DM Mono", monospace',
-          fontSize: '9px',
-          letterSpacing: '1px',
-          color: 'hsl(var(--text-muted))',
-          cursor: 'pointer',
-          padding: 0,
-          transition: 'color 200ms ease',
-          textTransform: 'uppercase',
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.color = 'hsl(var(--text-dim))'
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.color = 'hsl(var(--text-muted))'
-        }}
-      >
-        העתק
-      </button>
     </div>
   )
 }
