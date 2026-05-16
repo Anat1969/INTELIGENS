@@ -1,7 +1,7 @@
 // src/lib/gemini.ts
 
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
 
 const SYSTEM_INSTRUCTION = `
 אתה פילוסוף קוגניטיבי שמתמחה בתיאוריית האינטליגנציה האנושית.
