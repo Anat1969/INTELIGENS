@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { synthesizeIntelligence, SynthesizedIntelligence } from '@/lib/gemini'
-import { findExisting, saveNew } from '@/lib/synthesis-store'
+import { findExisting, saveNew } from '@/lib/sqlite-store'
 import SynthesisResult from './SynthesisResult'
 
 interface Intelligence {

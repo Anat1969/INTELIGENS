@@ -2,7 +2,7 @@
 // ספריית האינטליגנציות החדשות — מתחת לכל האפליקציה
 
 import { useEffect, useState } from 'react'
-import { fetchLibrary } from '@/lib/synthesis-store'
+import { fetchLibrary } from '@/lib/sqlite-store'
 import { SynthesizedIntelligence } from '@/lib/gemini'
 import LibraryCard from './LibraryCard'
 
