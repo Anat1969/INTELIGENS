@@ -79,8 +79,10 @@ export async function synthesizeIntelligence(
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY
 
   if (!apiKey) {
-    throw new Error('VITE_GEMINI_API_KEY is not defined')
+    throw new Error('VITE_GEMINI_API_KEY is not defined. Add it to .env.local')
   }
+
+  console.log('🧠 Synthesizing:', intelligences.map(i => i.name).join(' + '))
 
   const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
     method: 'POST',
@@ -104,21 +106,30 @@ export async function synthesizeIntelligence(
   })
 
   if (!response.ok) {
-    throw new Error(`Gemini API error: ${response.status}`)
+    const errorText = await response.text()
+    console.error('Gemini API error:', response.status, errorText)
+    throw new Error(`Gemini API error: ${response.status} - ${errorText.substring(0, 100)}`)
   }
 
   const data = await response.json()
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text
 
   if (!text) {
+    console.error('Gemini response:', data)
     throw new Error('תשובה ריקה מ-Gemini')
   }
 
-  const parsed: GeminiIntelligence = JSON.parse(text)
+  try {
+    const parsed: GeminiIntelligence = JSON.parse(text)
+    console.log('✨ Synthesis complete:', parsed.name)
 
-  return {
-    ...parsed,
-    source_ids: intelligences.map(i => i.id),
-    source: 'synthesized'
+    return {
+      ...parsed,
+      source_ids: intelligences.map(i => i.id),
+      source: 'synthesized'
+    }
+  } catch (e) {
+    console.error('Failed to parse Gemini response:', text)
+    throw new Error('תשובה לא תקינה מ-Gemini')
   }
 }
