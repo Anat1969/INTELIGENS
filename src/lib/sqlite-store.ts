@@ -16,10 +16,15 @@ export async function findExisting(ids: string[]): Promise<SynthesizedIntelligen
       body: JSON.stringify({ source_ids: ids }),
     })
 
+    if (!res.ok) {
+      console.warn(`SQLite API unavailable (${res.status}). Will generate new synthesis via Gemini.`)
+      return null
+    }
+
     const { found, data } = await res.json()
     return found ? data : null
   } catch (error) {
-    console.error('Error finding existing synthesis:', error)
+    console.warn('SQLite API not available:', error)
     return null
   }
 }

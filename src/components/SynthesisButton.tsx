@@ -52,7 +52,13 @@ export default function SynthesisButton({ selected }: Props) {
       setIsFromCache(false)
 
       const generated = await synthesizeIntelligence(selected)
-      await saveNew(generated)
+
+      // Try to save but don't fail if server not available
+      try {
+        await saveNew(generated)
+      } catch (e) {
+        console.warn('Could not save to database:', e)
+      }
 
       setResult(generated)
       setPhase('done')
@@ -107,15 +113,26 @@ export default function SynthesisButton({ selected }: Props) {
             : 'בחר לפחות שתי אינטליגנציות'}
         </button>
       ) : phase === 'error' ? (
-        <p style={{
-          fontFamily:    '"DM Mono", monospace',
-          fontSize:      '15px',
-          letterSpacing: '2px',
-          color:         'hsl(var(--destructive))',
-          fontWeight:    600,
-        }}>
-          שגיאה בסינתזה — נסה שוב
-        </p>
+        <div>
+          <p style={{
+            fontFamily:    '"DM Mono", monospace',
+            fontSize:      '15px',
+            letterSpacing: '2px',
+            color:         'hsl(var(--destructive))',
+            fontWeight:    600,
+            marginBottom:  '8px',
+          }}>
+            שגיאה בסינתזה — נסה שוב
+          </p>
+          <p style={{
+            fontFamily:    '"DM Mono", monospace',
+            fontSize:      '12px',
+            letterSpacing: '1px',
+            color:         'hsl(var(--text-dim))',
+          }}>
+            (ודא שה-server פועל: npm run dev:api)
+          </p>
+        </div>
       ) : (
         <p style={{
           fontFamily:    '"DM Mono", monospace',
