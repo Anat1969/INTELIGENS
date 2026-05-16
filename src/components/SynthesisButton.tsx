@@ -80,17 +80,26 @@ export default function SynthesisButton({ selected }: Props) {
           onClick={handleSynthesize}
           disabled={!canSynthesize}
           style={{
-            background:    'none',
-            border:        canSynthesize ? '1px solid hsl(var(--border-selected))' : '1px solid hsl(var(--border))',
-            color:         canSynthesize ? 'hsl(var(--text-dim))' : 'hsl(var(--text-muted))',
+            background:    canSynthesize ? 'hsl(var(--surface))' : 'transparent',
+            border:        canSynthesize ? '2px solid hsl(var(--foreground))' : '2px solid hsl(var(--border))',
+            color:         canSynthesize ? 'hsl(var(--foreground))' : 'hsl(var(--text-dim))',
             fontFamily:    '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-            fontSize:      '14px',
+            fontSize:      '16px',
             fontStyle:     'italic',
-            padding:       '14px 36px',
-            borderRadius:  '2px',
+            padding:       '16px 40px',
+            borderRadius:  '4px',
             cursor:        canSynthesize ? 'pointer' : 'not-allowed',
             letterSpacing: '0.3px',
             transition:    'all 200ms ease',
+            fontWeight:    500,
+          }}
+          onMouseEnter={e => {
+            if (canSynthesize) {
+              e.currentTarget.style.opacity = '0.8';
+            }
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.opacity = '1';
           }}
         >
           {canSynthesize
@@ -100,19 +109,21 @@ export default function SynthesisButton({ selected }: Props) {
       ) : phase === 'error' ? (
         <p style={{
           fontFamily:    '"DM Mono", monospace',
-          fontSize:      '13px',
+          fontSize:      '15px',
           letterSpacing: '2px',
           color:         'hsl(var(--destructive))',
+          fontWeight:    600,
         }}>
           שגיאה בסינתזה — נסה שוב
         </p>
       ) : (
         <p style={{
           fontFamily:    '"DM Mono", monospace',
-          fontSize:      '13px',
+          fontSize:      '15px',
           letterSpacing: '2px',
-          color:         'hsl(var(--text-dim))',
+          color:         'hsl(var(--foreground))',
           animation:     'pulse 1.4s ease-in-out infinite',
+          fontWeight:    600,
         }}>
           {LOADING_MESSAGES[phase]}
         </p>

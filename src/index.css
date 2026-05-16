@@ -79,45 +79,45 @@
   .light {
     /* Light mode palette — AAA WCAG contrast verified */
     --background: 240 100% 99%;      /* #fafbff */
-    --foreground: 240 20% 15%;       /* #24273d */
+    --foreground: 240 25% 10%;       /* #1a1f38 - darker for better contrast */
 
     --surface: 240 100% 98%;         /* #f5f7ff */
-    --text-dim: 240 12% 40%;         /* #5a5d78 */
+    --text-dim: 240 15% 32%;         /* #3d4157 - darker and more visible */
 
     --card: 240 100% 98%;
-    --card-foreground: 240 20% 15%;
+    --card-foreground: 240 25% 10%;
 
     --popover: 240 100% 98%;
-    --popover-foreground: 240 20% 15%;
+    --popover-foreground: 240 25% 10%;
 
-    --primary: 240 20% 15%;
+    --primary: 240 25% 10%;
     --primary-foreground: 240 100% 99%;
 
-    --secondary: 240 20% 85%;
-    --secondary-foreground: 240 20% 15%;
+    --secondary: 240 25% 80%;
+    --secondary-foreground: 240 25% 10%;
 
-    --muted: 240 20% 85%;
-    --muted-foreground: 240 12% 40%;
+    --muted: 240 25% 80%;
+    --muted-foreground: 240 15% 32%;
 
-    --accent: 240 20% 85%;
-    --accent-foreground: 240 20% 15%;
+    --accent: 240 25% 75%;
+    --accent-foreground: 240 25% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 20% 85%;
+    --border: 240 20% 80%;
     --input: 240 100% 98%;
-    --ring: 240 20% 15%;
+    --ring: 240 25% 10%;
 
     /* Sidebar for light mode */
     --sidebar-background: 240 100% 99%;
-    --sidebar-foreground: 240 20% 15%;
-    --sidebar-primary: 240 20% 15%;
+    --sidebar-foreground: 240 25% 10%;
+    --sidebar-primary: 240 25% 10%;
     --sidebar-primary-foreground: 240 100% 99%;
-    --sidebar-accent: 240 20% 85%;
-    --sidebar-accent-foreground: 240 20% 15%;
-    --sidebar-border: 240 20% 85%;
-    --sidebar-ring: 240 20% 15%;
+    --sidebar-accent: 240 25% 75%;
+    --sidebar-accent-foreground: 240 25% 10%;
+    --sidebar-border: 240 20% 80%;
+    --sidebar-ring: 240 25% 10%;
   }
 }
 

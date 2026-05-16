@@ -70,9 +70,9 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
       {/* שם */}
       <h2 style={{
         fontFamily:    '"DM Serif Display", serif',
-        fontSize:      'clamp(28px, 4vw, 44px)',
+        fontSize:      'clamp(36px, 5vw, 52px)',
         color:         'hsl(var(--foreground))',
-        marginBottom:  '6px',
+        marginBottom:  '8px',
         lineHeight:    1.2,
         letterSpacing: '-0.5px',
       }}>
@@ -82,11 +82,12 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
       {/* תת-כותרת */}
       <p style={{
         fontFamily:    '"DM Mono", monospace',
-        fontSize:      '11px',
+        fontSize:      '13px',
         letterSpacing: '2px',
-        color:         'hsl(var(--accent))',
+        color:         'hsl(var(--foreground))',
         marginBottom:  '32px',
         textTransform: 'uppercase',
+        fontWeight:    500,
       }}>
         {result.type}
       </p>
@@ -107,20 +108,21 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
         <div>
           <h4 style={{
             fontFamily:    '"DM Mono", monospace',
-            fontSize:      '10px',
+            fontSize:      '12px',
             letterSpacing: '2px',
             textTransform: 'uppercase',
-            color:         'hsl(var(--accent2))',
-            marginBottom:  '12px',
+            color:         'hsl(var(--foreground))',
+            marginBottom:  '16px',
+            fontWeight:    600,
           }}>
             הגרעין
           </h4>
           <p style={{
             fontFamily:  '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-            fontSize:    '14px',
-            color:       'hsl(var(--text-dim))',
+            fontSize:    '16px',
+            color:       'hsl(var(--foreground))',
             lineHeight:  1.8,
-            fontWeight:  300,
+            fontWeight:  400,
           }}>
             {result.essence}
           </p>
@@ -129,20 +131,21 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
         <div>
           <h4 style={{
             fontFamily:    '"DM Mono", monospace',
-            fontSize:      '10px',
+            fontSize:      '12px',
             letterSpacing: '2px',
             textTransform: 'uppercase',
-            color:         'hsl(var(--accent2))',
-            marginBottom:  '12px',
+            color:         'hsl(var(--foreground))',
+            marginBottom:  '16px',
+            fontWeight:    600,
           }}>
             העוצמה
           </h4>
           <p style={{
             fontFamily:  '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-            fontSize:    '14px',
-            color:       'hsl(var(--text-dim))',
+            fontSize:    '16px',
+            color:       'hsl(var(--foreground))',
             lineHeight:  1.8,
-            fontWeight:  300,
+            fontWeight:  400,
           }}>
             {result.power}
           </p>
@@ -155,24 +158,24 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
       <div style={{ marginBottom: '28px' }}>
         <h4 style={{
           fontFamily:    '"DM Mono", monospace',
-          fontSize:      '10px',
+          fontSize:      '12px',
           letterSpacing: '2px',
           textTransform: 'uppercase',
-          color:         'hsl(var(--accent3))',
-          marginBottom:  '14px',
+          color:         'hsl(var(--foreground))',
+          marginBottom:  '16px',
+          fontWeight:    600,
         }}>
           תפקידים שמתאימים לצירוף
         </h4>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
           {result.roles.map(role => (
             <span key={role} style={{
-              fontFamily:    '"DM Mono", monospace',
-              fontSize:      '11px',
-              letterSpacing: '1px',
-              color:         'hsl(var(--accent3))',
-              borderBottom:  '1px solid hsl(var(--accent3))',
-              paddingBottom: '2px',
-              opacity:       0.8,
+              fontFamily:    '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
+              fontSize:      '14px',
+              color:         'hsl(var(--foreground))',
+              borderBottom:  '2px solid hsl(var(--foreground))',
+              paddingBottom: '4px',
+              fontWeight:    500,
             }}>
               {role}
             </span>
@@ -182,20 +185,20 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
 
       {/* ציטוט */}
       <div style={{
-        padding:       '20px 24px',
-        borderRight:   '2px solid hsl(var(--accent))',
-        background:    'rgba(124,106,247,0.04)',
+        padding:       '24px 28px',
+        borderRight:   '3px solid hsl(var(--foreground))',
+        background:    'hsl(var(--surface))',
         marginBottom:  '28px',
       }}>
         <p style={{
           fontFamily:  '"DM Serif Display", serif',
-          fontSize:    '17px',
+          fontSize:    '19px',
           color:       'hsl(var(--foreground))',
           lineHeight:  1.7,
           fontStyle:   'italic',
-          fontWeight:  300,
+          fontWeight:  400,
         }}>
-          {result.quote}
+          "{result.quote}"
         </p>
       </div>
 
