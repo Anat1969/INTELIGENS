@@ -5,6 +5,8 @@ import { StatusBar } from "@/components/StatusBar";
 import { ComposeTrigger } from "@/components/ComposeTrigger";
 import { ResultPanel } from "@/components/ResultPanel";
 import { AppNav } from "@/components/AppNav";
+import SynthesisButton from "@/components/SynthesisButton";
+import SynthesisLibrary from "@/components/SynthesisLibrary";
 
 const Index = () => {
   const [selected, setSelected] = useState<IntelligenceId[]>([]);
@@ -112,9 +114,22 @@ const Index = () => {
 
         <ComposeTrigger count={selected.length} onClick={analyze} />
 
+        {/* Synthesis Engine */}
+        <SynthesisButton
+          selected={selected.map((id) => ({
+            id,
+            name: BY_ID[id].name,
+            domain: BY_ID[id].domain,
+            description: BY_ID[id].description,
+          }))}
+        />
+
         <div ref={resultRef}>
           {result && <ResultPanel combo={result} selectedIds={resultIds} />}
         </div>
+
+        {/* Synthesis Library */}
+        <SynthesisLibrary />
       </main>
     </div>
   );
