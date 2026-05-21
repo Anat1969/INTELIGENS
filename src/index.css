@@ -126,6 +126,10 @@
     @apply border-border;
   }
 
+  html {
+    direction: rtl;
+  }
+
   html,
   body {
     @apply bg-background text-foreground;
