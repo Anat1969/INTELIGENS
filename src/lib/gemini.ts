@@ -87,6 +87,23 @@ export async function synthesizeIntelligence(
   }
 
   console.log('🧠 Synthesizing:', intelligences.map(i => i.name).join(' + '))
+  console.log('Intelligences received:', intelligences)
+
+  if (!intelligences || intelligences.length === 0) {
+    throw new Error('No intelligences provided for synthesis')
+  }
+
+  intelligences.forEach((i, idx) => {
+    if (!i.name || !i.domain || !i.description) {
+      console.warn(`Intelligence ${idx} missing fields:`, i)
+    }
+  })
+
+  const userPrompt = buildUserPrompt(intelligences)
+
+  if (!userPrompt || userPrompt.trim().length === 0) {
+    throw new Error('Failed to build valid prompt for synthesis')
+  }
 
   const userPrompt = buildUserPrompt(intelligences)
 
@@ -98,7 +115,7 @@ export async function synthesizeIntelligence(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      system_instruction: SYSTEM_INSTRUCTION,
+      systemInstruction: SYSTEM_INSTRUCTION,
       contents: [
         {
           role: 'user',
