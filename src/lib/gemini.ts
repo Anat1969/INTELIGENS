@@ -105,12 +105,6 @@ export async function synthesizeIntelligence(
     throw new Error('Failed to build valid prompt for synthesis')
   }
 
-  const userPrompt = buildUserPrompt(intelligences)
-
-  if (!userPrompt || userPrompt.trim().length === 0) {
-    throw new Error('User prompt cannot be empty')
-  }
-
   const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
