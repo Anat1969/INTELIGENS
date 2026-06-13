@@ -46,7 +46,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "רגישות לשפה כחומר חי — לקצב המשפט, לבחירת המילה, לאופן שבו טיעון נבנה ומתמוטט. מי שניחן בה לא רק מסביר — הוא יוצר מציאות במילים.",
     keyword: "פואטיקה",
-    hue: "38, 85%, 58%",
+    hue: "0, 82%, 62%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -58,7 +58,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "חשיבה בדפוסים, ביחסי סיבה-תוצאה, בהוכחות. הכישרון לזהות שהנחה מוטעית בתחילת שרשרת — לפני שהיא הופכת לאסון.",
     keyword: "מבנה",
-    hue: "218, 78%, 60%",
+    hue: "30, 88%, 58%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -70,7 +70,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "חשיבה בתמונות ובמרחבים — היכולת לסובב אובייקט בנפש, לראות מה מסתתר מאחורי הפינה, לתכנן בשלוש ממדים לפני שמגיעים לשניים.",
     keyword: "קומפוזיציה",
-    hue: "182, 72%, 50%",
+    hue: "52, 85%, 52%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -82,7 +82,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "רגישות לדפוסים אקוסטיים, לחזרה, לסטייה מהמצופה. היכולת לשמוע מבנה ברעש ולמצוא סדר בתוך אנרכיה קולית.",
     keyword: "תבנית",
-    hue: "272, 70%, 65%",
+    hue: "90, 65%, 48%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -94,7 +94,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "ידע שמחזיקים הידיים לפני שהראש מעבד אותו. לומדים בעשייה, בנגיעה, בתנועה שמלמדת מה המחשבה לא יכולה.",
     keyword: "מגע",
-    hue: "22, 80%, 55%",
+    hue: "145, 70%, 45%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -106,7 +106,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "קריאת מצבי רוח, כוונות ומה שלא נאמר בחדר. הכישרון לדעת — לפני ששאלת — מה האדם שמולך צריך.",
     keyword: "נוכחות",
-    hue: "342, 70%, 60%",
+    hue: "180, 72%, 46%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -118,7 +118,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "הכרה עמוקה של עצמך — רגשות, כוחות, עיוורים, מניעים. זה לא בריאות נפשית. זה מפה פנימית שמאפשרת ניווט.",
     keyword: "בהירות",
-    hue: "255, 60%, 58%",
+    hue: "210, 78%, 58%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -130,7 +130,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "הכישרון לסווג, לזהות ולהבחין בין דברים שנראים דומים. החשיבה האקולוגית — כל דבר הוא חלק ממערכת שמקיימת את עצמה.",
     keyword: "דפוס",
-    hue: "148, 60%, 42%",
+    hue: "240, 68%, 62%",
     group: "gardner",
     source: "גארדנר, 1983",
   },
@@ -142,7 +142,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "שאלות על מות, משמעות, תכלית ומקום האדם ביקום. לא כאבדוניזם — כאוריינטציה שמכוונת החלטות יומיומיות.",
     keyword: "משמעות",
-    hue: "290, 30%, 45%",
+    hue: "270, 65%, 60%",
     group: "extension",
     source: "גארדנר, לא אושר",
   },
@@ -154,7 +154,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "זיהוי, ויסות ותרגום של רגשות לאנרגיית פעולה. ההבדל בין להיות מוצף רגשית לבין להשתמש ברגש כנתון.",
     keyword: "תהודה",
-    hue: "355, 75%, 58%",
+    hue: "300, 70%, 58%",
     group: "extension",
     source: "גולמן, 1995",
   },
@@ -166,7 +166,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "הבנת אלגוריתמים, ממשקים, שכבות הפשטה וזרימת מידע. היכולת לחשוב עם המכונה — לא לשרת אותה.",
     keyword: "לוגיקה",
-    hue: "200, 90%, 55%",
+    hue: "330, 75%, 58%",
     group: "extension",
     source: "קונספט עכשווי",
   },
@@ -178,7 +178,7 @@ export const INTELLIGENCES: Intelligence[] = [
     description:
       "ראיית הקשרים הנסתרים — לולאות משוב, השפעות מושהות, נקודות מינוף. ידיעה שכל פתרון הוא גם גנן של בעיה עתידית.",
     keyword: "מינוף",
-    hue: "195, 65%, 48%",
+    hue: "350, 78%, 60%",
     group: "extension",
     source: "תיאוריית מערכות",
   },

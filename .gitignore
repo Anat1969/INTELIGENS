@@ -22,8 +22,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment files (contain API keys)
-.env
+# Environment files with secret keys (server-side)
 .env.local
 .env.*.local
 
