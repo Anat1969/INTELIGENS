@@ -1,43 +1,24 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BY_ID, lookupCombo, type Combo, type IntelligenceId } from "@/data/intelligences";
+import { BY_ID, type IntelligenceId } from "@/data/intelligences";
 import { IntelligenceGrid } from "@/components/IntelligenceGrid";
 import { StatusBar } from "@/components/StatusBar";
-import { ComposeTrigger } from "@/components/ComposeTrigger";
-import { ResultPanel } from "@/components/ResultPanel";
 import { AppNav } from "@/components/AppNav";
 import SynthesisButton from "@/components/SynthesisButton";
 import SynthesisLibrary from "@/components/SynthesisLibrary";
 
 const Index = () => {
   const [selected, setSelected] = useState<IntelligenceId[]>([]);
-  const [result, setResult] = useState<Combo | null>(null);
-  const [resultIds, setResultIds] = useState<IntelligenceId[]>([]);
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   const toggle = (id: IntelligenceId) => {
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
-    setResult(null);
   };
 
   const clear = () => {
     setSelected([]);
-    setResult(null);
   };
-
-  const analyze = () => {
-    if (selected.length < 2) return;
-    const combo = lookupCombo(selected);
-    setResult(combo);
-    setResultIds([...selected]);
-  };
-
-  useEffect(() => {
-    if (result && resultRef.current) {
-      resultRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  }, [result]);
 
   useEffect(() => {
     try {
@@ -55,13 +36,9 @@ const Index = () => {
       .split(",")
       .map((s) => s.trim())
       .filter((s): s is IntelligenceId => s in BY_ID) as IntelligenceId[];
-    if (ids.length >= 2) {
+    if (ids.length >= 1) {
       setSelected(ids);
-      const combo = lookupCombo(ids);
-      setResult(combo);
-      setResultIds(ids);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const background = useMemo(() => {
@@ -111,19 +88,16 @@ const Index = () => {
 
         <IntelligenceGrid selected={selected} onToggle={toggle} />
 
-        <ComposeTrigger count={selected.length} onClick={analyze} />
-
-        <SynthesisButton
-          selected={selected.map((id) => ({
-            id,
-            name: BY_ID[id].name,
-            domain: BY_ID[id].domain,
-            description: BY_ID[id].description,
-          }))}
-        />
-
-        <div ref={resultRef}>
-          {result && <ResultPanel combo={result} selectedIds={resultIds} />}
+        {/* Single unified synthesis action */}
+        <div ref={resultRef} className="mt-8">
+          <SynthesisButton
+            selected={selected.map((id) => ({
+              id,
+              name: BY_ID[id].name,
+              domain: BY_ID[id].domain,
+              description: BY_ID[id].description,
+            }))}
+          />
         </div>
 
         <SynthesisLibrary />
