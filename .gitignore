@@ -22,6 +22,11 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment files (contain API keys)
+.env
+.env.local
+.env.*.local
+
 # Local SQLite database
 db/
 *.timestamp-*.mjs
