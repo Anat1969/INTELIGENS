@@ -1,1 +1,4 @@
 project_id = "zqyzahixnzmdxxtvykhw"
+
+[functions.synthesize]
+verify_jwt = false
