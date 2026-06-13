@@ -1,15 +1,14 @@
-// src/components/SynthesisResult.tsx
-
 import { SynthesizedIntelligence } from '@/lib/gemini'
+import { Copy, Check } from 'lucide-react'
+import { useState } from 'react'
 
 interface Props {
   result: SynthesizedIntelligence
   isFromCache: boolean
 }
 
-function copyToClipboard(result: SynthesizedIntelligence) {
-  const text = `
-${result.name}
+function buildCopyText(result: SynthesizedIntelligence) {
+  return `${result.name}
 ${result.type}
 
 הגרעין:
@@ -21,207 +20,172 @@ ${result.power}
 תפקידים: ${result.roles.join(' · ')}
 
 "${result.quote}"
+${result.keyQuestion ? `\nשאלת מפתח: ${result.keyQuestion}` : ''}
 
-נוצר ב-Intelligence Composer — סינתזה
-  `.trim()
-
-  navigator.clipboard.writeText(text)
+נוצר ב-Intelligence Composer`.trim()
 }
 
 export default function SynthesisResult({ result, isFromCache }: Props) {
+  const [copied, setCopied] = useState(false)
+
+  function handleCopy() {
+    navigator.clipboard.writeText(buildCopyText(result))
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   return (
-    <div style={{
-      background:   'hsl(var(--background))',
-      border:       '1px solid hsl(var(--border))',
-      borderRadius: '8px',
-      padding:      '40px',
-      marginTop:    '32px',
-      position:     'relative',
-      overflow:     'hidden',
-      animation:    'resultReveal 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-      textAlign:    'right',
-    }}>
+    <div className="synthesis-result-card glass-card w-full max-w-[900px] mx-auto mt-10 p-8 md:p-12 text-right">
 
-      {/* פס עליון — גרדיאנט */}
-      <div style={{
-        position:   'absolute',
-        top: 0, right: 0, left: 0,
-        height:     '2px',
-        background: 'linear-gradient(90deg, hsl(var(--accent)), hsl(var(--accent2)))',
-      }} />
+      {/* Source tag */}
+      <div className="flex items-center justify-between mb-8">
+        <span
+          className="font-mono-dm text-[10px] tracking-[0.15em] px-3 py-1.5 rounded-lg"
+          style={{
+            background: isFromCache
+              ? "hsla(200, 80%, 50%, 0.1)"
+              : "hsla(260, 80%, 60%, 0.1)",
+            color: isFromCache
+              ? "hsla(200, 80%, 55%, 1)"
+              : "hsla(260, 70%, 65%, 1)",
+            border: `1px solid ${isFromCache ? "hsla(200, 80%, 50%, 0.15)" : "hsla(260, 80%, 60%, 0.15)"}`,
+          }}
+        >
+          {isFromCache ? 'נשלפה מהספריה' : 'אינטליגנציה חדשה'}
+        </span>
 
-      {/* תגית מקור */}
-      <p style={{
-        fontFamily:    '"DM Mono", monospace',
-        fontSize:      '10px',
-        letterSpacing: '2px',
-        color:         'hsl(var(--accent))',
-        borderBottom:  '1px dashed hsl(var(--accent))',
-        display:       'inline-block',
-        marginBottom:  '24px',
-        paddingBottom: '2px',
-        opacity:       0.8,
-      }}>
-        {isFromCache
-          ? 'אינטליגנציה שכבר גולתה — נשלפה מהספריה'
-          : 'אינטליגנציה חדשה — לא הוגדרה עדיין'}
-      </p>
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-2 font-mono-dm text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-lg transition-all duration-200 hover:opacity-70"
+          style={{
+            color: "hsl(var(--text-dim))",
+            background: "hsla(var(--foreground), 0.04)",
+          }}
+        >
+          {copied ? <Check size={12} /> : <Copy size={12} />}
+          {copied ? 'הועתק' : 'העתק'}
+        </button>
+      </div>
 
-      {/* שם */}
-      <h2 style={{
-        fontFamily:    '"DM Serif Display", serif',
-        fontSize:      'clamp(36px, 5vw, 52px)',
-        color:         'hsl(var(--foreground))',
-        marginBottom:  '8px',
-        lineHeight:    1.2,
-        letterSpacing: '-0.5px',
-      }}>
+      {/* Name */}
+      <h2
+        className="font-serif-display leading-[1.15] tracking-[-0.02em]"
+        style={{
+          fontSize: 'clamp(36px, 5vw, 56px)',
+          color: 'hsl(var(--foreground))',
+        }}
+      >
         {result.name}
       </h2>
 
-      {/* תת-כותרת */}
-      <p style={{
-        fontFamily:    '"DM Mono", monospace',
-        fontSize:      '13px',
-        letterSpacing: '2px',
-        color:         'hsl(var(--foreground))',
-        marginBottom:  '32px',
-        textTransform: 'uppercase',
-        fontWeight:    500,
-      }}>
+      {/* Subtitle */}
+      <p
+        className="mt-3 font-mono-dm text-[12px] tracking-[0.15em] uppercase"
+        style={{ color: 'hsl(var(--text-dim))' }}
+      >
         {result.type}
       </p>
 
-      <div style={{
-        height:     '1px',
-        background: 'hsl(var(--border))',
-        marginBottom: '28px',
-      }} />
+      {/* Divider */}
+      <div
+        className="mt-8 h-px w-full"
+        style={{ background: 'linear-gradient(90deg, hsla(260, 70%, 60%, 0.3), hsla(200, 80%, 55%, 0.3), transparent)' }}
+      />
 
-      {/* גרעין + עוצמה */}
-      <div style={{
-        display:             'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap:                 '32px',
-        marginBottom:        '28px',
-      }}>
+      {/* Essence + Power */}
+      <div className="mt-8 grid gap-8 md:grid-cols-2">
         <div>
-          <h4 style={{
-            fontFamily:    '"DM Mono", monospace',
-            fontSize:      '12px',
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            color:         'hsl(var(--foreground))',
-            marginBottom:  '16px',
-            fontWeight:    600,
-          }}>
+          <h4
+            className="font-mono-dm text-[11px] tracking-[0.2em] uppercase mb-4"
+            style={{ color: 'hsla(260, 70%, 65%, 0.8)' }}
+          >
             הגרעין
           </h4>
-          <p style={{
-            fontFamily:  '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-            fontSize:    '16px',
-            color:       'hsl(var(--foreground))',
-            lineHeight:  1.8,
-            fontWeight:  400,
-          }}>
+          <p
+            className="font-sans-he text-[15px] leading-[1.85]"
+            style={{ color: 'hsl(var(--foreground))' }}
+          >
             {result.essence}
           </p>
         </div>
 
         <div>
-          <h4 style={{
-            fontFamily:    '"DM Mono", monospace',
-            fontSize:      '12px',
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            color:         'hsl(var(--foreground))',
-            marginBottom:  '16px',
-            fontWeight:    600,
-          }}>
+          <h4
+            className="font-mono-dm text-[11px] tracking-[0.2em] uppercase mb-4"
+            style={{ color: 'hsla(200, 80%, 60%, 0.8)' }}
+          >
             העוצמה
           </h4>
-          <p style={{
-            fontFamily:  '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-            fontSize:    '16px',
-            color:       'hsl(var(--foreground))',
-            lineHeight:  1.8,
-            fontWeight:  400,
-          }}>
+          <p
+            className="font-sans-he text-[15px] leading-[1.85]"
+            style={{ color: 'hsl(var(--foreground))' }}
+          >
             {result.power}
           </p>
         </div>
       </div>
 
-      <div style={{ height: '1px', background: 'hsl(var(--border))', marginBottom: '24px' }} />
+      {/* Divider */}
+      <div className="mt-8 h-px w-full" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
 
-      {/* תפקידים */}
-      <div style={{ marginBottom: '28px' }}>
-        <h4 style={{
-          fontFamily:    '"DM Mono", monospace',
-          fontSize:      '12px',
-          letterSpacing: '2px',
-          textTransform: 'uppercase',
-          color:         'hsl(var(--foreground))',
-          marginBottom:  '16px',
-          fontWeight:    600,
-        }}>
+      {/* Roles */}
+      <div className="mt-8">
+        <h4
+          className="font-mono-dm text-[11px] tracking-[0.2em] uppercase mb-5"
+          style={{ color: 'hsl(var(--text-dim))' }}
+        >
           תפקידים שמתאימים לצירוף
         </h4>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        <div className="flex flex-wrap gap-3">
           {result.roles.map(role => (
-            <span key={role} style={{
-              fontFamily:    '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-              fontSize:      '14px',
-              color:         'hsl(var(--foreground))',
-              borderBottom:  '2px solid hsl(var(--foreground))',
-              paddingBottom: '4px',
-              fontWeight:    500,
-            }}>
+            <span
+              key={role}
+              className="font-sans-he text-[13px] px-4 py-2 rounded-xl"
+              style={{
+                color: 'hsl(var(--foreground))',
+                background: 'hsla(var(--foreground), 0.04)',
+                border: '1px solid hsla(var(--foreground), 0.08)',
+              }}
+            >
               {role}
             </span>
           ))}
         </div>
       </div>
 
-      {/* ציטוט */}
-      <div style={{
-        padding:       '24px 28px',
-        borderRight:   '3px solid hsl(var(--foreground))',
-        background:    'hsl(var(--surface))',
-        marginBottom:  '28px',
-      }}>
-        <p style={{
-          fontFamily:  '"DM Serif Display", serif',
-          fontSize:    '19px',
-          color:       'hsl(var(--foreground))',
-          lineHeight:  1.7,
-          fontStyle:   'italic',
-          fontWeight:  400,
-        }}>
+      {/* Quote */}
+      <div
+        className="mt-8 p-6 rounded-2xl"
+        style={{
+          background: 'hsla(var(--surface), 0.5)',
+          borderRight: '3px solid hsla(260, 70%, 60%, 0.5)',
+        }}
+      >
+        <p
+          className="font-serif-display text-[18px] md:text-[20px] leading-[1.7] italic"
+          style={{ color: 'hsl(var(--foreground))' }}
+        >
           "{result.quote}"
         </p>
       </div>
 
-      {/* העתקה */}
-      <button
-        onClick={() => copyToClipboard(result)}
-        style={{
-          background:    'none',
-          border:        'none',
-          fontFamily:    '"DM Mono", monospace',
-          fontSize:      '11px',
-          letterSpacing: '1.5px',
-          color:         'hsl(var(--text-muted))',
-          cursor:        'pointer',
-          padding:       0,
-          transition:    'color 200ms ease',
-        }}
-        onMouseEnter={e => (e.currentTarget.style.color = 'hsl(var(--text-dim))')}
-        onMouseLeave={e => (e.currentTarget.style.color = 'hsl(var(--text-muted))')}
-      >
-        העתק את האינטליגנציה
-      </button>
-
+      {/* Key Question */}
+      {result.keyQuestion && (
+        <div className="mt-6">
+          <h4
+            className="font-mono-dm text-[11px] tracking-[0.2em] uppercase mb-3"
+            style={{ color: 'hsla(340, 70%, 60%, 0.8)' }}
+          >
+            שאלת מפתח
+          </h4>
+          <p
+            className="font-sans-he text-[15px] leading-[1.8]"
+            style={{ color: 'hsl(var(--text-dim))' }}
+          >
+            {result.keyQuestion}
+          </p>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,7 +1,6 @@
-// src/components/LibraryCard.tsx
-// כרטיס קטן לספריה — לחיצה מרחיבה לפרטים מלאים
-
 import { SynthesizedIntelligence } from '@/lib/gemini'
+import { ChevronDown } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface Props {
   intelligence: SynthesizedIntelligence
@@ -15,152 +14,92 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
   return (
     <div
       onClick={onToggle}
+      className={cn("library-card-3d cursor-pointer text-right", isExpanded && "expanded")}
       style={{
-        background:    'var(--surface)',
-        border:        '1px dashed var(--border)',
-        borderRadius:  '4px',
-        padding:       isExpanded ? '24px 20px' : '18px 16px',
-        cursor:        'pointer',
-        transition:    'all 300ms ease',
-        position:      'relative',
-        overflow:      'hidden',
-      }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLDivElement
-        el.style.borderColor = 'rgba(124,106,247,0.4)'
-        el.style.borderStyle = 'solid'
-      }}
-      onMouseLeave={e => {
-        if (!isExpanded) {
-          const el = e.currentTarget as HTMLDivElement
-          el.style.borderColor = 'var(--border)'
-          el.style.borderStyle = 'dashed'
-        }
+        background: isExpanded ? 'hsla(var(--surface), 0.8)' : 'hsla(var(--surface), 0.4)',
+        border: isExpanded
+          ? '1px solid hsla(260, 70%, 60%, 0.2)'
+          : '1px solid hsla(var(--foreground), 0.06)',
+        padding: isExpanded ? '24px 20px' : '20px 18px',
       }}
     >
-      {/* תגית סינתזה */}
-      <span style={{
-        fontFamily:    '"DM Mono", monospace',
-        fontSize:      '9px',
-        letterSpacing: '2px',
-        color:         'var(--text-muted)',
-        textTransform: 'uppercase',
-        display:       'block',
-        marginBottom:  '10px',
-      }}>
+      <span
+        className="font-mono-dm text-[9px] tracking-[0.15em] uppercase block mb-3"
+        style={{ color: 'hsla(260, 70%, 65%, 0.5)' }}
+      >
         סינתזה
       </span>
 
-      {/* שם */}
-      <h3 style={{
-        fontFamily:   '"DM Serif Display", serif',
-        fontSize:     '16px',
-        color:        'var(--text)',
-        marginBottom: '6px',
-        lineHeight:   1.3,
-        fontWeight:   400,
-      }}>
+      <h3
+        className="font-serif-display text-[16px] leading-[1.3] mb-2"
+        style={{ color: 'hsl(var(--foreground))' }}
+      >
         {name}
       </h3>
 
-      {/* תת-כותרת */}
-      <p style={{
-        fontFamily:    '"DM Mono", monospace',
-        fontSize:      '9px',
-        letterSpacing: '1.5px',
-        color:         'var(--text-muted)',
-        textTransform: 'uppercase',
-        marginBottom:  isExpanded ? '20px' : 0,
-      }}>
+      <p
+        className="font-mono-dm text-[9px] tracking-[0.1em] uppercase"
+        style={{ color: 'hsl(var(--text-dim))', marginBottom: isExpanded ? '20px' : 0 }}
+      >
         {type}
       </p>
 
-      {/* תוכן מורחב */}
       {isExpanded && (
         <div style={{ animation: 'resultReveal 300ms ease forwards' }}>
+          <div className="h-px w-full mb-4" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
 
-          <div style={{
-            height:       '1px',
-            background:   'var(--border)',
-            marginBottom: '16px',
-          }} />
-
-          <p style={{
-            fontFamily:   '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-            fontSize:     '12px',
-            color:        'var(--text-dim)',
-            lineHeight:   1.75,
-            fontWeight:   300,
-            marginBottom: '16px',
-          }}>
+          <p
+            className="font-sans-he text-[12px] leading-[1.8] mb-4"
+            style={{ color: 'hsl(var(--text-dim))' }}
+          >
             {essence}
           </p>
 
-          {/* תפקידים */}
-          <div style={{
-            display:      'flex',
-            flexWrap:     'wrap',
-            gap:          '8px',
-            marginBottom: '16px',
-          }}>
+          <div className="flex flex-wrap gap-2 mb-4">
             {roles.map(role => (
-              <span key={role} style={{
-                fontFamily:    '"DM Mono", monospace',
-                fontSize:      '9px',
-                letterSpacing: '1px',
-                color:         'var(--accent3)',
-                borderBottom:  '1px solid var(--accent3)',
-                paddingBottom: '1px',
-                opacity:       0.7,
-              }}>
+              <span
+                key={role}
+                className="font-mono-dm text-[9px] tracking-[0.05em] px-2 py-1 rounded-md"
+                style={{
+                  color: 'hsla(260, 70%, 65%, 0.7)',
+                  background: 'hsla(260, 70%, 60%, 0.06)',
+                }}
+              >
                 {role}
               </span>
             ))}
           </div>
 
-          {/* ציטוט */}
-          <p style={{
-            fontFamily:  '"DM Serif Display", serif',
-            fontSize:    '13px',
-            color:       'var(--text-dim)',
-            fontStyle:   'italic',
-            lineHeight:  1.6,
-            borderRight: '2px solid var(--border)',
-            paddingRight: '12px',
-          }}>
+          <p
+            className="font-serif-display text-[13px] italic leading-[1.6] pr-3 mb-3"
+            style={{
+              color: 'hsl(var(--text-dim))',
+              borderRight: '2px solid hsla(260, 70%, 60%, 0.3)',
+            }}
+          >
             {quote}
           </p>
 
-          {/* מקורות */}
-          <p style={{
-            fontFamily:    '"DM Mono", monospace',
-            fontSize:      '9px',
-            letterSpacing: '1px',
-            color:         'var(--text-muted)',
-            marginTop:     '14px',
-            opacity:       0.5,
-          }}>
+          <p
+            className="font-mono-dm text-[9px] tracking-[0.05em] mt-3"
+            style={{ color: 'hsl(var(--text-dim))', opacity: 0.4 }}
+          >
             {source_ids.join(' + ')}
           </p>
-
         </div>
       )}
 
-      {/* חץ מצב */}
-      <span style={{
-        position:   'absolute',
-        bottom:     '14px',
-        left:       '14px',
-        fontFamily: '"DM Mono", monospace',
-        fontSize:   '10px',
-        color:      'var(--text-muted)',
-        opacity:    0.4,
-        transition: 'transform 200ms ease',
-        transform:  isExpanded ? 'rotate(180deg)' : 'none',
-      }}>
-        ↓
-      </span>
-
+      <div className="absolute bottom-3 left-3">
+        <ChevronDown
+          size={12}
+          className="transition-transform duration-200"
+          style={{
+            color: 'hsl(var(--text-dim))',
+            opacity: 0.3,
+            transform: isExpanded ? 'rotate(180deg)' : 'none',
+          }}
+        />
+      </div>
     </div>
   )
 }

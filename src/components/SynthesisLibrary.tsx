@@ -1,6 +1,3 @@
-// src/components/SynthesisLibrary.tsx
-// ספריית האינטליגנציות החדשות — מתחת לכל האפליקציה
-
 import { useEffect, useState } from 'react'
 import { fetchLibrary } from '@/lib/sqlite-store'
 import { SynthesizedIntelligence } from '@/lib/gemini'
@@ -21,59 +18,31 @@ export default function SynthesisLibrary() {
   if (loading || library.length === 0) return null
 
   return (
-    <section style={{
-      marginTop:    '80px',
-      paddingTop:   '48px',
-      borderTop:    '1px solid var(--border)',
-    }}>
-
-      {/* כותרת סקשן */}
-      <div style={{
-        display:        'flex',
-        justifyContent: 'space-between',
-        alignItems:     'baseline',
-        marginBottom:   '32px',
-      }}>
-        <h2 style={{
-          fontFamily:    '"DM Serif Display", serif',
-          fontSize:      '24px',
-          color:         'var(--text)',
-          fontWeight:    400,
-          letterSpacing: '-0.5px',
-        }}>
+    <section className="mt-24 pt-12" style={{ borderTop: '1px solid hsla(var(--foreground), 0.06)' }}>
+      <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-3 mb-8">
+        <h2
+          className="font-serif-display text-[28px]"
+          style={{ color: 'hsl(var(--foreground))' }}
+        >
           ספריית הגילויים
         </h2>
-        <span style={{
-          fontFamily:    '"DM Mono", monospace',
-          fontSize:      '10px',
-          letterSpacing: '2px',
-          color:         'var(--text-muted)',
-          textTransform: 'uppercase',
-        }}>
-          אינטליגנציות שנוצרו בסינתזה — מחוץ לתיאוריה המקורית
+        <span
+          className="font-mono-dm text-[10px] tracking-[0.15em] uppercase"
+          style={{ color: 'hsl(var(--text-dim))', opacity: 0.6 }}
+        >
+          אינטליגנציות שנוצרו בסינתזה
         </span>
       </div>
 
-      {/* הסבר */}
-      <p style={{
-        fontFamily:   '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-        fontSize:     '13px',
-        color:        'var(--text-muted)',
-        lineHeight:   1.7,
-        marginBottom: '32px',
-        maxWidth:     '600px',
-        fontWeight:   300,
-      }}>
+      <p
+        className="font-sans-he text-[13px] leading-[1.8] mb-10 max-w-[600px]"
+        style={{ color: 'hsl(var(--text-dim))' }}
+      >
         כל אינטליגנציה שמופיעה כאן נוצרה על-ידי משתמש שבחר צירוף ספציפי.
         היא לא חלק מתיאוריית גארדנר — היא נוצרה בשיחה בין כישורים קיימים.
       </p>
 
-      {/* גריד הספריה — קטן יותר מהגריד הראשי */}
-      <div style={{
-        display:             'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap:                 '10px',
-      }}>
+      <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
         {library.map(item => (
           <LibraryCard
             key={item.source_ids.join('+')}
@@ -87,7 +56,6 @@ export default function SynthesisLibrary() {
           />
         ))}
       </div>
-
     </section>
   )
 }

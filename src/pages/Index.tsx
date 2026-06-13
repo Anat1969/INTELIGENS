@@ -39,7 +39,6 @@ const Index = () => {
     }
   }, [result]);
 
-  // Persist manual selection for the Profile comparison view
   useEffect(() => {
     try {
       sessionStorage.setItem("manualSelection", JSON.stringify(selected));
@@ -48,7 +47,6 @@ const Index = () => {
     }
   }, [selected]);
 
-  // Read ?selected=a,b,c on first mount and auto-analyze
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const raw = params.get("selected");
@@ -67,14 +65,15 @@ const Index = () => {
   }, []);
 
   const background = useMemo(() => {
-    if (selected.length === 0) return "hsl(var(--background))";
+    if (selected.length === 0)
+      return "radial-gradient(ellipse 80% 50% at 50% 0%, hsla(260, 60%, 30%, 0.06), hsl(var(--background)))";
     const colors = selected.map((id) => BY_ID[id].hue);
     if (colors.length === 1)
       return `radial-gradient(ellipse at 50% 0%, hsla(${colors[0]}, 0.12), hsl(var(--background)) 60%)`;
     const stops = colors
-      .map((c, i) => `hsla(${c}, 0.10) ${(i / (colors.length - 1)) * 100}%`)
+      .map((c, i) => `hsla(${c}, 0.08) ${(i / (colors.length - 1)) * 100}%`)
       .join(", ");
-    return `linear-gradient(135deg, ${stops}), hsl(var(--background))`;
+    return `linear-gradient(135deg, ${stops}), radial-gradient(ellipse at 50% 0%, hsla(260, 60%, 30%, 0.05), transparent), hsl(var(--background))`;
   }, [selected]);
 
   return (
@@ -85,7 +84,7 @@ const Index = () => {
       <AppNav />
       <StatusBar selected={selected} onClear={clear} />
 
-      <main className="mx-auto max-w-[1400px] px-6 py-16">
+      <main className="mx-auto max-w-[1400px] px-6 pt-36 pb-20">
         {/* Header */}
         <header className="mb-16">
           <h1 className="font-serif-display text-[44px] md:text-[56px] leading-[1.05] tracking-[-0.02em] text-foreground">
@@ -98,14 +97,14 @@ const Index = () => {
             בחר · שלב · גלה את מה שנוצר
           </p>
           <div
-            className="mt-6 h-px w-32"
+            className="mt-6 h-[2px] w-32 rounded-full"
             style={{
               background:
                 selected.length > 0
                   ? `linear-gradient(90deg, ${selected
                       .map((id) => `hsl(${BY_ID[id].hue})`)
                       .join(", ")})`
-                  : "hsl(var(--border))",
+                  : "linear-gradient(90deg, hsla(260, 70%, 60%, 0.3), hsla(200, 80%, 55%, 0.3))",
             }}
           />
         </header>
@@ -114,7 +113,6 @@ const Index = () => {
 
         <ComposeTrigger count={selected.length} onClick={analyze} />
 
-        {/* Synthesis Engine */}
         <SynthesisButton
           selected={selected.map((id) => ({
             id,
@@ -128,7 +126,6 @@ const Index = () => {
           {result && <ResultPanel combo={result} selectedIds={resultIds} />}
         </div>
 
-        {/* Synthesis Library */}
         <SynthesisLibrary />
       </main>
     </div>

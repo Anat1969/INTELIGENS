@@ -1,22 +1,28 @@
-// src/lib/gemini.ts
-
 const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
 const SYSTEM_INSTRUCTION = `
-אתה פילוסוף קוגניטיבי שמתמחה בתיאוריית האינטליגנציה האנושית.
+אתה פילוסוף קוגניטיבי ומדען רב-תחומי, מתמחה בתיאוריית האינטליגנציות המרובות, פסיכולוגיה קוגניטיבית ומדעי המוח.
 
-תפקידך: כאשר מקבלים שילוב של אינטליגנציות, לזהות מה נוצר
-בצומת ביניהן — לא סכום, אלא ישות חדשה שאינה קיימת בנפרד.
+## תפקיד
+כשמקבלים שילוב של אינטליגנציות, תפקידך לזהות את ה**ישות הקוגניטיבית החדשה** שנוצרת בצומת ביניהן. זה לא סכום חלקים — אלא תופעת-על (emergence) שאינה קיימת כשכל אינטליגנציה פועלת לבדה.
 
-חוקים קשיחים:
-1. שם האינטליגנציה החדשה — 2-4 מילים בעברית, פואטי אך מדויק
-2. אסור לקרוא לה בשמות המקור (לא "לשונית-לוגית")
-3. היא חייבת לתאר מה שקיים רק כאשר כל הכוחות פועלים יחד
-4. הגרעין — פסקה אחת, 2-3 משפטים, עמוקה ולא שיווקית
-5. העוצמה — מה הופך אפשרי עם הכישור הזה שאי-אפשר בלעדיו
-6. תפקידים — 4-5 תפקידים ספציפיים וריאליסטיים
-7. הציטוט — משפט אחד. פואטי. מדויק. שנשאר.
+חשוב כמו מדען שחוקר תגובה כימית: שני יסודות מתמזגים ויוצרים חומר חדש עם תכונות שאף אחד מהם לא הציג לבדו.
+
+## חוקים
+1. **שם** — 2-4 מילים בעברית. פואטי, מדויק, ייחודי. לעולם אל תשתמש בשמות המקור או בווריאציות שלהם.
+2. **תת-כותרת** — ביטוי קצר (3-6 מילים) שמתאר את מהות הכישור. לא שם נרדף אלא זווית אחרת.
+3. **הגרעין** — פסקה בת 3-4 משפטים. תיאור פילוסופי עמוק של מה שנוצר בצומת. לא שיווקי. לא כללי. כל משפט חייב להוסיף שכבה חדשה של הבנה. השתמש במטאפורות מדויקות מעולמות הידע.
+4. **העוצמה** — פסקה בת 2-3 משפטים על מה שנעשה אפשרי **רק** עם הכישור המשולב הזה — מה שאי אפשר להשיג עם כל אחת מהאינטליגנציות בנפרד. תן דוגמאות ספציפיות וקונקרטיות.
+5. **תפקידים** — 5-6 תפקידים מקצועיים ספציפיים, ריאליסטיים ובלתי-שגרתיים. לא גנריים כמו "יועץ" או "מנהל". חשוב על תפקידים שרק מי שמחזיק בצירוף הזה יכול למלא.
+6. **הציטוט** — משפט אחד בלבד. פואטי. מדויק. שנוגע ונשאר. לא קלישאה. מותר לו להיות פרובוקטיבי, פילוסופי, או מפתיע.
+7. **שאלת-מפתח** — שאלה אחת עמוקה שרק מי שמחזיק בצירוף הזה יכול לשאול. שאלה שפותחת שדה חשיבה חדש.
+
+## סגנון
+- כתוב עברית עשירה, מדויקת, עם עומק. לא פרזות. לא ז'רגון.
+- כל מילה חייבת להצדיק את נוכחותה.
+- היה ספציפי — אם יכולת להחליף את השם/הגרעין/העוצמה לצירוף אחר, הנוסח לא מדויק מספיק.
+- הימנע ממילים כמו "סינרגיה", "ייחודי", "מדהים", "מושלם".
 
 השב אך ורק ב-JSON תקין, ללא טקסט נוסף.
 `
@@ -28,6 +34,7 @@ export interface SynthesizedIntelligence {
   power: string
   roles: string[]
   quote: string
+  keyQuestion?: string
   source_ids: string[]
   source: 'synthesized'
 }
@@ -39,6 +46,7 @@ interface GeminiIntelligence {
   power: string
   roles: string[]
   quote: string
+  keyQuestion?: string
 }
 
 interface Intelligence {
@@ -54,27 +62,26 @@ function buildUserPrompt(intelligences: Intelligence[]): string {
   }
 
   const list = intelligences
-    .map(i => `— ${i.name} (תחום: ${i.domain})\n  ${i.description}`)
+    .map(i => `— **${i.name}** (תחום: ${i.domain})\n  ${i.description}`)
     .join('\n\n')
 
-  const prompt = `הנה ${intelligences.length} אינטליגנציות שנבחרו:
+  return `הנה ${intelligences.length} אינטליגנציות שנבחרו:
 
 ${list}
 
-זהה את האינטליגנציה החדשה שנוצרת כאשר כל אלה פועלות יחד.
-היא לא קיימת בשפה המקצועית עדיין. תן לה שם.
+זהה את האינטליגנציה החדשה שנוצרת בצומת כולן — הישות שלא קיימת כשאף אחת מהן פועלת לבדה.
+תן לה שם שמדויק לצירוף הזה בלבד — שם שלא יתאים לשום צירוף אחר.
 
 החזר JSON בפורמט הבא בדיוק:
 {
-  "name": "שם האינטליגנציה החדשה",
-  "type": "תת-כותרת תיאורית קצרה",
-  "essence": "פסקה אחת על מה שנוצר בצומת",
-  "power": "פסקה אחת על מה שהופך אפשרי",
-  "roles": ["תפקיד", "תפקיד", "תפקיד", "תפקיד"],
-  "quote": "משפט אחד שנשאר"
+  "name": "שם האינטליגנציה החדשה (2-4 מילים)",
+  "type": "תת-כותרת תיאורית (3-6 מילים)",
+  "essence": "פסקה פילוסופית עמוקה על מה שנוצר בצומת — 3-4 משפטים",
+  "power": "מה הופך אפשרי רק עם הכישור המשולב — 2-3 משפטים עם דוגמאות",
+  "roles": ["תפקיד ספציפי 1", "תפקיד 2", "תפקיד 3", "תפקיד 4", "תפקיד 5"],
+  "quote": "משפט פואטי אחד שנשאר",
+  "keyQuestion": "שאלה עמוקה אחת שרק הצירוף הזה יכול לשאול"
 }`
-
-  return prompt.trim()
 }
 
 export async function synthesizeIntelligence(
@@ -86,47 +93,33 @@ export async function synthesizeIntelligence(
     throw new Error('VITE_GEMINI_API_KEY is not defined. Add it to .env.local')
   }
 
-  console.log('🧠 Synthesizing:', intelligences.map(i => i.name).join(' + '))
-  console.log('Intelligences received:', intelligences)
-
   if (!intelligences || intelligences.length === 0) {
     throw new Error('No intelligences provided for synthesis')
   }
 
-  intelligences.forEach((i, idx) => {
-    if (!i.name || !i.domain || !i.description) {
-      console.warn(`Intelligence ${idx} missing fields:`, i)
-    }
-  })
-
   const userPrompt = buildUserPrompt(intelligences)
-
-  if (!userPrompt || userPrompt.trim().length === 0) {
-    throw new Error('Failed to build valid prompt for synthesis')
-  }
 
   const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      systemInstruction: SYSTEM_INSTRUCTION,
+      systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
       contents: [
         {
           role: 'user',
           parts: [{ text: userPrompt }]
         }
       ],
-      generation_config: {
-        temperature: 0.85,
-        max_output_tokens: 700,
-        response_mime_type: 'application/json'
+      generationConfig: {
+        temperature: 0.9,
+        maxOutputTokens: 1200,
+        responseMimeType: 'application/json'
       }
     })
   })
 
   if (!response.ok) {
     const errorText = await response.text()
-    console.error('Gemini API error:', response.status, errorText)
     throw new Error(`Gemini API error: ${response.status} - ${errorText.substring(0, 100)}`)
   }
 
@@ -134,21 +127,18 @@ export async function synthesizeIntelligence(
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text
 
   if (!text) {
-    console.error('Gemini response:', data)
     throw new Error('תשובה ריקה מ-Gemini')
   }
 
   try {
     const parsed: GeminiIntelligence = JSON.parse(text)
-    console.log('✨ Synthesis complete:', parsed.name)
 
     return {
       ...parsed,
       source_ids: intelligences.map(i => i.id),
       source: 'synthesized'
     }
-  } catch (e) {
-    console.error('Failed to parse Gemini response:', text)
+  } catch {
     throw new Error('תשובה לא תקינה מ-Gemini')
   }
 }

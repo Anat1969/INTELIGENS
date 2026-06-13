@@ -1,5 +1,3 @@
-// src/components/SynthesisButton.tsx
-
 import { useState } from 'react'
 import { synthesizeIntelligence, SynthesizedIntelligence } from '@/lib/gemini'
 import { findExisting, saveNew } from '@/lib/sqlite-store'
@@ -19,8 +17,8 @@ interface Props {
 type Phase = 'idle' | 'checking' | 'generating' | 'done' | 'error'
 
 const LOADING_MESSAGES: Record<string, string> = {
-  checking:   'בודק אם הצירוף כבר גולה ···',
-  generating: 'מסנתז ···',
+  checking:   'בודק אם הצירוף כבר גולה',
+  generating: 'מסנתז אינטליגנציה חדשה',
 }
 
 export default function SynthesisButton({ selected }: Props) {
@@ -38,7 +36,6 @@ export default function SynthesisButton({ selected }: Props) {
     setResult(null)
 
     try {
-      // בדיקה במאגר קודם
       const existing = await findExisting(selected.map(i => i.id))
 
       if (existing) {
@@ -48,29 +45,25 @@ export default function SynthesisButton({ selected }: Props) {
         return
       }
 
-      // אין במאגר — נוצר עם Gemini
       setPhase('generating')
       setIsFromCache(false)
 
       const generated = await synthesizeIntelligence(selected)
 
-      // Try to save but don't fail if server not available
       try {
         await saveNew(generated)
-      } catch (e) {
-        console.warn('Could not save to database:', e)
+      } catch {
+        // graceful degradation
       }
 
       setResult(generated)
       setPhase('done')
     } catch (error) {
-      console.error('Synthesis error:', error)
       setErrorMessage(error instanceof Error ? error.message : 'שגיאה לא ידועה')
       setPhase('error')
     }
   }
 
-  // איפוס כאשר הבחירה משתנה
   if (phase === 'done' && result) {
     const resultKey = result.source_ids.slice().sort().join('+')
     const selectedKey = selected.map(i => i.id).sort().join('+')
@@ -81,106 +74,64 @@ export default function SynthesisButton({ selected }: Props) {
   }
 
   return (
-    <div style={{ marginTop: '12px', textAlign: 'center' }}>
+    <div className="mt-4 flex flex-col items-center">
 
       {phase === 'idle' || phase === 'done' ? (
         <button
           onClick={handleSynthesize}
           disabled={!canSynthesize}
-          style={{
-            background:    canSynthesize ? 'hsl(var(--surface))' : 'transparent',
-            border:        canSynthesize ? '2px solid hsl(var(--foreground))' : '2px solid hsl(var(--border))',
-            color:         canSynthesize ? 'hsl(var(--foreground))' : 'hsl(var(--text-dim))',
-            fontFamily:    '"IBM Plex Sans Hebrew", "Heebo", sans-serif',
-            fontSize:      '16px',
-            fontStyle:     'italic',
-            padding:       '16px 40px',
-            borderRadius:  '4px',
-            cursor:        canSynthesize ? 'pointer' : 'not-allowed',
-            letterSpacing: '0.3px',
-            transition:    'all 200ms ease',
-            fontWeight:    500,
-          }}
-          onMouseEnter={e => {
-            if (canSynthesize) {
-              e.currentTarget.style.opacity = '0.8';
-            }
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.opacity = '1';
-          }}
+          className="synthesis-btn font-sans-he"
         >
           {canSynthesize
             ? 'סנתז אינטליגנציה חדשה  →'
             : 'בחר לפחות שתי אינטליגנציות'}
         </button>
       ) : phase === 'error' ? (
-        <div style={{ textAlign: 'center' }}>
-          <p style={{
-            fontFamily:    '"DM Mono", monospace',
-            fontSize:      '15px',
-            letterSpacing: '2px',
-            color:         'hsl(var(--destructive))',
-            fontWeight:    600,
-            marginBottom:  '12px',
-          }}>
-            ⚠️ שגיאה בסינתזה
-          </p>
-          <p style={{
-            fontFamily:    '"DM Mono", monospace',
-            fontSize:      '13px',
-            color:         'hsl(var(--foreground))',
-            marginBottom:  '8px',
-            direction:     'ltr',
-            maxWidth:      '500px',
-            margin:        '0 auto 8px',
-          }}>
-            {errorMessage || 'שגיאה לא ידועה'}
-          </p>
-          <p style={{
-            fontFamily:    '"DM Mono", monospace',
-            fontSize:      '12px',
-            color:         'hsl(var(--text-dim))',
-          }}>
-            בדוק את Console (F12) לפרטים
-          </p>
-          <button
-            onClick={handleSynthesize}
-            style={{
-              marginTop:    '12px',
-              background:   'none',
-              border:       '1px solid hsl(var(--foreground))',
-              color:        'hsl(var(--foreground))',
-              fontFamily:   '"DM Mono", monospace',
-              fontSize:     '13px',
-              padding:      '8px 16px',
-              cursor:       'pointer',
-              borderRadius: '3px',
-              transition:   'opacity 200ms',
-            }}
-            onMouseEnter={e => e.currentTarget.style.opacity = '0.7'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+        <div className="text-center max-w-[500px]">
+          <div
+            className="glass-card rounded-2xl p-8"
+            style={{ borderColor: "hsla(0, 70%, 50%, 0.2)" }}
           >
-            נסה שוב
-          </button>
+            <p className="font-mono-dm text-[14px] tracking-[0.1em] mb-3" style={{ color: "hsl(var(--destructive))" }}>
+              שגיאה בסינתזה
+            </p>
+            <p className="font-mono-dm text-[12px] mb-2 dir-ltr" style={{ color: "hsl(var(--foreground))", direction: "ltr" }}>
+              {errorMessage || 'שגיאה לא ידועה'}
+            </p>
+            <p className="font-mono-dm text-[11px] mb-4" style={{ color: "hsl(var(--text-dim))" }}>
+              בדוק את Console (F12) לפרטים
+            </p>
+            <button
+              onClick={handleSynthesize}
+              className="font-mono-dm text-[12px] px-5 py-2.5 rounded-xl transition-all duration-200 hover:opacity-70"
+              style={{
+                color: "hsl(var(--foreground))",
+                border: "1px solid hsla(var(--foreground), 0.15)",
+                background: "hsla(var(--surface), 0.5)",
+              }}
+            >
+              נסה שוב
+            </button>
+          </div>
         </div>
       ) : (
-        <p style={{
-          fontFamily:    '"DM Mono", monospace',
-          fontSize:      '15px',
-          letterSpacing: '2px',
-          color:         'hsl(var(--foreground))',
-          animation:     'pulse 1.4s ease-in-out infinite',
-          fontWeight:    600,
-        }}>
-          {LOADING_MESSAGES[phase]}
-        </p>
+        <div className="flex flex-col items-center gap-4 py-8">
+          <div className="relative flex items-center justify-center">
+            <div className="loading-orb" />
+            <div className="loading-ring" />
+          </div>
+          <p
+            className="font-mono-dm text-[13px] tracking-[0.15em]"
+            style={{ color: "hsl(var(--text-dim))" }}
+          >
+            {LOADING_MESSAGES[phase]}
+          </p>
+        </div>
       )}
 
       {phase === 'done' && result && (
         <SynthesisResult result={result} isFromCache={isFromCache} />
       )}
-
     </div>
   )
 }

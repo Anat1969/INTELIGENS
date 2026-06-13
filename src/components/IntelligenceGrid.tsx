@@ -11,11 +11,11 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
   const extensions = INTELLIGENCES.filter((i) => i.group === "extension");
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-12">
       <div
-        className="grid gap-3"
+        className="grid gap-4"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
         }}
       >
         {gardner.map((intel) => (
@@ -29,29 +29,35 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
       </div>
 
       {/* Section divider */}
-      <div className="space-y-3">
-        <div className="h-px w-full bg-border" />
+      <div className="space-y-4">
+        <div
+          className="h-px w-full"
+          style={{ background: "linear-gradient(90deg, transparent, hsla(var(--foreground), 0.08), transparent)" }}
+        />
         <div className="flex items-baseline justify-between gap-4">
           <h2
-            className="font-serif-display text-[18px]"
+            className="font-serif-display text-[20px]"
             style={{ color: "hsl(var(--text-dim))" }}
           >
             הרחבות
           </h2>
           <span
-            className="font-mono-dm text-[10px] tracking-[0.2em] uppercase"
-            style={{ color: "hsl(var(--text-dim))", opacity: 0.6 }}
+            className="font-mono-dm text-[10px] tracking-[0.15em] uppercase"
+            style={{ color: "hsl(var(--text-dim))", opacity: 0.5 }}
           >
-            שנויות במחלוקת — מחוץ לתיאוריה המקורית
+            מחוץ לתיאוריה המקורית
           </span>
         </div>
-        <div className="h-px w-full bg-border" />
+        <div
+          className="h-px w-full"
+          style={{ background: "linear-gradient(90deg, transparent, hsla(var(--foreground), 0.08), transparent)" }}
+        />
       </div>
 
       <div
-        className="grid gap-3"
+        className="grid gap-4"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
         }}
       >
         {extensions.map((intel) => (
