@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { synthesizeIntelligence, SynthesizedIntelligence } from '@/lib/gemini'
 import { findExisting, saveNew } from '@/lib/sqlite-store'
+import { addToLibrary } from '@/lib/local-library'
 import SynthesisResult from './SynthesisResult'
 
 interface Intelligence {
@@ -12,13 +13,15 @@ interface Intelligence {
 
 interface Props {
   selected: Intelligence[]
+  onNewSynthesis?: () => void
 }
 
 type Phase = 'idle' | 'checking' | 'generating' | 'done' | 'error'
 
-export default function SynthesisButton({ selected }: Props) {
+export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
   const [phase, setPhase] = useState<Phase>('idle')
   const [result, setResult] = useState<SynthesizedIntelligence | null>(null)
+  const [resultId, setResultId] = useState<string>('')
   const [isFromCache, setIsFromCache] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const resultRef = useRef<HTMLDivElement>(null)
@@ -27,19 +30,18 @@ export default function SynthesisButton({ selected }: Props) {
   const canSynthesize = selected.length >= 2
   const selectedKey = selected.map(i => i.id).sort().join('+')
 
-  // Reset when selection changes
   useEffect(() => {
     if (selectedKey !== prevKeyRef.current) {
       prevKeyRef.current = selectedKey
       if (phase === 'done' || phase === 'error') {
         setPhase('idle')
         setResult(null)
+        setResultId('')
         setErrorMessage('')
       }
     }
   }, [selectedKey, phase])
 
-  // Scroll to result
   useEffect(() => {
     if (phase === 'done' && resultRef.current) {
       resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -51,45 +53,47 @@ export default function SynthesisButton({ selected }: Props) {
 
     setPhase('checking')
     setResult(null)
+    setResultId('')
     setIsFromCache(false)
 
     try {
-      // Check cache first
       let existing: SynthesizedIntelligence | null = null
       try {
         existing = await findExisting(selected.map(i => i.id))
       } catch {
-        // Server unavailable — proceed to generate
+        // Server unavailable
       }
 
       if (existing) {
         setResult(existing)
         setIsFromCache(true)
+        const saved = addToLibrary(existing)
+        setResultId(saved.id)
         setPhase('done')
+        onNewSynthesis?.()
         return
       }
 
-      // Generate with Gemini
       setPhase('generating')
-
       const generated = await synthesizeIntelligence(selected)
 
-      // Try to save but don't block
       try {
         await saveNew(generated)
       } catch {
         // graceful degradation
       }
 
+      const saved = addToLibrary(generated)
+      setResultId(saved.id)
       setResult(generated)
       setPhase('done')
+      onNewSynthesis?.()
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'שגיאה לא ידועה')
       setPhase('error')
     }
   }
 
-  // Prompt text based on selection count
   let promptText = 'בחר לפחות שתי אינטליגנציות'
   if (selected.length === 1) promptText = 'בחר עוד אינטליגנציה אחת לפחות'
   if (selected.length === 2) promptText = 'סנתז את הכישור שנוצר →'
@@ -98,8 +102,6 @@ export default function SynthesisButton({ selected }: Props) {
 
   return (
     <div className="flex flex-col items-center">
-
-      {/* Main action area */}
       <div className="py-10 flex flex-col items-center gap-6">
         {phase === 'idle' || phase === 'done' ? (
           <button
@@ -153,10 +155,9 @@ export default function SynthesisButton({ selected }: Props) {
         )}
       </div>
 
-      {/* Result */}
       <div ref={resultRef}>
         {phase === 'done' && result && (
-          <SynthesisResult result={result} isFromCache={isFromCache} />
+          <SynthesisResult result={result} isFromCache={isFromCache} itemId={resultId} />
         )}
       </div>
     </div>

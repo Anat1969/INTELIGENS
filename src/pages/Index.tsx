@@ -8,6 +8,7 @@ import SynthesisLibrary from "@/components/SynthesisLibrary";
 
 const Index = () => {
   const [selected, setSelected] = useState<IntelligenceId[]>([]);
+  const [libraryRefresh, setLibraryRefresh] = useState(0);
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   const toggle = (id: IntelligenceId) => {
@@ -62,7 +63,6 @@ const Index = () => {
       <StatusBar selected={selected} onClear={clear} />
 
       <main className="mx-auto max-w-[1400px] px-6 pt-36 pb-20">
-        {/* Header */}
         <header className="mb-16">
           <h1 className="font-serif-display text-[44px] md:text-[56px] leading-[1.05] tracking-[-0.02em] text-foreground">
             מפת האינטליגנציות
@@ -88,7 +88,6 @@ const Index = () => {
 
         <IntelligenceGrid selected={selected} onToggle={toggle} />
 
-        {/* Single unified synthesis action */}
         <div ref={resultRef} className="mt-8">
           <SynthesisButton
             selected={selected.map((id) => ({
@@ -97,10 +96,11 @@ const Index = () => {
               domain: BY_ID[id].domain,
               description: BY_ID[id].description,
             }))}
+            onNewSynthesis={() => setLibraryRefresh(n => n + 1)}
           />
         </div>
 
-        <SynthesisLibrary />
+        <SynthesisLibrary refreshKey={libraryRefresh} />
       </main>
     </div>
   );

@@ -1,10 +1,12 @@
 import { SynthesizedIntelligence } from '@/lib/gemini'
-import { Copy, Check, Image } from 'lucide-react'
+import { Copy, Check, Image, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   result: SynthesizedIntelligence
   isFromCache: boolean
+  itemId?: string
 }
 
 function buildCopyText(result: SynthesizedIntelligence) {
@@ -25,9 +27,10 @@ ${result.keyQuestion ? `\nשאלת מפתח: ${result.keyQuestion}` : ''}
 נוצר ב-Intelligence Composer`.trim()
 }
 
-export default function SynthesisResult({ result, isFromCache }: Props) {
+export default function SynthesisResult({ result, isFromCache, itemId }: Props) {
   const [copied, setCopied] = useState(false)
   const [visualCopied, setVisualCopied] = useState(false)
+  const navigate = useNavigate()
 
   function handleCopy() {
     navigator.clipboard.writeText(buildCopyText(result))
@@ -46,22 +49,39 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
   return (
     <div className="synthesis-result-card glass-card w-full max-w-[900px] mx-auto mt-10 p-8 md:p-12 text-right">
 
-      {/* Source tag */}
+      {/* Source tag + actions */}
       <div className="flex items-center justify-between mb-8">
-        <span
-          className="font-mono-dm text-[10px] tracking-[0.15em] px-3 py-1.5 rounded-lg"
-          style={{
-            background: isFromCache
-              ? "hsla(200, 80%, 50%, 0.1)"
-              : "hsla(260, 80%, 60%, 0.1)",
-            color: isFromCache
-              ? "hsla(200, 80%, 55%, 1)"
-              : "hsla(260, 70%, 65%, 1)",
-            border: `1px solid ${isFromCache ? "hsla(200, 80%, 50%, 0.15)" : "hsla(260, 80%, 60%, 0.15)"}`,
-          }}
-        >
-          {isFromCache ? 'נשלפה מהספריה' : 'אינטליגנציה חדשה'}
-        </span>
+        <div className="flex items-center gap-3">
+          <span
+            className="font-mono-dm text-[10px] tracking-[0.15em] px-3 py-1.5 rounded-lg"
+            style={{
+              background: isFromCache
+                ? "hsla(200, 80%, 50%, 0.1)"
+                : "hsla(260, 80%, 60%, 0.1)",
+              color: isFromCache
+                ? "hsla(200, 80%, 55%, 1)"
+                : "hsla(260, 70%, 65%, 1)",
+              border: `1px solid ${isFromCache ? "hsla(200, 80%, 50%, 0.15)" : "hsla(260, 80%, 60%, 0.15)"}`,
+            }}
+          >
+            {isFromCache ? 'נשלפה מהספריה' : 'אינטליגנציה חדשה'}
+          </span>
+
+          {itemId && (
+            <button
+              onClick={() => navigate(`/intelligence/${itemId}`)}
+              className="flex items-center gap-1.5 font-mono-dm text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-lg transition-all duration-200 hover:opacity-70"
+              style={{
+                color: "hsla(260, 70%, 65%, 1)",
+                background: "hsla(260, 70%, 60%, 0.06)",
+                border: "1px solid hsla(260, 70%, 60%, 0.12)",
+              }}
+            >
+              <ExternalLink size={11} />
+              צפה בדף המלא
+            </button>
+          )}
+        </div>
 
         <button
           onClick={handleCopy}
@@ -87,7 +107,6 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
         {result.name}
       </h2>
 
-      {/* Subtitle */}
       <p
         className="mt-3 font-mono-dm text-[12px] tracking-[0.15em] uppercase"
         style={{ color: 'hsl(var(--text-dim))' }}
@@ -95,7 +114,6 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
         {result.type}
       </p>
 
-      {/* Divider */}
       <div
         className="mt-8 h-px w-full"
         style={{ background: 'linear-gradient(90deg, hsla(260, 70%, 60%, 0.3), hsla(200, 80%, 55%, 0.3), transparent)' }}
@@ -134,7 +152,6 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
         </div>
       </div>
 
-      {/* Divider */}
       <div className="mt-8 h-px w-full" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
 
       {/* Roles */}

@@ -1,33 +1,23 @@
-import { useEffect, useState, useMemo } from 'react'
-import { fetchLibrary } from '@/lib/sqlite-store'
-import { SynthesizedIntelligence } from '@/lib/gemini'
-import LibraryCard from './LibraryCard'
+import { useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getLibraryGrouped, type LibraryItem } from '@/lib/local-library'
+import { BY_ID } from '@/data/intelligences'
 
-export default function SynthesisLibrary() {
-  const [library, setLibrary] = useState<SynthesizedIntelligence[]>([])
-  const [loading, setLoading] = useState(true)
-  const [expanded, setExpanded] = useState<string | null>(null)
+interface Props {
+  refreshKey?: number
+}
 
-  useEffect(() => {
-    fetchLibrary().then(data => {
-      setLibrary(data)
-      setLoading(false)
-    })
-  }, [])
+export default function SynthesisLibrary({ refreshKey }: Props) {
+  const navigate = useNavigate()
 
   const grouped = useMemo(() => {
-    const groups: Record<number, SynthesizedIntelligence[]> = {}
-    for (const item of library) {
-      const count = item.source_ids.length
-      if (!groups[count]) groups[count] = []
-      groups[count].push(item)
-    }
-    return Object.entries(groups)
-      .map(([count, items]) => ({ count: Number(count), items }))
-      .sort((a, b) => a.count - b.count)
-  }, [library])
+    return getLibraryGrouped()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshKey])
 
-  if (loading || library.length === 0) return null
+  const totalCount = useMemo(() => grouped.reduce((sum, g) => sum + g.items.length, 0), [grouped])
+
+  if (totalCount === 0) return null
 
   const groupLabels: Record<number, string> = {
     2: 'צירוף זוגי',
@@ -48,7 +38,7 @@ export default function SynthesisLibrary() {
           className="font-mono-dm text-[10px] tracking-[0.15em] uppercase"
           style={{ color: 'hsl(var(--text-dim))', opacity: 0.6 }}
         >
-          {library.length} אינטליגנציות שנוצרו בסינתזה
+          {totalCount} אינטליגנציות שנוצרו
         </span>
       </div>
 
@@ -56,8 +46,8 @@ export default function SynthesisLibrary() {
         className="font-sans-he text-[13px] leading-[1.8] mb-10 max-w-[600px]"
         style={{ color: 'hsl(var(--text-dim))' }}
       >
-        כל אינטליגנציה שמופיעה כאן נוצרה על-ידי משתמש שבחר צירוף ספציפי.
-        היא לא חלק מתיאוריית גארדנר — היא נוצרה בשיחה בין כישורים קיימים.
+        כל אינטליגנציה שמופיעה כאן נוצרה על-ידי צירוף ספציפי.
+        לחץ עליה כדי לפתוח את הדף המלא שלה.
       </p>
 
       {grouped.map(({ count, items }) => (
@@ -91,22 +81,92 @@ export default function SynthesisLibrary() {
             />
           </div>
 
-          <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}>
+          <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
             {items.map(item => (
-              <LibraryCard
-                key={item.source_ids.join('+')}
-                intelligence={item}
-                isExpanded={expanded === item.source_ids.join('+')}
-                onToggle={() => setExpanded(
-                  expanded === item.source_ids.join('+')
-                    ? null
-                    : item.source_ids.join('+')
-                )}
-              />
+              <LibraryItemCard key={item.id} item={item} onClick={() => navigate(`/intelligence/${item.id}`)} />
             ))}
           </div>
         </div>
       ))}
     </section>
+  )
+}
+
+function LibraryItemCard({ item, onClick }: { item: LibraryItem; onClick: () => void }) {
+  const sourceHues = item.source_ids
+    .filter(sid => sid in BY_ID)
+    .map(sid => BY_ID[sid as keyof typeof BY_ID].hue)
+
+  const gradientLine = sourceHues.length >= 2
+    ? `linear-gradient(90deg, ${sourceHues.map(h => `hsl(${h})`).join(', ')})`
+    : sourceHues[0]
+      ? `hsl(${sourceHues[0]})`
+      : 'hsla(var(--foreground), 0.1)'
+
+  return (
+    <button
+      onClick={onClick}
+      className="library-card-3d text-right w-full transition-all duration-200 hover:translate-y-[-2px]"
+      style={{
+        background: 'hsla(var(--surface), 0.5)',
+        border: '1px solid hsla(var(--foreground), 0.06)',
+        padding: '0',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Image thumbnail or color bar */}
+      {item.image_data ? (
+        <div className="w-full h-32 overflow-hidden">
+          <img
+            src={item.image_data}
+            alt={item.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <div
+          className="w-full h-2"
+          style={{ background: gradientLine }}
+        />
+      )}
+
+      <div className="p-5">
+        <h3
+          className="font-serif-display text-[17px] leading-[1.3] mb-2"
+          style={{ color: 'hsl(var(--foreground))' }}
+        >
+          {item.name}
+        </h3>
+
+        <p
+          className="font-mono-dm text-[9px] tracking-[0.1em] uppercase mb-3"
+          style={{ color: 'hsl(var(--text-dim))' }}
+        >
+          {item.type}
+        </p>
+
+        <p
+          className="font-sans-he text-[12px] leading-[1.7] line-clamp-2 mb-3"
+          style={{ color: 'hsl(var(--text-dim))', opacity: 0.7 }}
+        >
+          {item.essence}
+        </p>
+
+        <div className="flex items-center justify-between">
+          <span
+            className="font-mono-dm text-[8px] tracking-[0.1em]"
+            style={{ color: 'hsl(var(--text-dim))', opacity: 0.4 }}
+          >
+            {item.source_ids.join(' + ')}
+          </span>
+          <span
+            className="font-mono-dm text-[8px] tracking-[0.1em]"
+            style={{ color: 'hsl(var(--text-dim))', opacity: 0.3 }}
+          >
+            {new Date(item.created_at).toLocaleDateString('he-IL')}
+          </span>
+        </div>
+      </div>
+    </button>
   )
 }
