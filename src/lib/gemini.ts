@@ -1,9 +1,6 @@
-// src/lib/gemini.ts — Synthesis via server proxy (Claude) with Gemini fallback
+// src/lib/gemini.ts — Claude API synthesis (direct browser call)
 
-const API_URL = 'http://localhost:3001'
-
-const GEMINI_API_URL =
-  'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
+const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages'
 
 const SYSTEM_INSTRUCTION = `
 אתה פילוסוף קוגניטיבי ומדען רב-תחומי, מתמחה בתיאוריית האינטליגנציות המרובות, פסיכולוגיה קוגניטיבית ומדעי המוח.
@@ -30,7 +27,7 @@ const SYSTEM_INSTRUCTION = `
 - הימנע ממילים כמו "סינרגיה", "ייחודי", "מדהים", "מושלם".
 - הפרומפט הויזואלי — באנגלית בלבד, ספציפי ומטאפורי.
 
-השב אך ורק ב-JSON תקין, ללא טקסט נוסף.
+השב אך ורק ב-JSON תקין, ללא טקסט נוסף, ללא markdown, ללא backticks.
 `
 
 export interface SynthesizedIntelligence {
@@ -66,7 +63,7 @@ ${list}
 זהה את האינטליגנציה החדשה שנוצרת בצומת כולן — הישות שלא קיימת כשאף אחת מהן פועלת לבדה.
 תן לה שם שמדויק לצירוף הזה בלבד — שם שלא יתאים לשום צירוף אחר.
 
-החזר JSON בפורמט הבא בדיוק:
+החזר JSON בפורמט הבא בדיוק (ללא markdown, ללא backticks):
 {
   "name": "שם האינטליגנציה החדשה (2-4 מילים)",
   "type": "תת-כותרת תיאורית (3-6 מילים)",
@@ -79,65 +76,6 @@ ${list}
 }`
 }
 
-async function synthesizeViaClaude(
-  intelligences: Intelligence[]
-): Promise<SynthesizedIntelligence> {
-  const response = await fetch(`${API_URL}/api/synthesis/generate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ intelligences }),
-  })
-
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({ error: `HTTP ${response.status}` }))
-    throw new Error(err.error || `Server error: ${response.status}`)
-  }
-
-  const { data } = await response.json()
-  return data as SynthesizedIntelligence
-}
-
-async function synthesizeViaGemini(
-  intelligences: Intelligence[]
-): Promise<SynthesizedIntelligence> {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY
-  if (!apiKey) {
-    throw new Error('No API key available for synthesis')
-  }
-
-  const userPrompt = buildUserPrompt(intelligences)
-
-  const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-      contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-      generationConfig: {
-        temperature: 0.9,
-        maxOutputTokens: 1500,
-        responseMimeType: 'application/json',
-      },
-    }),
-  })
-
-  if (!response.ok) {
-    const errorText = await response.text()
-    throw new Error(`Gemini API error: ${response.status} - ${errorText.substring(0, 100)}`)
-  }
-
-  const data = await response.json()
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text
-  if (!text) throw new Error('תשובה ריקה מ-Gemini')
-
-  const parsed = JSON.parse(text)
-  return {
-    ...parsed,
-    source_ids: intelligences.map(i => i.id),
-    source: 'synthesized',
-  }
-}
-
 export async function synthesizeIntelligence(
   intelligences: Intelligence[]
 ): Promise<SynthesizedIntelligence> {
@@ -145,11 +83,57 @@ export async function synthesizeIntelligence(
     throw new Error('At least 2 intelligences required')
   }
 
-  // Try Claude API (server proxy) first, fall back to Gemini
-  try {
-    return await synthesizeViaClaude(intelligences)
-  } catch {
-    console.log('Claude server unavailable, falling back to Gemini')
-    return await synthesizeViaGemini(intelligences)
+  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY
+  if (!apiKey) {
+    throw new Error('VITE_ANTHROPIC_API_KEY is not configured')
+  }
+
+  const userPrompt = buildUserPrompt(intelligences)
+
+  const response = await fetch(CLAUDE_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 2000,
+      system: SYSTEM_INSTRUCTION,
+      messages: [{ role: 'user', content: userPrompt }],
+    }),
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text()
+    throw new Error(`Claude API error: ${response.status} - ${errorText.substring(0, 200)}`)
+  }
+
+  const data = await response.json()
+  const textBlock = data.content?.find((b: { type: string }) => b.type === 'text')
+  if (!textBlock) {
+    throw new Error('תשובה ריקה מ-Claude')
+  }
+
+  let text = textBlock.text.trim()
+  if (text.startsWith('```')) {
+    text = text.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '')
+  }
+
+  const parsed = JSON.parse(text)
+
+  return {
+    name: parsed.name,
+    type: parsed.type,
+    essence: parsed.essence,
+    power: parsed.power,
+    roles: parsed.roles,
+    quote: parsed.quote,
+    keyQuestion: parsed.keyQuestion || '',
+    visualPrompt: parsed.visualPrompt || '',
+    source_ids: intelligences.map(i => i.id),
+    source: 'synthesized',
   }
 }
