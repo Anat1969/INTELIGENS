@@ -11,11 +11,12 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
   const extensions = INTELLIGENCES.filter((i) => i.group === "extension");
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
+      {/* Gardner intelligences — stacked rows, 2 columns on wide screens */}
       <div
         className="grid gap-3"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 420px), 1fr))",
         }}
       >
         {gardner.map((intel) => (
@@ -54,10 +55,11 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
         />
       </div>
 
+      {/* Extensions — same row layout */}
       <div
         className="grid gap-3"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 420px), 1fr))",
         }}
       >
         {extensions.map((intel) => (
