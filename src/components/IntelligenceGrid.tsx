@@ -13,9 +13,9 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
   return (
     <div className="space-y-12">
       <div
-        className="grid gap-4"
+        className="grid gap-3"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
         }}
       >
         {gardner.map((intel) => (
@@ -55,9 +55,9 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
       </div>
 
       <div
-        className="grid gap-4"
+        className="grid gap-3"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
         }}
       >
         {extensions.map((intel) => (

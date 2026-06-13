@@ -17,7 +17,7 @@ export async function findExisting(ids: string[]): Promise<SynthesizedIntelligen
     })
 
     if (!res.ok) {
-      console.warn(`SQLite API unavailable (${res.status}). Will generate new synthesis via Gemini.`)
+      console.warn(`SQLite API unavailable (${res.status}). Will generate new synthesis.`)
       return null
     }
 
@@ -38,9 +38,7 @@ export async function saveNew(intelligence: SynthesizedIntelligence): Promise<vo
     })
 
     const result = await res.json()
-    if (result.success) {
-      console.log('✅ Synthesis saved to database')
-    } else {
+    if (!result.success) {
       throw new Error(result.error)
     }
   } catch (error) {

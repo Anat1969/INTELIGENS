@@ -1,6 +1,7 @@
 import { SynthesizedIntelligence } from '@/lib/gemini'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Copy, Check, Image } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useState } from 'react'
 
 interface Props {
   intelligence: SynthesizedIntelligence
@@ -9,7 +10,17 @@ interface Props {
 }
 
 export default function LibraryCard({ intelligence, isExpanded, onToggle }: Props) {
-  const { name, type, essence, roles, quote, source_ids } = intelligence
+  const { name, type, essence, roles, quote, source_ids, visualPrompt, keyQuestion } = intelligence
+  const [visualCopied, setVisualCopied] = useState(false)
+
+  function handleCopyVisual(e: React.MouseEvent) {
+    e.stopPropagation()
+    if (visualPrompt) {
+      navigator.clipboard.writeText(visualPrompt)
+      setVisualCopied(true)
+      setTimeout(() => setVisualCopied(false), 2000)
+    }
+  }
 
   return (
     <div
@@ -23,12 +34,14 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
         padding: isExpanded ? '24px 20px' : '20px 18px',
       }}
     >
-      <span
-        className="font-mono-dm text-[9px] tracking-[0.15em] uppercase block mb-3"
-        style={{ color: 'hsla(260, 70%, 65%, 0.5)' }}
-      >
-        סינתזה
-      </span>
+      <div className="flex items-start justify-between gap-2">
+        <span
+          className="font-mono-dm text-[9px] tracking-[0.15em] uppercase block mb-3"
+          style={{ color: 'hsla(260, 70%, 65%, 0.5)' }}
+        >
+          סינתזה · {source_ids.length}
+        </span>
+      </div>
 
       <h3
         className="font-serif-display text-[16px] leading-[1.3] mb-2"
@@ -79,6 +92,60 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
           >
             {quote}
           </p>
+
+          {keyQuestion && (
+            <p
+              className="font-sans-he text-[11px] leading-[1.7] mb-3 pr-3"
+              style={{
+                color: 'hsla(340, 70%, 60%, 0.7)',
+                borderRight: '2px solid hsla(340, 70%, 60%, 0.2)',
+              }}
+            >
+              {keyQuestion}
+            </p>
+          )}
+
+          {/* Visual Prompt Frame */}
+          {visualPrompt && (
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-2">
+                <span
+                  className="font-mono-dm text-[8px] tracking-[0.15em] uppercase flex items-center gap-1.5"
+                  style={{ color: 'hsla(170, 70%, 55%, 0.7)' }}
+                >
+                  <Image size={10} />
+                  פרומפט ויזואלי
+                </span>
+                <button
+                  onClick={handleCopyVisual}
+                  className="flex items-center gap-1 font-mono-dm text-[8px] tracking-[0.1em] px-2 py-1 rounded-md transition-all duration-200 hover:opacity-70"
+                  style={{
+                    color: 'hsla(170, 70%, 55%, 0.7)',
+                    background: 'hsla(170, 70%, 55%, 0.06)',
+                    border: '1px solid hsla(170, 70%, 55%, 0.12)',
+                  }}
+                >
+                  {visualCopied ? <Check size={9} /> : <Copy size={9} />}
+                  {visualCopied ? 'הועתק' : 'העתק'}
+                </button>
+              </div>
+              <div
+                className="p-3 rounded-lg"
+                style={{
+                  background: 'hsla(170, 70%, 55%, 0.04)',
+                  border: '1px solid hsla(170, 70%, 55%, 0.1)',
+                  direction: 'ltr',
+                }}
+              >
+                <p
+                  className="font-mono-dm text-[10px] leading-[1.7]"
+                  style={{ color: 'hsl(var(--text-dim))', opacity: 0.7 }}
+                >
+                  {visualPrompt}
+                </p>
+              </div>
+            </div>
+          )}
 
           <p
             className="font-mono-dm text-[9px] tracking-[0.05em] mt-3"

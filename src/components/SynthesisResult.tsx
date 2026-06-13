@@ -1,5 +1,5 @@
 import { SynthesizedIntelligence } from '@/lib/gemini'
-import { Copy, Check } from 'lucide-react'
+import { Copy, Check, Image } from 'lucide-react'
 import { useState } from 'react'
 
 interface Props {
@@ -27,11 +27,20 @@ ${result.keyQuestion ? `\nשאלת מפתח: ${result.keyQuestion}` : ''}
 
 export default function SynthesisResult({ result, isFromCache }: Props) {
   const [copied, setCopied] = useState(false)
+  const [visualCopied, setVisualCopied] = useState(false)
 
   function handleCopy() {
     navigator.clipboard.writeText(buildCopyText(result))
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  function handleCopyVisual() {
+    if (result.visualPrompt) {
+      navigator.clipboard.writeText(result.visualPrompt)
+      setVisualCopied(true)
+      setTimeout(() => setVisualCopied(false), 2000)
+    }
   }
 
   return (
@@ -184,6 +193,49 @@ export default function SynthesisResult({ result, isFromCache }: Props) {
           >
             {result.keyQuestion}
           </p>
+        </div>
+      )}
+
+      {/* Visual Prompt */}
+      {result.visualPrompt && (
+        <div className="mt-8">
+          <div className="h-px w-full mb-6" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
+          <div className="flex items-center justify-between mb-4">
+            <h4
+              className="font-mono-dm text-[11px] tracking-[0.2em] uppercase flex items-center gap-2"
+              style={{ color: 'hsla(170, 70%, 55%, 0.8)' }}
+            >
+              <Image size={14} />
+              פרומפט ויזואלי
+            </h4>
+            <button
+              onClick={handleCopyVisual}
+              className="flex items-center gap-2 font-mono-dm text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-lg transition-all duration-200 hover:opacity-70"
+              style={{
+                color: 'hsla(170, 70%, 55%, 0.8)',
+                background: 'hsla(170, 70%, 55%, 0.06)',
+                border: '1px solid hsla(170, 70%, 55%, 0.15)',
+              }}
+            >
+              {visualCopied ? <Check size={12} /> : <Copy size={12} />}
+              {visualCopied ? 'הועתק' : 'העתק פרומפט'}
+            </button>
+          </div>
+          <div
+            className="p-5 rounded-xl"
+            style={{
+              background: 'hsla(170, 70%, 55%, 0.04)',
+              border: '1px solid hsla(170, 70%, 55%, 0.12)',
+              direction: 'ltr',
+            }}
+          >
+            <p
+              className="font-mono-dm text-[12px] leading-[1.8]"
+              style={{ color: 'hsl(var(--text-dim))' }}
+            >
+              {result.visualPrompt}
+            </p>
+          </div>
         </div>
       )}
     </div>
