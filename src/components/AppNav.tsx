@@ -8,6 +8,7 @@ const links = [
   { to: "/", label: "בית" },
   { to: "/composer", label: "מפת האינטליגנציות" },
   { to: "/profile", label: "הפרופיל שלך" },
+  { to: "/trust", label: "אמון ופרטיות" },
 ];
 
 const ThemeToggle = () => {
