@@ -32,7 +32,7 @@ const EN: Record<IntelligenceId, { domain: string; keyword: string }> = {
   existential: { domain: 'depth', keyword: 'meaning' },
   emotional: { domain: 'heart', keyword: 'resonance' },
   digital: { domain: 'technology', keyword: 'logic' },
-  social: { domain: 'networks', keyword: 'leverage' },
+  systems: { domain: 'networks', keyword: 'leverage' },
 }
 
 function sortedIds(ids: IntelligenceId[]): IntelligenceId[] {
