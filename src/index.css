@@ -1074,6 +1074,7 @@
 .mag-body-extra {
   max-width: 68ch;
   margin: 0 auto 64px;
+  text-align: right;
 }
 
 .mag-section { margin-bottom: 40px; }
