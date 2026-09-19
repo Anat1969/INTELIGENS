@@ -26,6 +26,7 @@ function namesOf(ids: string[]): string {
 }
 
 export default function SynthesisLibrary({ refreshKey }: Props) {
+  const navigate = useNavigate()
   const [cards, setCards] = useState<Card[] | null>(null)
 
   useEffect(() => {
@@ -154,17 +155,13 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
 
           <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
             {items.map(item => (
-              <LibraryItemCard key={item.id} item={item} onClick={() => navigateTo(item.id)} />
+              <LibraryItemCard key={item.id} item={item} onClick={() => navigate(`/intelligence/${item.id}`)} />
             ))}
           </div>
         </div>
       ))}
     </section>
   )
-
-  function navigateTo(id: string) {
-    navigate(`/intelligence/${id}`)
-  }
 }
 
 function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void }) {
