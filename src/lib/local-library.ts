@@ -27,7 +27,10 @@ function saveAll(items: LibraryItem[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
 }
 
-export function addToLibrary(intelligence: SynthesizedIntelligence): LibraryItem {
+export function addToLibrary(
+  intelligence: SynthesizedIntelligence,
+  id?: string,
+): LibraryItem {
   const items = loadAll()
   const key = [...intelligence.source_ids].sort().join('+')
 
@@ -36,7 +39,7 @@ export function addToLibrary(intelligence: SynthesizedIntelligence): LibraryItem
 
   const item: LibraryItem = {
     ...intelligence,
-    id: generateId(),
+    id: id ?? generateId(),
     created_at: new Date().toISOString(),
   }
   items.unshift(item)
