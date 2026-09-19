@@ -41,6 +41,7 @@ const loadInitial = (): SavedState => {
 
 const Profile = () => {
   const [state, setState] = useState<SavedState>(loadInitial);
+  const [libraryKey, setLibraryKey] = useState(0);
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
