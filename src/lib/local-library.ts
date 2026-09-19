@@ -8,6 +8,8 @@ export interface LibraryItem extends SynthesizedIntelligence {
   id: string
   created_at: string
   image_data?: string
+  parent?: string
+  combo?: string
 }
 
 function generateId(): string {
