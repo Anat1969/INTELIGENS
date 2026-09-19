@@ -8,6 +8,8 @@ export interface LibraryItem extends SynthesizedIntelligence {
   id: string
   created_at: string
   image_data?: string
+  parent?: string
+  combo?: string
 }
 
 function generateId(): string {
@@ -30,6 +32,7 @@ function saveAll(items: LibraryItem[]): void {
 export function addToLibrary(
   intelligence: SynthesizedIntelligence,
   id?: string,
+  extra?: Partial<LibraryItem>,
 ): LibraryItem {
   const items = loadAll()
   const key = [...intelligence.source_ids].sort().join('+')
@@ -41,6 +44,7 @@ export function addToLibrary(
     ...intelligence,
     id: id ?? generateId(),
     created_at: new Date().toISOString(),
+    ...(extra ?? {}),
   }
   items.unshift(item)
   saveAll(items)

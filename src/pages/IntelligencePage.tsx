@@ -1,8 +1,10 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { getLibraryItem, updateItemImage, type LibraryItem } from '@/lib/local-library'
-import { fetchMerge } from '@/lib/github-store'
-import { BY_ID } from '@/data/intelligences'
+import { getLibraryItem, updateItemImage, addToLibrary, type LibraryItem } from '@/lib/local-library'
+import { fetchMerge, saveMerge } from '@/lib/github-store'
+import { hasToken } from '@/lib/gh-token'
+import { composeIntelligence, comboLabel } from '@/lib/synthesize'
+import { BY_ID, INTELLIGENCES, type IntelligenceId } from '@/data/intelligences'
 import { ArrowRight, Upload, Image, Copy, Check, Trash2 } from 'lucide-react'
 import { AppNav } from '@/components/AppNav'
 import { PrintButton } from '@/components/print/PrintButton'
@@ -15,6 +17,71 @@ export default function IntelligencePage() {
   const [visualCopied, setVisualCopied] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [chain, setChain] = useState<string[]>([])
+  const [picked, setPicked] = useState<string[]>([])
+
+  useEffect(() => {
+    setPicked([])
+  }, [id])
+
+  // Walk the parent chain (oldest ancestor → current)
+  useEffect(() => {
+    let alive = true
+    async function walk() {
+      if (!item) {
+        setChain([])
+        return
+      }
+      const names: string[] = []
+      let parentId = item.parent
+      const seen = new Set<string>()
+      while (parentId && !seen.has(parentId)) {
+        seen.add(parentId)
+        const remote = (await fetchMerge(parentId)) as LibraryItem | null
+        const local = getLibraryItem(parentId)
+        const resolved = remote?.name ? remote : local
+        names.unshift(
+          resolved?.name ??
+            parentId
+              .split('-')
+              .map((sid) => (sid in BY_ID ? BY_ID[sid as IntelligenceId].name : sid))
+              .join(' + '),
+        )
+        parentId = resolved?.parent
+      }
+      if (alive) setChain(names)
+    }
+    walk()
+    return () => {
+      alive = false
+    }
+  }, [item])
+
+  const togglePick = useCallback((pid: string) => {
+    setPicked((prev) => (prev.includes(pid) ? prev.filter((p) => p !== pid) : [...prev, pid]))
+  }, [])
+
+  const handleContinueMerge = useCallback(() => {
+    if (!item || picked.length === 0) return
+    const newSourceIds = Array.from(new Set([...item.source_ids, ...picked])).sort() as IntelligenceId[]
+    const newId = newSourceIds.join('-')
+    const composed = composeIntelligence(newSourceIds)
+    const now = new Date().toISOString()
+    addToLibrary(composed, newId, { parent: item.id, combo: comboLabel(newSourceIds) })
+
+    if (hasToken()) {
+      saveMerge({
+        ...composed,
+        id: newId,
+        created_at: now,
+        date: now,
+        combo: comboLabel(newSourceIds),
+        parent: item.id,
+      }).catch(() => undefined)
+    }
+    navigate(`/intelligence/${newId}`)
+  }, [item, picked, navigate])
+
 
   useEffect(() => {
     if (!id) return
@@ -164,6 +231,24 @@ export default function IntelligencePage() {
           >
             נוצר מהצירוף: {sourceNames}
           </p>
+
+          {chain.length > 0 && (
+            <div className="mt-3">
+              <p
+                className="font-mono-dm text-[9px] tracking-[0.2em] uppercase mb-2"
+                style={{ color: 'hsl(var(--text-dim))', opacity: 0.6 }}
+              >
+                שרשרת המקור
+              </p>
+              <p
+                className="font-sans-he text-[14px] leading-[1.9]"
+                style={{ color: 'hsl(var(--text-dim))' }}
+              >
+                {[...chain, item.name].join('  ←  ')}
+              </p>
+            </div>
+          )}
+
 
           {/* Rainbow line from source hues */}
           <div
@@ -414,6 +499,66 @@ export default function IntelligencePage() {
           </section>
         )}
 
+        {/* Continue merging */}
+        <section className="mb-16">
+          <div
+            className="h-px w-full mb-12"
+            style={{ background: 'hsla(var(--foreground), 0.06)' }}
+          />
+          <h2
+            className="font-mono-dm text-[10px] tracking-[0.25em] uppercase mb-6"
+            style={{ color: 'hsl(var(--text-dim))' }}
+          >
+            המשך למזג
+          </h2>
+          <p
+            className="font-sans-he text-[14px] mb-6"
+            style={{ color: 'hsl(var(--text-dim))' }}
+          >
+            בחרו אינטליגנציות נוספות כדי לצמוח מהמיזוג הזה לאינטליגנציה חדשה.
+          </p>
+          <div className="flex flex-wrap gap-3 mb-8">
+            {INTELLIGENCES.filter((intel) => !item.source_ids.includes(intel.id)).map((intel) => {
+              const on = picked.includes(intel.id)
+              return (
+                <button
+                  key={intel.id}
+                  onClick={() => togglePick(intel.id)}
+                  className="font-sans-he text-[14px] px-4 py-2 rounded-xl transition-all duration-200"
+                  style={{
+                    color: on ? `hsl(${intel.hue})` : 'hsl(var(--foreground))',
+                    background: on ? `hsla(${intel.hue}, 0.12)` : 'hsla(var(--foreground), 0.03)',
+                    border: `1px solid ${on ? `hsla(${intel.hue}, 0.35)` : 'hsla(var(--foreground), 0.08)'}`,
+                  }}
+                >
+                  {intel.name}
+                </button>
+              )
+            })}
+          </div>
+          <button
+            onClick={handleContinueMerge}
+            disabled={picked.length === 0}
+            className="font-sans-he text-[15px] px-6 py-3 rounded-xl transition-all duration-200 disabled:opacity-40"
+            style={{
+              color: 'hsl(var(--foreground))',
+              background: 'hsla(var(--foreground), 0.05)',
+              border: '1px solid hsla(var(--foreground), 0.12)',
+            }}
+          >
+            מזג ליצירת אינטליגנציה חדשה
+          </button>
+          {!hasToken() && (
+            <p
+              className="mt-4 font-sans-he text-[12px] leading-[1.8]"
+              style={{ color: 'hsl(var(--text-dim))' }}
+            >
+              מצב קריאה בלבד — המיזוג לא נשמר למאגר הציבורי. להזנת טוקן:{' '}
+              <Link to="/settings" className="underline">הגדרות</Link>
+            </p>
+          )}
+        </section>
+
         {/* Footer */}
         <footer
           className="pt-8 mt-8 text-center"
@@ -435,6 +580,9 @@ export default function IntelligencePage() {
           צירוף של {item.source_ids.length} · {sourceNames} ·{' '}
           {new Date(item.created_at).toLocaleDateString('he-IL')}
         </p>
+        {chain.length > 0 && (
+          <p className="print-meta">שרשרת המקור: {[...chain, item.name].join(' ← ')}</p>
+        )}
 
         {item.image_data && (
           <img className="print-img" src={item.image_data} alt={item.name} />
