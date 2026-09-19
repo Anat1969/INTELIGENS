@@ -486,6 +486,66 @@ export default function IntelligencePage() {
           </section>
         )}
 
+        {/* Continue merging */}
+        <section className="mb-16">
+          <div
+            className="h-px w-full mb-12"
+            style={{ background: 'hsla(var(--foreground), 0.06)' }}
+          />
+          <h2
+            className="font-mono-dm text-[10px] tracking-[0.25em] uppercase mb-6"
+            style={{ color: 'hsl(var(--text-dim))' }}
+          >
+            המשך למזג
+          </h2>
+          <p
+            className="font-sans-he text-[14px] mb-6"
+            style={{ color: 'hsl(var(--text-dim))' }}
+          >
+            בחרו אינטליגנציות נוספות כדי לצמוח מהמיזוג הזה לאינטליגנציה חדשה.
+          </p>
+          <div className="flex flex-wrap gap-3 mb-8">
+            {INTELLIGENCES.filter((intel) => !item.source_ids.includes(intel.id)).map((intel) => {
+              const on = picked.includes(intel.id)
+              return (
+                <button
+                  key={intel.id}
+                  onClick={() => togglePick(intel.id)}
+                  className="font-sans-he text-[14px] px-4 py-2 rounded-xl transition-all duration-200"
+                  style={{
+                    color: on ? `hsl(${intel.hue})` : 'hsl(var(--foreground))',
+                    background: on ? `hsla(${intel.hue}, 0.12)` : 'hsla(var(--foreground), 0.03)',
+                    border: `1px solid ${on ? `hsla(${intel.hue}, 0.35)` : 'hsla(var(--foreground), 0.08)'}`,
+                  }}
+                >
+                  {intel.name}
+                </button>
+              )
+            })}
+          </div>
+          <button
+            onClick={handleContinueMerge}
+            disabled={picked.length === 0}
+            className="font-sans-he text-[15px] px-6 py-3 rounded-xl transition-all duration-200 disabled:opacity-40"
+            style={{
+              color: 'hsl(var(--foreground))',
+              background: 'hsla(var(--foreground), 0.05)',
+              border: '1px solid hsla(var(--foreground), 0.12)',
+            }}
+          >
+            מזג ליצירת אינטליגנציה חדשה
+          </button>
+          {!hasToken() && (
+            <p
+              className="mt-4 font-sans-he text-[12px] leading-[1.8]"
+              style={{ color: 'hsl(var(--text-dim))' }}
+            >
+              מצב קריאה בלבד — המיזוג לא נשמר למאגר הציבורי. להזנת טוקן:{' '}
+              <Link to="/settings" className="underline">הגדרות</Link>
+            </p>
+          )}
+        </section>
+
         {/* Footer */}
         <footer
           className="pt-8 mt-8 text-center"
