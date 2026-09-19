@@ -143,6 +143,24 @@ export const AppNav = () => {
           </div>
         </div>
       )}
+
+      {!hasToken && (
+        <div
+          dir="rtl"
+          className="border-t text-center"
+          style={{
+            borderColor: "hsla(var(--foreground), 0.06)",
+            background: "hsla(var(--surface), 0.6)",
+          }}
+        >
+          <p className="mx-auto max-w-[1400px] px-6 py-1.5 text-[11px]" style={{ color: "hsl(var(--text-dim))" }}>
+            מצב קריאה בלבד — להזנת טוקן לעריכה:{" "}
+            <Link to="/settings" className="underline hover:opacity-80" style={{ color: "hsl(var(--foreground))" }}>
+              הגדרות
+            </Link>
+          </p>
+        </div>
+      )}
     </nav>
   );
 };
