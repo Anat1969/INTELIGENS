@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Landing from "./pages/Landing.tsx";
 import Index from "./pages/Index.tsx";
 import Profile from "./pages/Profile.tsx";
+import ProfileReport from "./pages/ProfileReport.tsx";
 import IntelligencePage from "./pages/IntelligencePage.tsx";
 import Trust from "./pages/Trust.tsx";
 import Settings from "./pages/Settings.tsx";
