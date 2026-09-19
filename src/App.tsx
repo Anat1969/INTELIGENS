@@ -25,6 +25,7 @@ const App = () => (
           <Route path="/composer" element={<Index />} />
           <Route path="/intelligence/:id" element={<IntelligencePage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<ProfileReport />} />
           <Route path="/trust" element={<Trust />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
