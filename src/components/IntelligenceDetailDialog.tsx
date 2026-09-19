@@ -1,7 +1,11 @@
+import { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { COMBOS, BY_ID, type Intelligence } from '@/data/intelligences'
 import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
+import { LivingSpaceBlock } from '@/components/LivingSpaceBlock'
+import { baseVisualPrompt } from '@/lib/synthesize'
+import { resolveImage } from '@/lib/living-image'
 
 interface Props {
   intel: Intelligence | null
@@ -28,6 +32,19 @@ function firstSentence(text: string) {
 }
 
 export function IntelligenceDetailDialog({ intel, onClose }: Props) {
+  const [printImage, setPrintImage] = useState<string | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    if (!intel) return
+    resolveImage(`base-${intel.id}`).then((found) => {
+      if (alive) setPrintImage(found)
+    })
+    return () => {
+      alive = false
+    }
+  }, [intel])
+
   if (!intel) return null
 
   const groupLabel = intel.group === 'gardner' ? 'גארדנר' : 'הרחבה'
@@ -106,6 +123,10 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
           )}
 
           <div className="pt-2">
+            <LivingSpaceBlock id={`base-${intel.id}`} visualPrompt={baseVisualPrompt(intel.id)} />
+          </div>
+
+          <div className="pt-2">
             <PrintButton />
           </div>
         </DialogContent>
@@ -131,6 +152,9 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
               </div>
             ))}
           </>
+        )}
+        {printImage && (
+          <img className="print-img" src={printImage} alt={intel.name} />
         )}
       </PrintableArticle>
     </>
