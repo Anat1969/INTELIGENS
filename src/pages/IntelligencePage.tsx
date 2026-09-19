@@ -447,7 +447,13 @@ export default function IntelligencePage() {
             <p>{item.keyQuestion}</p>
           </>
         )}
+
+        <PrintLayers
+          layers={mergeLayers(item.source_ids as IntelligenceId[])}
+          images={layerImages}
+        />
       </PrintableArticle>
+
     </div>
   )
 }
