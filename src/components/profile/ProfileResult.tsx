@@ -128,32 +128,15 @@ export const ProfileResult = ({
   }, []);
 
   // Combos — uses PROFILE_COMBOS (personal voice), distinct from the Map's COMBOS
-  const combos = useMemo(() => {
-    const ids2 = [sorted[0].intelligence, sorted[1].intelligence];
-    const k2 = [...ids2].sort().join("+");
-    const c2 = PROFILE_COMBOS[k2] ?? lookupProfileCombo(ids2);
-    const out: { combo: Combo; ids: IntelligenceId[] }[] = [
-      { combo: c2, ids: ids2 },
-    ];
-    if (sorted[2] && sorted[2].percent >= 70) {
-      const ids3 = [sorted[0].intelligence, sorted[1].intelligence, sorted[2].intelligence];
-      const c3 = lookupProfileCombo(ids3);
-      out.push({ combo: c3, ids: ids3 });
-    }
-    return out;
-  }, [sorted]);
+  const combos = useMemo(() => getProfileCombos(sorted), [sorted]);
 
-  // Comparison with manual selection
+  // Comparison with manual selection (prop wins over sessionStorage)
   const manualSelection = useMemo<IntelligenceId[]>(() => {
-    try {
-      const raw = sessionStorage.getItem("manualSelection");
-      if (!raw) return [];
-      const arr = JSON.parse(raw);
-      return Array.isArray(arr) ? (arr.filter((x) => x in BY_ID) as IntelligenceId[]) : [];
-    } catch {
-      return [];
+    if (manualProp) {
+      return manualProp.filter((x) => x in BY_ID) as IntelligenceId[];
     }
-  }, []);
+    return readManualSelection();
+  }, [manualProp]);
 
   const measuredTop = sorted.filter((s) => s.percent >= 65).map((s) => s.intelligence);
   const manualSet = new Set(manualSelection);
