@@ -18,7 +18,7 @@ export default function IntelligencePage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [item, setItem] = useState<LibraryItem | null>(null)
-  const [printImage, setPrintImage] = useState<string | null>(null)
+  const layerImages = useLayerPrintImages(id)
   const [chain, setChain] = useState<string[]>([])
   const [picked, setPicked] = useState<string[]>([])
 
