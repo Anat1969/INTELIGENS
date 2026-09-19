@@ -3,20 +3,22 @@ import { useEffect, useState, useCallback } from 'react'
 import { getLibraryItem, addToLibrary, type LibraryItem } from '@/lib/local-library'
 import { fetchMerge, saveMerge } from '@/lib/github-store'
 import { hasToken } from '@/lib/gh-token'
-import { resolvePrintImage } from '@/lib/living-image'
-import { composeIntelligence, comboLabel } from '@/lib/synthesize'
+import { composeIntelligence, comboLabel, mergeLayers } from '@/lib/synthesize'
 import { BY_ID, INTELLIGENCES, type IntelligenceId } from '@/data/intelligences'
 import { ArrowRight } from 'lucide-react'
 import { AppNav } from '@/components/AppNav'
-import { LivingSpaceBlock } from '@/components/LivingSpaceBlock'
+import { ThreeLayers } from '@/components/ThreeLayers'
+import { PrintLayers } from '@/components/print/PrintLayers'
+import { useLayerPrintImages } from '@/hooks/useLayerPrintImages'
 import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
+
 
 export default function IntelligencePage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [item, setItem] = useState<LibraryItem | null>(null)
-  const [printImage, setPrintImage] = useState<string | null>(null)
+  const layerImages = useLayerPrintImages(id)
   const [chain, setChain] = useState<string[]>([])
   const [picked, setPicked] = useState<string[]>([])
 
@@ -110,17 +112,6 @@ export default function IntelligencePage() {
     }
   }, [id, navigate])
 
-  // The printed report always receives an embedded, already-loaded image.
-  useEffect(() => {
-    let alive = true
-    if (!id) return
-    resolvePrintImage(id).then((found) => {
-      if (alive) setPrintImage(found)
-    })
-    return () => {
-      alive = false
-    }
-  }, [id])
 
   if (!item) return null
 
@@ -229,14 +220,12 @@ export default function IntelligencePage() {
           </div>
         </header>
 
-        {/* Living space (prompt + GitHub-backed image) */}
-        <LivingSpaceBlock
-          id={item.id}
-          visualPrompt={item.visualPrompt}
-          onImage={() => {
-            resolvePrintImage(item.id).then(setPrintImage)
-          }}
+        {/* Three layers (persona → space → building) */}
+        <ThreeLayers
+          layers={mergeLayers(item.source_ids as IntelligenceId[])}
+          idPrefix={item.id}
         />
+
 
         {/* Source intelligences */}
         <div
@@ -436,9 +425,6 @@ export default function IntelligencePage() {
           <p className="print-meta">שרשרת המקור: {[...chain, item.name].join(' ← ')}</p>
         )}
 
-        {printImage && (
-          <img className="print-img" src={printImage} alt={item.name} />
-        )}
 
         <h2>הגרעין</h2>
         <p>{item.essence}</p>
@@ -461,7 +447,13 @@ export default function IntelligencePage() {
             <p>{item.keyQuestion}</p>
           </>
         )}
+
+        <PrintLayers
+          layers={mergeLayers(item.source_ids as IntelligenceId[])}
+          images={layerImages}
+        />
       </PrintableArticle>
+
     </div>
   )
 }

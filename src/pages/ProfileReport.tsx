@@ -8,9 +8,11 @@ import { fetchProfile } from "@/lib/github-store";
 import { getProfile, type SavedProfile } from "@/lib/local-profiles";
 import { computeScores, getProfileCombos } from "@/lib/profile-scores";
 import { BY_ID } from "@/data/intelligences";
-import { LivingSpaceBlock } from "@/components/LivingSpaceBlock";
-import { baseVisualPrompt } from "@/lib/synthesize";
-import { resolvePrintImage } from "@/lib/living-image";
+import { ThreeLayers } from "@/components/ThreeLayers";
+import { PrintLayers } from "@/components/print/PrintLayers";
+import { useLayerPrintImages } from "@/hooks/useLayerPrintImages";
+import { getLayers } from "@/lib/synthesize";
+
 
 const formatDate = (iso: string) => {
   const d = new Date(iso);
@@ -28,18 +30,9 @@ const ProfileReport = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<SavedProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [printImage, setPrintImage] = useState<string | null>(null);
+  const layerImages = useLayerPrintImages(id ? `profile-${id}` : null);
 
-  useEffect(() => {
-    let alive = true;
-    if (!id) return;
-    resolvePrintImage(`profile-${id}`).then((found) => {
-      if (alive) setPrintImage(found);
-    });
-    return () => {
-      alive = false;
-    };
-  }, [id]);
+
 
   useEffect(() => {
     let alive = true;
@@ -113,14 +106,12 @@ const ProfileReport = () => {
         />
 
         <div className="mx-auto max-w-[800px] mt-12">
-          <LivingSpaceBlock
-            id={`profile-${profile.id}`}
-            visualPrompt={baseVisualPrompt(sorted[0].intelligence)}
-            onImage={() => {
-              resolvePrintImage(`profile-${profile.id}`).then(setPrintImage);
-            }}
+          <ThreeLayers
+            layers={getLayers(sorted[0].intelligence)}
+            idPrefix={`profile-${profile.id}`}
           />
         </div>
+
       </main>
 
       <PrintableArticle>
@@ -147,10 +138,9 @@ const ProfileReport = () => {
             <p>{c.combo.essence}</p>
           </div>
         ))}
-        {printImage && (
-          <img className="print-img" src={printImage} alt={profile.fillerName} />
-        )}
+        <PrintLayers layers={getLayers(sorted[0].intelligence)} images={layerImages} />
       </PrintableArticle>
+
     </div>
   );
 };

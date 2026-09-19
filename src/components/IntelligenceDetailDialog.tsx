@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { COMBOS, BY_ID, type Intelligence } from '@/data/intelligences'
 import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
-import { LivingSpaceBlock } from '@/components/LivingSpaceBlock'
-import { baseVisualPrompt } from '@/lib/synthesize'
-import { resolvePrintImage } from '@/lib/living-image'
+import { PrintLayers } from '@/components/print/PrintLayers'
+import { ThreeLayers } from '@/components/ThreeLayers'
+import { getLayers } from '@/lib/synthesize'
+import { useLayerPrintImages } from '@/hooks/useLayerPrintImages'
 
 interface Props {
   intel: Intelligence | null
@@ -32,18 +32,9 @@ function firstSentence(text: string) {
 }
 
 export function IntelligenceDetailDialog({ intel, onClose }: Props) {
-  const [printImage, setPrintImage] = useState<string | null>(null)
+  const idPrefix = intel ? `base-${intel.id}` : null
+  const layerImages = useLayerPrintImages(idPrefix)
 
-  useEffect(() => {
-    let alive = true
-    if (!intel) return
-    resolvePrintImage(`base-${intel.id}`).then((found) => {
-      if (alive) setPrintImage(found)
-    })
-    return () => {
-      alive = false
-    }
-  }, [intel])
 
   if (!intel) return null
 
@@ -123,14 +114,9 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
           )}
 
           <div className="pt-2">
-            <LivingSpaceBlock
-              id={`base-${intel.id}`}
-              visualPrompt={baseVisualPrompt(intel.id)}
-              onImage={() => {
-                resolvePrintImage(`base-${intel.id}`).then(setPrintImage)
-              }}
-            />
+            <ThreeLayers layers={getLayers(intel.id)} idPrefix={`base-${intel.id}`} />
           </div>
+
 
           <div className="pt-2">
             <PrintButton />
@@ -159,10 +145,9 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
             ))}
           </>
         )}
-        {printImage && (
-          <img className="print-img" src={printImage} alt={intel.name} />
-        )}
+        <PrintLayers layers={getLayers(intel.id)} images={layerImages} />
       </PrintableArticle>
+
     </>
   )
 }

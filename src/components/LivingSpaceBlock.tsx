@@ -13,6 +13,10 @@ interface Props {
   id: string
   visualPrompt?: string
   description?: string
+  /** Section heading. */
+  title?: string
+  /** Hebrew interpretation paragraph, rendered as readable content. */
+  interpretation?: string
   /** Notified whenever the shown image changes (used for the printed report). */
   onImage?: (src: string | null) => void
 }
@@ -22,7 +26,15 @@ type SaveStatus = 'idle' | 'saving' | 'saved' | 'local' | 'error'
 const DEFAULT_HELP =
   'צרו תמונה עם הפרומפט, ואז גררו/הדביקו (Ctrl+V) או העלו אותה כאן — היא תישמר למאגר.'
 
-export function LivingSpaceBlock({ id, visualPrompt, description, onImage }: Props) {
+export function LivingSpaceBlock({
+  id,
+  visualPrompt,
+  description,
+  title,
+  interpretation,
+  onImage,
+}: Props) {
+
   const [src, setSrc] = useState<string | null>(() => remoteImageUrl(id))
   const [copied, setCopied] = useState(false)
   const [status, setStatus] = useState<SaveStatus>('idle')
@@ -114,8 +126,18 @@ export function LivingSpaceBlock({ id, visualPrompt, description, onImage }: Pro
         className="font-mono-dm text-[10px] tracking-[0.25em] uppercase mb-6"
         style={{ color: 'hsl(var(--text-dim))' }}
       >
-        מרחב מחיה
+        {title ?? 'מרחב מחיה'}
       </h2>
+
+      {interpretation && (
+        <p
+          className="font-sans-he text-[16px] leading-[1.9] mb-6"
+          style={{ color: 'hsla(var(--foreground), 0.9)' }}
+        >
+          {interpretation}
+        </p>
+      )}
+
 
       {visualPrompt && (
         <div className="no-print mb-6">
