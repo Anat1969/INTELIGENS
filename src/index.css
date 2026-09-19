@@ -703,3 +703,79 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsla(var(--foreground), 0.2);
 }
+
+/* ─── Print (PDF A4) ─── */
+
+.print-root { display: none; }
+
+@media print {
+  @page { size: A4; margin: 16mm; }
+
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+    color-scheme: light !important;
+    forced-color-adjust: none;
+  }
+
+  body > *:not(.print-root) { display: none !important; }
+  #root { display: none !important; }
+  .no-print { display: none !important; }
+
+  .print-root {
+    display: block !important;
+    direction: rtl;
+    text-align: right;
+    background: #fff;
+    color: #000;
+  }
+
+  .print-root * {
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #000 !important;
+  }
+
+  .print-head,
+  .print-foot {
+    font-size: 8pt;
+    letter-spacing: 0.1em;
+    color: #444 !important;
+    text-transform: uppercase;
+  }
+
+  .print-head { border-bottom: 0.5pt solid #999; padding-bottom: 4pt; margin-bottom: 10pt; }
+  .print-foot {
+    display: flex;
+    justify-content: space-between;
+    border-top: 0.5pt solid #999;
+    padding-top: 4pt;
+    margin-top: 12pt;
+  }
+
+  .print-article { font-size: 9.5pt; line-height: 1.5; }
+  .print-article h1 { font-size: 22pt; line-height: 1.1; margin: 0 0 4pt; }
+  .print-article h2 { font-size: 9pt; letter-spacing: 0.18em; margin: 10pt 0 3pt; color: #333 !important; }
+  .print-article p { margin: 0 0 5pt; }
+  .print-article .print-sub { font-size: 11pt; color: #333 !important; margin-bottom: 2pt; }
+  .print-article .print-meta { font-size: 8pt; color: #555 !important; margin-bottom: 8pt; }
+  .print-article .print-quote {
+    font-size: 10pt;
+    font-style: italic;
+    border-right: 1.5pt solid #000;
+    padding-right: 8pt;
+    margin: 8pt 0;
+  }
+  .print-article .print-img {
+    max-height: 55mm;
+    max-width: 70mm;
+    object-fit: cover;
+    display: block;
+    margin: 0 0 8pt;
+    border: 0.5pt solid #999;
+  }
+  .print-article ul { margin: 0 14pt 5pt 0; padding: 0; }
+  .print-article li { margin-bottom: 2pt; }
+  .print-article .print-combo { margin-bottom: 6pt; }
+  .print-article .print-combo strong { font-size: 10pt; }
+}

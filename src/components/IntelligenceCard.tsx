@@ -1,4 +1,5 @@
 import { memo, useRef, useCallback } from "react";
+import { Info } from "lucide-react";
 import type { Intelligence } from "@/data/intelligences";
 import { cn } from "@/lib/utils";
 
@@ -6,9 +7,10 @@ interface Props {
   intel: Intelligence;
   selected: boolean;
   onToggle: (id: Intelligence["id"]) => void;
+  onOpenDetails?: (intel: Intelligence) => void;
 }
 
-const IntelligenceCardBase = ({ intel, selected, onToggle }: Props) => {
+const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenDetails }: Props) => {
   const isExt = intel.group === "extension";
   const hue = intel.hue;
   const cardRef = useRef<HTMLButtonElement>(null);
@@ -129,6 +131,30 @@ const IntelligenceCardBase = ({ intel, selected, onToggle }: Props) => {
           >
             {intel.keyword}
           </span>
+
+          {onOpenDetails && (
+            <span
+              role="button"
+              tabIndex={0}
+              aria-label={`פרטים על ${intel.name}`}
+              title="פרטים והורדת PDF"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenDetails(intel);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onOpenDetails(intel);
+                }
+              }}
+              className="shrink-0 grid place-items-center w-6 h-6 rounded-full transition-opacity opacity-40 hover:opacity-100"
+              style={{ border: `1px solid hsla(${hue}, 0.4)` }}
+            >
+              <Info size={12} style={{ color: `hsl(${hue})` }} />
+            </span>
+          )}
 
           {selected && (
             <div

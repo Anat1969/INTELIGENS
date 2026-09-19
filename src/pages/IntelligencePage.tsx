@@ -4,6 +4,8 @@ import { getLibraryItem, updateItemImage, type LibraryItem } from '@/lib/local-l
 import { BY_ID } from '@/data/intelligences'
 import { ArrowRight, Upload, Image, Copy, Check, Trash2 } from 'lucide-react'
 import { AppNav } from '@/components/AppNav'
+import { PrintButton } from '@/components/print/PrintButton'
+import { PrintableArticle } from '@/components/print/PrintableArticle'
 
 export default function IntelligencePage() {
   const { id } = useParams<{ id: string }>()
@@ -147,6 +149,10 @@ export default function IntelligencePage() {
                   : 'hsla(var(--foreground), 0.1)',
             }}
           />
+
+          <div className="mt-8">
+            <PrintButton />
+          </div>
         </header>
 
         {/* Image Section */}
@@ -394,6 +400,41 @@ export default function IntelligencePage() {
           </p>
         </footer>
       </article>
+
+      <PrintableArticle>
+        <h1>{item.name}</h1>
+        <p className="print-sub">{item.type}</p>
+        <p className="print-meta">
+          צירוף של {item.source_ids.length} · {sourceNames} ·{' '}
+          {new Date(item.created_at).toLocaleDateString('he-IL')}
+        </p>
+
+        {item.image_data && (
+          <img className="print-img" src={item.image_data} alt={item.name} />
+        )}
+
+        <h2>הגרעין</h2>
+        <p>{item.essence}</p>
+
+        <h2>העוצמה</h2>
+        <p>{item.power}</p>
+
+        <h2>תפקידים</h2>
+        <ul>
+          {item.roles.map((role) => (
+            <li key={role}>{role}</li>
+          ))}
+        </ul>
+
+        <p className="print-quote">{item.quote}</p>
+
+        {item.keyQuestion && (
+          <>
+            <h2>שאלת מפתח</h2>
+            <p>{item.keyQuestion}</p>
+          </>
+        )}
+      </PrintableArticle>
     </div>
   )
 }
