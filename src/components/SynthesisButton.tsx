@@ -1,7 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { composeIntelligence, SynthesizedIntelligence } from '@/lib/synthesize'
+import { Link } from 'react-router-dom'
+import { composeIntelligence, comboLabel, SynthesizedIntelligence } from '@/lib/synthesize'
 import type { IntelligenceId } from '@/data/intelligences'
 import { addToLibrary, getLibrary } from '@/lib/local-library'
+import { hasToken } from '@/lib/gh-token'
+import { saveMerge } from '@/lib/github-store'
 import SynthesisResult from './SynthesisResult'
 
 interface Intelligence {
@@ -17,6 +20,7 @@ interface Props {
 }
 
 type Phase = 'idle' | 'done' | 'error'
+type SaveState = 'none' | 'saving' | 'saved' | 'failed' | 'readonly'
 
 export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
   const [phase, setPhase] = useState<Phase>('idle')
@@ -24,6 +28,8 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
   const [resultId, setResultId] = useState<string>('')
   const [isFromCache, setIsFromCache] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [saveState, setSaveState] = useState<SaveState>('none')
+  const [saveError, setSaveError] = useState<string>('')
   const resultRef = useRef<HTMLDivElement>(null)
   const prevKeyRef = useRef<string>('')
 
@@ -38,6 +44,8 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
         setResult(null)
         setResultId('')
         setErrorMessage('')
+        setSaveState('none')
+        setSaveError('')
       }
     }
   }, [selectedKey, phase])
@@ -54,19 +62,44 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
     setResult(null)
     setResultId('')
     setIsFromCache(false)
+    setSaveError('')
 
     try {
-      const composed = composeIntelligence(selected.map(i => i.id as IntelligenceId))
-      const key = [...composed.source_ids].sort().join('+')
+      const ids = selected.map(i => i.id as IntelligenceId)
+      const composed = composeIntelligence(ids)
+      const sorted = [...composed.source_ids].sort()
+      const stableId = sorted.join('-')
+      const key = sorted.join('+')
       const existed = getLibrary().some(
         i => [...i.source_ids].sort().join('+') === key,
       )
-      const saved = addToLibrary(composed)
+      addToLibrary(composed, stableId)
       setIsFromCache(existed)
-      setResultId(saved.id)
+      setResultId(stableId)
       setResult(composed)
       setPhase('done')
       onNewSynthesis?.()
+
+      if (hasToken()) {
+        setSaveState('saving')
+        saveMerge({
+          ...composed,
+          id: stableId,
+          created_at: new Date().toISOString(),
+          date: new Date().toISOString(),
+          combo: comboLabel(sorted as IntelligenceId[]),
+        })
+          .then(() => {
+            setSaveState('saved')
+            onNewSynthesis?.()
+          })
+          .catch((err: unknown) => {
+            setSaveState('failed')
+            setSaveError(err instanceof Error ? err.message : 'השמירה למאגר נכשלה')
+          })
+      } else {
+        setSaveState('readonly')
+      }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'שגיאה לא ידועה')
       setPhase('error')
@@ -115,6 +148,23 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
           >
             {promptText}
           </button>
+        )}
+
+        {phase === 'done' && saveState !== 'none' && (
+          <p
+            className="font-sans-he text-[12px] text-center max-w-[560px] leading-[1.8]"
+            style={{ color: 'hsl(var(--text-dim))' }}
+          >
+            {saveState === 'saving' && 'שומר למאגר...'}
+            {saveState === 'saved' && 'נשמר למאגר'}
+            {saveState === 'failed' && (saveError || 'השמירה למאגר נכשלה')}
+            {saveState === 'readonly' && (
+              <>
+                מצב קריאה בלבד — המיזוג לא נשמר למאגר הציבורי. להזנת טוקן:{' '}
+                <Link to="/settings" className="underline">הגדרות</Link>
+              </>
+            )}
+          </p>
         )}
       </div>
 

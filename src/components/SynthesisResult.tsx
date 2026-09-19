@@ -1,4 +1,5 @@
-import { SynthesizedIntelligence } from '@/lib/synthesize'
+import { SynthesizedIntelligence, comboLabel } from '@/lib/synthesize'
+import type { IntelligenceId } from '@/data/intelligences'
 import { Copy, Check, Image, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -112,6 +113,13 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
         style={{ color: 'hsl(var(--text-dim))' }}
       >
         {result.type}
+      </p>
+
+      <p
+        className="mt-2 font-sans-he text-[13px]"
+        style={{ color: 'hsl(var(--text-dim))' }}
+      >
+        נוצר מהצירוף: {comboLabel(result.source_ids as IntelligenceId[])}
       </p>
 
       <div

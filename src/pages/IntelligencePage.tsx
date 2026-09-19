@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { getLibraryItem, updateItemImage, type LibraryItem } from '@/lib/local-library'
+import { fetchMerge } from '@/lib/github-store'
 import { BY_ID } from '@/data/intelligences'
 import { ArrowRight, Upload, Image, Copy, Check, Trash2 } from 'lucide-react'
 import { AppNav } from '@/components/AppNav'
@@ -16,10 +17,29 @@ export default function IntelligencePage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (id) {
-      const found = getLibraryItem(id)
+    if (!id) return
+    let alive = true
+
+    async function load(mergeId: string) {
+      const remote = (await fetchMerge(mergeId)) as LibraryItem | null
+      if (!alive) return
+      if (remote && remote.name) {
+        const local = getLibraryItem(mergeId)
+        setItem({
+          ...remote,
+          created_at: remote.created_at ?? new Date().toISOString(),
+          image_data: remote.image_data ?? local?.image_data,
+        })
+        return
+      }
+      const found = getLibraryItem(mergeId)
       if (found) setItem(found)
       else navigate('/composer')
+    }
+
+    load(id)
+    return () => {
+      alive = false
     }
   }, [id, navigate])
 
@@ -136,6 +156,13 @@ export default function IntelligencePage() {
             style={{ color: 'hsl(var(--text-dim))' }}
           >
             {item.type}
+          </p>
+
+          <p
+            className="mt-3 font-sans-he text-[15px]"
+            style={{ color: 'hsl(var(--foreground))' }}
+          >
+            נוצר מהצירוף: {sourceNames}
           </p>
 
           {/* Rainbow line from source hues */}
