@@ -379,16 +379,18 @@ export const ProfileResult = ({
       )}
 
       {/* ACTION */}
-      <div className="action mt-16 flex justify-center">
-        <button
-          type="button"
-          onClick={handleGoToComposer}
-          className="font-serif-display text-[22px] md:text-[26px] tracking-tight pb-2 border-b border-foreground transition-opacity hover:opacity-80"
-          style={{ color: "hsl(var(--foreground))" }}
-        >
-          עבור לדף הצירופים עם הנבחרים שלך
-        </button>
-      </div>
+      {showAction && (
+        <div className="action mt-16 flex justify-center">
+          <button
+            type="button"
+            onClick={handleGoToComposer}
+            className="font-serif-display text-[22px] md:text-[26px] tracking-tight pb-2 border-b border-foreground transition-opacity hover:opacity-80"
+            style={{ color: "hsl(var(--foreground))" }}
+          >
+            עבור לדף הצירופים עם הנבחרים שלך
+          </button>
+        </div>
+      )}
     </section>
   );
 };
