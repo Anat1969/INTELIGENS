@@ -425,9 +425,6 @@ export default function IntelligencePage() {
           <p className="print-meta">שרשרת המקור: {[...chain, item.name].join(' ← ')}</p>
         )}
 
-        {printImage && (
-          <img className="print-img" src={printImage} alt={item.name} />
-        )}
 
         <h2>הגרעין</h2>
         <p>{item.essence}</p>
