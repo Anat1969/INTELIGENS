@@ -8,9 +8,11 @@ import { fetchProfile } from "@/lib/github-store";
 import { getProfile, type SavedProfile } from "@/lib/local-profiles";
 import { computeScores, getProfileCombos } from "@/lib/profile-scores";
 import { BY_ID } from "@/data/intelligences";
-import { LivingSpaceBlock } from "@/components/LivingSpaceBlock";
-import { baseVisualPrompt } from "@/lib/synthesize";
-import { resolvePrintImage } from "@/lib/living-image";
+import { ThreeLayers } from "@/components/ThreeLayers";
+import { PrintLayers } from "@/components/print/PrintLayers";
+import { useLayerPrintImages } from "@/hooks/useLayerPrintImages";
+import { getLayers } from "@/lib/synthesize";
+
 
 const formatDate = (iso: string) => {
   const d = new Date(iso);
