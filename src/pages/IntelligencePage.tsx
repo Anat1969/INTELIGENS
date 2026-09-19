@@ -1,5 +1,5 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { getLibraryItem, addToLibrary, type LibraryItem } from '@/lib/local-library'
 import { fetchMerge, saveMerge } from '@/lib/github-store'
 import { hasToken } from '@/lib/gh-token'
@@ -434,8 +434,8 @@ export default function IntelligencePage() {
           <p className="print-meta">שרשרת המקור: {[...chain, item.name].join(' ← ')}</p>
         )}
 
-        {item.image_data && (
-          <img className="print-img" src={item.image_data} alt={item.name} />
+        {printImage && (
+          <img className="print-img" src={printImage} alt={item.name} />
         )}
 
         <h2>הגרעין</h2>
