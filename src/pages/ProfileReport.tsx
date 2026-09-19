@@ -30,18 +30,9 @@ const ProfileReport = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<SavedProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [printImage, setPrintImage] = useState<string | null>(null);
+  const layerImages = useLayerPrintImages(id ? `profile-${id}` : null);
 
-  useEffect(() => {
-    let alive = true;
-    if (!id) return;
-    resolvePrintImage(`profile-${id}`).then((found) => {
-      if (alive) setPrintImage(found);
-    });
-    return () => {
-      alive = false;
-    };
-  }, [id]);
+
 
   useEffect(() => {
     let alive = true;
