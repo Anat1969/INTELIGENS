@@ -18,7 +18,7 @@ export default function BaseArticle() {
   if (!intel) return null
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="base-article-page min-h-screen">
       <AppNav />
       <main className="pt-28 pb-20 px-5 sm:px-8">
         <div className="no-print mag-topbar">

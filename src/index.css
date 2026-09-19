@@ -748,6 +748,31 @@
 
 /* ─── Magazine article ─── */
 
+.base-article-page {
+  --background: 60 20% 98%;
+  --foreground: 60 2% 10%;
+  --surface: 60 14% 95%;
+  --surface-elevated: 60 14% 92%;
+  --text-dim: 45 4% 34%;
+  --border: 45 8% 82%;
+  --ring: 60 2% 10%;
+  min-height: 100vh;
+  background: #fbfbf8;
+  color: #1b1b1a;
+}
+
+.dark .base-article-page {
+  --background: 20 5% 11%;
+  --foreground: 60 5% 92%;
+  --surface: 20 5% 14%;
+  --surface-elevated: 20 5% 17%;
+  --text-dim: 45 4% 67%;
+  --border: 30 5% 27%;
+  --ring: 60 5% 92%;
+  background: #1e1c1b;
+  color: #ececea;
+}
+
 .mag-topbar {
   width: min(1180px, 100%);
   margin: 0 auto 28px;
@@ -758,7 +783,14 @@
 .mag {
   width: min(1180px, 100%);
   margin: 0 auto;
-  color: hsl(var(--foreground));
+  padding: clamp(24px, 4vw, 56px);
+  background: #ffffff;
+  color: #1b1b1a;
+}
+
+.dark .mag {
+  background: #1e1c1b;
+  color: #ececea;
 }
 
 .mag-hero {

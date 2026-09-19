@@ -1,19 +1,41 @@
-import { memo, useRef, useCallback } from "react";
-import { Info } from "lucide-react";
+import { memo, useRef, useCallback, useEffect, useState } from "react";
 import type { Intelligence } from "@/data/intelligences";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { onImageUpdated, resolveImage } from "@/lib/living-image";
 
 interface Props {
   intel: Intelligence;
   selected: boolean;
   onToggle: (id: Intelligence["id"]) => void;
-  onOpenDetails?: (intel: Intelligence) => void;
+  onOpenArticle: (id: Intelligence["id"]) => void;
 }
 
-const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenDetails }: Props) => {
+const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenArticle }: Props) => {
   const isExt = intel.group === "extension";
   const hue = intel.hue;
-  const cardRef = useRef<HTMLButtonElement>(null);
+  const imageId = `base-${intel.id}-persona`;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [personaImage, setPersonaImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    const refresh = () => {
+      void resolveImage(imageId).then((image) => {
+        if (active) setPersonaImage(image);
+      });
+    };
+
+    refresh();
+    const unsubscribe = onImageUpdated((updatedId) => {
+      if (updatedId === imageId) refresh();
+    });
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [imageId]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     const card = cardRef.current;
@@ -32,17 +54,28 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenDetails }: Prop
       : "translateY(0) scale(1)";
   }, [selected]);
 
+  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onToggle(intel.id);
+    }
+  }, [intel.id, onToggle]);
+
   return (
-    <button
+    <div
       ref={cardRef}
-      type="button"
+      role="button"
+      tabIndex={0}
       onClick={() => onToggle(intel.id)}
+      onKeyDown={handleKeyDown}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       aria-pressed={selected}
+      aria-label={`${intel.name} — בחירה להרכבה`}
       className={cn(
         "intel-card-3d group relative text-right w-full",
-        "px-5 py-4 transition-all duration-300 ease-out",
+        "p-4 transition-all duration-300 ease-out",
         "card-press cursor-pointer",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40",
         selected && "selected",
@@ -79,28 +112,42 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenDetails }: Prop
         }}
       />
 
-      {/* Horizontal layout: number | content | keyword + indicator */}
-      <div className="relative z-10 flex items-center gap-4">
-        {/* Number */}
-        <span
-          className="font-mono-dm text-[11px] tracking-[0.3em] shrink-0 w-8 text-center transition-colors"
+      <div className="relative z-10 flex items-stretch gap-4">
+        <div
+          className="relative w-28 sm:w-32 shrink-0 self-stretch min-h-28 overflow-hidden rounded-md border"
           style={{
-            color: selected ? `hsl(${hue})` : "hsl(var(--text-dim))",
-            opacity: selected ? 1 : 0.4,
+            borderColor: selected ? `hsla(${hue}, 0.42)` : "hsla(var(--foreground), 0.1)",
+            background: personaImage
+              ? "hsl(var(--surface-elevated))"
+              : `linear-gradient(145deg, hsla(${hue}, 0.34), hsla(${hue}, 0.06))`,
           }}
         >
-          {intel.number}
-        </span>
+          {personaImage && (
+            <img
+              src={personaImage}
+              alt={`דימוי אישיות עבור ${intel.name}`}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
+          {!personaImage && (
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 grid place-items-center font-serif-display text-[36px]"
+              style={{ color: `hsl(${hue})`, opacity: 0.7 }}
+            >
+              {intel.number}
+            </span>
+          )}
+        </div>
 
-        {/* Vertical separator */}
-        <div
-          className="w-px h-10 shrink-0 transition-colors"
-          style={{ background: selected ? `hsla(${hue}, 0.3)` : "hsla(var(--foreground), 0.08)" }}
-        />
-
-        {/* Main content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-baseline gap-3 flex-wrap">
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span
+              className="font-mono-dm text-[10px] tracking-[0.24em] transition-colors"
+              style={{ color: selected ? `hsl(${hue})` : "hsl(var(--text-dim))" }}
+            >
+              {intel.number}
+            </span>
             <h3 className="font-serif-display text-[17px] leading-tight text-foreground">
               {intel.name}
             </h3>
@@ -113,69 +160,40 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenDetails }: Prop
           </div>
 
           <p
-            className="mt-1 text-[16px] leading-[1.9] line-clamp-2"
+            className="mt-2 text-[16px] leading-[1.75]"
             style={{ color: "hsla(var(--foreground), 0.9)" }}
           >
             {intel.description}
           </p>
-        </div>
 
-        {/* Right side: keyword + selection dot */}
-        <div className="flex items-center gap-3 shrink-0">
-          <span
-            className="hidden sm:block font-mono-dm text-[9px] tracking-[0.15em] pb-0.5"
-            style={{
-              color: "hsl(var(--foreground))",
-              borderBottom: `1px solid hsla(${hue}, 0.4)`,
-            }}
-          >
-            {intel.keyword}
-          </span>
-
-          {onOpenDetails && (
-            <span
-              role="button"
-              tabIndex={0}
-              aria-label={`פרטים על ${intel.name}`}
-              title="פרטים והורדת PDF"
+          <div className="mt-auto flex items-center justify-between gap-3 pt-3">
+            <Button
+              type="button"
+              variant="ghost"
+              className="tool-btn h-auto"
               onClick={(e) => {
                 e.stopPropagation();
-                onOpenDetails(intel);
+                onOpenArticle(intel.id);
               }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onOpenDetails(intel);
-                }
-              }}
-              className="shrink-0 grid place-items-center w-6 h-6 rounded-full transition-opacity opacity-40 hover:opacity-100"
-              style={{ border: `1px solid hsla(${hue}, 0.4)` }}
+              aria-label={`פתח מאמר על ${intel.name}`}
             >
-              <Info size={12} style={{ color: `hsl(${hue})` }} />
+              פתח מאמר
+            </Button>
+
+            <span className="font-mono-dm text-[9px] tracking-[0.12em]" style={{ color: "hsl(var(--text-dim))" }}>
+              {intel.source}
             </span>
-          )}
-
-          {selected && (
-            <div
-              className="w-2.5 h-2.5 rounded-full shrink-0"
-              style={{
-                background: `hsl(${hue})`,
-                boxShadow: `0 0 10px hsla(${hue}, 0.5)`,
-              }}
-            />
-          )}
+          </div>
         </div>
-      </div>
 
-      {/* Source tag - tiny */}
-      <div
-        className="absolute bottom-2 left-3 font-mono-dm text-[7px] tracking-[0.1em]"
-        style={{ color: "hsl(var(--text-dim))", opacity: 0.3 }}
-      >
-        {intel.source}
+        {selected && (
+          <div
+            className="absolute left-3 top-3 h-2.5 w-2.5 rounded-full"
+            style={{ background: `hsl(${hue})`, boxShadow: `0 0 10px hsla(${hue}, 0.5)` }}
+          />
+        )}
       </div>
-    </button>
+    </div>
   );
 };
 
