@@ -3,14 +3,16 @@ import { useEffect, useState, useCallback } from 'react'
 import { getLibraryItem, addToLibrary, type LibraryItem } from '@/lib/local-library'
 import { fetchMerge, saveMerge } from '@/lib/github-store'
 import { hasToken } from '@/lib/gh-token'
-import { resolvePrintImage } from '@/lib/living-image'
-import { composeIntelligence, comboLabel } from '@/lib/synthesize'
+import { composeIntelligence, comboLabel, mergeLayers } from '@/lib/synthesize'
 import { BY_ID, INTELLIGENCES, type IntelligenceId } from '@/data/intelligences'
 import { ArrowRight } from 'lucide-react'
 import { AppNav } from '@/components/AppNav'
-import { LivingSpaceBlock } from '@/components/LivingSpaceBlock'
+import { ThreeLayers } from '@/components/ThreeLayers'
+import { PrintLayers } from '@/components/print/PrintLayers'
+import { useLayerPrintImages } from '@/hooks/useLayerPrintImages'
 import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
+
 
 export default function IntelligencePage() {
   const { id } = useParams<{ id: string }>()
