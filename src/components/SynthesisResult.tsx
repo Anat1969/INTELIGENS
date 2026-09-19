@@ -71,14 +71,9 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
           {itemId && (
             <button
               onClick={() => navigate(`/intelligence/${itemId}`)}
-              className="flex items-center gap-1.5 font-mono-dm text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-lg transition-all duration-200 hover:opacity-70"
-              style={{
-                color: "hsla(260, 70%, 65%, 1)",
-                background: "hsla(260, 70%, 60%, 0.06)",
-                border: "1px solid hsla(260, 70%, 60%, 0.12)",
-              }}
+              className="tool-btn"
             >
-              <ExternalLink size={11} />
+              <ExternalLink size={12} />
               צפה בדף המלא
             </button>
           )}
@@ -86,11 +81,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
 
         <button
           onClick={handleCopy}
-          className="flex items-center gap-2 font-mono-dm text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-lg transition-all duration-200 hover:opacity-70"
-          style={{
-            color: "hsl(var(--text-dim))",
-            background: "hsla(var(--foreground), 0.04)",
-          }}
+          className="tool-btn"
         >
           {copied ? <Check size={12} /> : <Copy size={12} />}
           {copied ? 'הועתק' : 'העתק'}
@@ -116,8 +107,8 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
       </p>
 
       <p
-        className="mt-2 font-sans-he text-[13px]"
-        style={{ color: 'hsl(var(--text-dim))' }}
+        className="mt-2 font-sans-he text-[14px]"
+        style={{ color: 'hsla(var(--foreground), 0.8)' }}
       >
         נוצר מהצירוף: {comboLabel(result.source_ids as IntelligenceId[])}
       </p>
@@ -213,8 +204,8 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
             שאלת מפתח
           </h4>
           <p
-            className="font-sans-he text-[15px] leading-[1.8]"
-            style={{ color: 'hsl(var(--text-dim))' }}
+            className="font-sans-he text-[15px] leading-[1.9]"
+            style={{ color: 'hsla(var(--foreground), 0.85)' }}
           >
             {result.keyQuestion}
           </p>
@@ -235,12 +226,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
             </h4>
             <button
               onClick={handleCopyVisual}
-              className="flex items-center gap-2 font-mono-dm text-[10px] tracking-[0.1em] px-3 py-1.5 rounded-lg transition-all duration-200 hover:opacity-70"
-              style={{
-                color: 'hsla(170, 70%, 55%, 0.8)',
-                background: 'hsla(170, 70%, 55%, 0.06)',
-                border: '1px solid hsla(170, 70%, 55%, 0.15)',
-              }}
+              className="tool-btn"
             >
               {visualCopied ? <Check size={12} /> : <Copy size={12} />}
               {visualCopied ? 'הועתק' : 'העתק פרומפט'}
@@ -255,8 +241,8 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
             }}
           >
             <p
-              className="font-mono-dm text-[12px] leading-[1.8]"
-              style={{ color: 'hsl(var(--text-dim))' }}
+              className="font-mono-dm text-[13px] leading-[1.85]"
+              style={{ color: 'hsla(var(--foreground), 0.8)' }}
             >
               {result.visualPrompt}
             </p>
