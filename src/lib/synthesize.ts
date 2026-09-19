@@ -50,6 +50,11 @@ function joinHe(parts: string[]): string {
   return `${parts.slice(0, -1).join(', ')} ו${parts[parts.length - 1]}`
 }
 
+export function baseVisualPrompt(id: IntelligenceId): string {
+  const e = EN[id] ?? { domain: 'thought', keyword: 'attention' }
+  return `An abstract dwelling devoted to ${e.domain}, built from translucent layers of ${e.keyword}. Light gathers and dissolves along its surfaces, tracing the quiet rhythm of a single way of knowing. No figures, no text — only architecture shaped by ${e.domain}.`
+}
+
 function buildVisualPrompt(ids: IntelligenceId[]): string {
   const en = ids.map((id) => EN[id]).filter(Boolean)
   const domains = en.map((e) => e.domain).join(', ')
