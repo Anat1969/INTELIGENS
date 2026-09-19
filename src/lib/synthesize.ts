@@ -5,6 +5,7 @@ import {
   lookupCombo,
   type IntelligenceId,
 } from '@/data/intelligences'
+import { LAYERS, type LayerSlots } from '@/data/intelligenceLayers'
 
 export interface SynthesizedIntelligence {
   name: string
