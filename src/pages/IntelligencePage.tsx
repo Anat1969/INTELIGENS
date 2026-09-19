@@ -112,17 +112,6 @@ export default function IntelligencePage() {
     }
   }, [id, navigate])
 
-  // The printed report always receives an embedded, already-loaded image.
-  useEffect(() => {
-    let alive = true
-    if (!id) return
-    resolvePrintImage(id).then((found) => {
-      if (alive) setPrintImage(found)
-    })
-    return () => {
-      alive = false
-    }
-  }, [id])
 
   if (!item) return null
 
