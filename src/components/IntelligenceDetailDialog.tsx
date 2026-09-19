@@ -32,6 +32,19 @@ function firstSentence(text: string) {
 }
 
 export function IntelligenceDetailDialog({ intel, onClose }: Props) {
+  const [printImage, setPrintImage] = useState<string | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    if (!intel) return
+    resolveImage(`base-${intel.id}`).then((found) => {
+      if (alive) setPrintImage(found)
+    })
+    return () => {
+      alive = false
+    }
+  }, [intel])
+
   if (!intel) return null
 
   const groupLabel = intel.group === 'gardner' ? 'גארדנר' : 'הרחבה'
