@@ -230,7 +230,7 @@ export default function IntelligencePage() {
         </header>
 
         {/* Living space (prompt + GitHub-backed image) */}
-        <LivingSpaceBlock id={item.id} visualPrompt={item.visualPrompt} />
+        <LivingSpaceBlock id={item.id} visualPrompt={item.visualPrompt} onImage={setPrintImage} />
 
         {/* Source intelligences */}
         <div

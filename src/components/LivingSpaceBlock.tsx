@@ -13,6 +13,8 @@ interface Props {
   id: string
   visualPrompt?: string
   description?: string
+  /** Notified whenever the shown image changes (used for the printed report). */
+  onImage?: (src: string | null) => void
 }
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'local' | 'error'
@@ -20,7 +22,7 @@ type SaveStatus = 'idle' | 'saving' | 'saved' | 'local' | 'error'
 const DEFAULT_HELP =
   'צרו תמונה עם הפרומפט, ואז גררו/הדביקו (Ctrl+V) או העלו אותה כאן — היא תישמר למאגר.'
 
-export function LivingSpaceBlock({ id, visualPrompt, description }: Props) {
+export function LivingSpaceBlock({ id, visualPrompt, description, onImage }: Props) {
   const [src, setSrc] = useState<string | null>(() => remoteImageUrl(id))
   const [copied, setCopied] = useState(false)
   const [status, setStatus] = useState<SaveStatus>('idle')
@@ -35,13 +37,16 @@ export function LivingSpaceBlock({ id, visualPrompt, description }: Props) {
   }, [id])
 
   const handleRemoteError = useCallback(() => {
-    setSrc(getLocalImage(id))
-  }, [id])
+    const local = getLocalImage(id)
+    setSrc(local)
+    onImage?.(local)
+  }, [id, onImage])
 
   const handleNewImage = useCallback(
     async (dataUrl: string) => {
       setLocalImage(id, dataUrl)
       setSrc(dataUrl)
+      onImage?.(dataUrl)
       if (!hasToken()) {
         setStatus('local')
         return
@@ -56,7 +61,7 @@ export function LivingSpaceBlock({ id, visualPrompt, description }: Props) {
         setError(e instanceof Error ? e.message : 'שמירת התמונה למאגר נכשלה.')
       }
     },
-    [id],
+    [id, onImage],
   )
 
   const readFile = useCallback(
@@ -99,6 +104,7 @@ export function LivingSpaceBlock({ id, visualPrompt, description }: Props) {
   const handleRemove = () => {
     clearLocalImage(id)
     setSrc(null)
+    onImage?.(null)
     setStatus('idle')
   }
 
