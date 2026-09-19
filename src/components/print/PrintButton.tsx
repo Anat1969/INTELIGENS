@@ -11,20 +11,15 @@ export function PrintButton({ className = '', note = true }: Props) {
       <button
         type="button"
         onClick={() => window.print()}
-        className="flex items-center gap-2 rounded-full px-4 py-2 font-mono-dm text-[11px] tracking-[0.12em] transition-opacity hover:opacity-70"
-        style={{
-          color: 'hsl(var(--foreground))',
-          border: '1px solid hsla(var(--foreground), 0.18)',
-          background: 'hsla(var(--foreground), 0.03)',
-        }}
+        className="tool-btn"
       >
         <Printer size={14} />
         הורד PDF (A4)
       </button>
       {note && (
         <p
-          className="font-mono-dm text-[9px] tracking-[0.08em]"
-          style={{ color: 'hsl(var(--text-dim))', opacity: 0.7 }}
+          className="font-mono-dm text-[11px] tracking-[0.08em]"
+          style={{ color: 'hsl(var(--text-dim))' }}
         >
           נפתח חלון הדפסה — בחרו "שמירה כ-PDF"
         </p>
