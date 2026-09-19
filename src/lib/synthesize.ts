@@ -5,6 +5,7 @@ import {
   lookupCombo,
   type IntelligenceId,
 } from '@/data/intelligences'
+import { LAYERS, type LayerSlots } from '@/data/intelligenceLayers'
 
 export interface SynthesizedIntelligence {
   name: string
@@ -97,5 +98,106 @@ export function composeIntelligence(
     visualPrompt: buildVisualPrompt(ids),
     source_ids: ids,
     source: 'composed',
+  }
+}
+
+// --- Three-layer prompt engine (persona → space → building) ---
+
+export interface IntelligenceLayers {
+  type: string
+  prompts: { persona: string; space: string; building: string }
+  interp: { persona: string; space: string; building: string }
+}
+
+const PERSONA_SUFFIX =
+  'candid, unposed, authentic human presence, Documentary realism, natural lighting, shallow depth of field, 16:9, No text, No words, No writing, No frame divisions.'
+const SPACE_SUFFIX =
+  'no people, bold, forward-looking, innovative contemporary architecture, Professional architecture photography, documentary realism, natural light, 16:9, No text, No words, No writing, No frame divisions.'
+const BUILDING_SUFFIX =
+  'bold, forward-looking, innovative contemporary architecture, Professional architecture photography, documentary realism, natural light, 16:9, No text, No words, No writing, No frame divisions.'
+
+function personaPromptFrom(type: string, p: LayerSlots['persona']): string {
+  return `A documentary portrait of ${p.archetype}, ${p.action}, in ${p.setting}, ${p.light}, ${p.materials}, ${PERSONA_SUFFIX}`
+}
+
+function spacePromptFrom(type: string, s: LayerSlots['space']): string {
+  return `A contemporary architectural interior living space for ${type}, ${s.concept}, ${s.materials}, ${s.light}, ${s.rhythm} spatial rhythm, ${s.element}, ${SPACE_SUFFIX}`
+}
+
+function buildingPromptFrom(type: string, b: LayerSlots['building']): string {
+  return `A contemporary architectural building and its surrounding environment, embodying ${type}'s way of shaping the world, ${b.concept}, ${b.site}, ${b.materials}, ${b.light}, ${b.scale}${b.context ? ', ' + b.context : ''}, ${BUILDING_SUFFIX}`
+}
+
+export function personaPrompt(id: IntelligenceId): string {
+  const L = LAYERS[id]
+  return personaPromptFrom(L.type, L.persona)
+}
+
+export function spacePrompt(id: IntelligenceId): string {
+  const L = LAYERS[id]
+  return spacePromptFrom(L.type, L.space)
+}
+
+export function buildingPrompt(id: IntelligenceId): string {
+  const L = LAYERS[id]
+  return buildingPromptFrom(L.type, L.building)
+}
+
+export function getLayers(id: IntelligenceId): IntelligenceLayers {
+  const L = LAYERS[id]
+  return {
+    type: L.type,
+    prompts: { persona: personaPrompt(id), space: spacePrompt(id), building: buildingPrompt(id) },
+    interp: L.interp,
+  }
+}
+
+function unionMaterials(materials: string[]): string {
+  const seen = new Set<string>()
+  for (const m of materials) {
+    for (const part of m.split(',')) {
+      const t = part.trim()
+      if (t && !seen.has(t.toLowerCase())) seen.add(t.toLowerCase())
+    }
+  }
+  const out: string[] = []
+  const added = new Set<string>()
+  for (const m of materials) {
+    for (const part of m.split(',')) {
+      const t = part.trim()
+      const k = t.toLowerCase()
+      if (t && seen.has(k) && !added.has(k)) {
+        added.add(k)
+        out.push(t)
+      }
+    }
+  }
+  return out.join(', ')
+}
+
+export function mergeLayers(sourceIds: IntelligenceId[]): IntelligenceLayers {
+  const ids = sortedIds(sourceIds)
+  const sources = ids.map((id) => LAYERS[id]).filter(Boolean)
+  const first = sources[0] ?? LAYERS.linguistic
+  const type = `the fusion of ${sources.map((s) => s.type).join(' and ')}`
+
+  const persona = { ...first.persona, materials: unionMaterials(sources.map((s) => s.persona.materials)) }
+  const space = { ...first.space, materials: unionMaterials(sources.map((s) => s.space.materials)) }
+  const building = { ...first.building, materials: unionMaterials(sources.map((s) => s.building.materials)) }
+
+  const sourceNames = joinHe(ids.map((id) => BY_ID[id]?.name ?? id))
+
+  return {
+    type,
+    prompts: {
+      persona: personaPromptFrom(type, persona),
+      space: spacePromptFrom(type, space),
+      building: buildingPromptFrom(type, building),
+    },
+    interp: {
+      persona: `שילוב של ${sourceNames}: ${first.interp.persona}`,
+      space: `שילוב של ${sourceNames}: ${first.interp.space}`,
+      building: `שילוב של ${sourceNames}: ${first.interp.building}`,
+    },
   }
 }
