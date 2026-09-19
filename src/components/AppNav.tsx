@@ -1,9 +1,24 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X, SquarePen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGitHubAuth } from "@/hooks/useGitHubAuth";
+
+/** Discreet shortcut back to Claude Code for continued editing. */
+const EditLink = () => (
+  <a
+    href="https://claude.ai/code"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="המשך עריכה ב-Claude Code"
+    title="המשך עריכה ב-Claude Code"
+    className="p-2.5 rounded-xl hover:opacity-70 transition-all duration-200"
+    style={{ color: "hsl(var(--text-dim))", background: "hsla(var(--surface), 0.5)" }}
+  >
+    <SquarePen size={16} />
+  </a>
+);
 
 const links = [
   { to: "/", label: "בית" },
@@ -96,6 +111,7 @@ export const AppNav = () => {
               </Link>
             );
           })}
+          <EditLink />
           <ThemeToggle />
         </div>
 
@@ -137,7 +153,8 @@ export const AppNav = () => {
                 </Link>
               );
             })}
-            <div className="pt-3 border-t flex justify-start" style={{ borderColor: "hsla(var(--foreground), 0.06)" }}>
+            <div className="pt-3 border-t flex justify-start gap-2" style={{ borderColor: "hsla(var(--foreground), 0.06)" }}>
+              <EditLink />
               <ThemeToggle />
             </div>
           </div>
