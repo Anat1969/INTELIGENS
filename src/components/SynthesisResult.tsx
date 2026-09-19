@@ -74,7 +74,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
               className="tool-btn"
             >
               <ExternalLink size={12} />
-              צפה בדף המלא
+              פתח מאמר
             </button>
           )}
         </div>
