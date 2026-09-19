@@ -32,6 +32,7 @@ function saveAll(items: LibraryItem[]): void {
 export function addToLibrary(
   intelligence: SynthesizedIntelligence,
   id?: string,
+  extra?: Partial<LibraryItem>,
 ): LibraryItem {
   const items = loadAll()
   const key = [...intelligence.source_ids].sort().join('+')
