@@ -5,34 +5,19 @@ import {
   type Combo,
   type IntelligenceId,
 } from "@/data/intelligences";
-import { lookupProfileCombo, PROFILE_COMBOS } from "@/data/profileCombos";
-import { INTEL_ORDER } from "@/data/profileQuestions";
-
-interface ProfileScore {
-  intelligence: IntelligenceId;
-  score: number;
-  percent: number;
-  hue: string;
-}
+import {
+  computeScores,
+  getProfileCombos,
+  readManualSelection,
+} from "@/lib/profile-scores";
 
 interface Props {
   answers: (number | null)[];
+  /** When provided, used instead of reading sessionStorage. */
+  manualSelection?: string[];
+  /** Hide the "go to composer" action (e.g. in a saved report). */
+  showAction?: boolean;
 }
-
-const computeScores = (answers: (number | null)[]): ProfileScore[] =>
-  INTEL_ORDER.map((id, idx) => {
-    const a1 = answers[idx * 2];
-    const a2 = answers[idx * 2 + 1];
-    const s1 = a1 === null || a1 === undefined ? 0 : 4 - a1;
-    const s2 = a2 === null || a2 === undefined ? 0 : 4 - a2;
-    const score = s1 + s2;
-    return {
-      intelligence: id,
-      score,
-      percent: Math.round((score / 8) * 100),
-      hue: BY_ID[id].hue,
-    };
-  }).sort((a, b) => b.percent - a.percent);
 
 const ComboBlock = ({
   combo,
@@ -125,7 +110,11 @@ const ComboBlock = ({
   );
 };
 
-export const ProfileResult = ({ answers }: Props) => {
+export const ProfileResult = ({
+  answers,
+  manualSelection: manualProp,
+  showAction = true,
+}: Props) => {
   const navigate = useNavigate();
   const sorted = useMemo(() => computeScores(answers), [answers]);
   const dominant = sorted[0];
@@ -139,32 +128,15 @@ export const ProfileResult = ({ answers }: Props) => {
   }, []);
 
   // Combos — uses PROFILE_COMBOS (personal voice), distinct from the Map's COMBOS
-  const combos = useMemo(() => {
-    const ids2 = [sorted[0].intelligence, sorted[1].intelligence];
-    const k2 = [...ids2].sort().join("+");
-    const c2 = PROFILE_COMBOS[k2] ?? lookupProfileCombo(ids2);
-    const out: { combo: Combo; ids: IntelligenceId[] }[] = [
-      { combo: c2, ids: ids2 },
-    ];
-    if (sorted[2] && sorted[2].percent >= 70) {
-      const ids3 = [sorted[0].intelligence, sorted[1].intelligence, sorted[2].intelligence];
-      const c3 = lookupProfileCombo(ids3);
-      out.push({ combo: c3, ids: ids3 });
-    }
-    return out;
-  }, [sorted]);
+  const combos = useMemo(() => getProfileCombos(sorted), [sorted]);
 
-  // Comparison with manual selection
+  // Comparison with manual selection (prop wins over sessionStorage)
   const manualSelection = useMemo<IntelligenceId[]>(() => {
-    try {
-      const raw = sessionStorage.getItem("manualSelection");
-      if (!raw) return [];
-      const arr = JSON.parse(raw);
-      return Array.isArray(arr) ? (arr.filter((x) => x in BY_ID) as IntelligenceId[]) : [];
-    } catch {
-      return [];
+    if (manualProp) {
+      return manualProp.filter((x) => x in BY_ID) as IntelligenceId[];
     }
-  }, []);
+    return readManualSelection();
+  }, [manualProp]);
 
   const measuredTop = sorted.filter((s) => s.percent >= 65).map((s) => s.intelligence);
   const manualSet = new Set(manualSelection);
@@ -407,16 +379,18 @@ export const ProfileResult = ({ answers }: Props) => {
       )}
 
       {/* ACTION */}
-      <div className="action mt-16 flex justify-center">
-        <button
-          type="button"
-          onClick={handleGoToComposer}
-          className="font-serif-display text-[22px] md:text-[26px] tracking-tight pb-2 border-b border-foreground transition-opacity hover:opacity-80"
-          style={{ color: "hsl(var(--foreground))" }}
-        >
-          עבור לדף הצירופים עם הנבחרים שלך
-        </button>
-      </div>
+      {showAction && (
+        <div className="action mt-16 flex justify-center">
+          <button
+            type="button"
+            onClick={handleGoToComposer}
+            className="font-serif-display text-[22px] md:text-[26px] tracking-tight pb-2 border-b border-foreground transition-opacity hover:opacity-80"
+            style={{ color: "hsl(var(--foreground))" }}
+          >
+            עבור לדף הצירופים עם הנבחרים שלך
+          </button>
+        </div>
+      )}
     </section>
   );
 };

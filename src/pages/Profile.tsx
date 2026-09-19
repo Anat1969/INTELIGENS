@@ -4,6 +4,8 @@ import { PROFILE_QUESTIONS } from "@/data/profileQuestions";
 import { QuestionBlock } from "@/components/profile/QuestionBlock";
 import { ProgressBar } from "@/components/profile/ProgressBar";
 import { ProfileResult } from "@/components/profile/ProfileResult";
+import { SaveProfileBlock } from "@/components/profile/SaveProfileBlock";
+import { ProfilesLibrary } from "@/components/profile/ProfilesLibrary";
 
 const STORAGE_KEY = "intelligenceProfile";
 const TOTAL = PROFILE_QUESTIONS.length;
@@ -39,6 +41,7 @@ const loadInitial = (): SavedState => {
 
 const Profile = () => {
   const [state, setState] = useState<SavedState>(loadInitial);
+  const [libraryKey, setLibraryKey] = useState(0);
   const resultRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -166,8 +169,18 @@ const Profile = () => {
         </div>
 
         <div ref={resultRef}>
-          {state.showResult && <ProfileResult answers={state.answers} />}
+          {state.showResult && (
+            <>
+              <ProfileResult answers={state.answers} />
+              <SaveProfileBlock
+                answers={state.answers}
+                onSaved={() => setLibraryKey((k) => k + 1)}
+              />
+            </>
+          )}
         </div>
+
+        <ProfilesLibrary refreshKey={libraryKey} />
       </main>
     </div>
   );
