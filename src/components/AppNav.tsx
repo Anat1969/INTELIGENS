@@ -9,6 +9,7 @@ const links = [
   { to: "/composer", label: "מפת האינטליגנציות" },
   { to: "/profile", label: "הפרופיל שלך" },
   { to: "/trust", label: "אמון ופרטיות" },
+  { to: "/settings", label: "הגדרות" },
 ];
 
 const ThemeToggle = () => {
