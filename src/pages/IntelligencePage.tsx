@@ -110,55 +110,17 @@ export default function IntelligencePage() {
     }
   }, [id, navigate])
 
-  const handleImageFile = useCallback((file: File) => {
-    if (!file.type.startsWith('image/') || !id) return
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const data = e.target?.result as string
-      updateItemImage(id, data)
-      setItem(prev => prev ? { ...prev, image_data: data } : null)
-    }
-    reader.readAsDataURL(file)
-  }, [id])
-
-  const handlePaste = useCallback((e: ClipboardEvent) => {
-    const items = e.clipboardData?.items
-    if (!items) return
-    for (const clipItem of Array.from(items)) {
-      if (clipItem.type.startsWith('image/')) {
-        e.preventDefault()
-        const file = clipItem.getAsFile()
-        if (file) handleImageFile(file)
-        break
-      }
-    }
-  }, [handleImageFile])
-
+  // Image shown in the printed report: GitHub first, local cache as fallback
   useEffect(() => {
-    document.addEventListener('paste', handlePaste)
-    return () => document.removeEventListener('paste', handlePaste)
-  }, [handlePaste])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-    const file = e.dataTransfer.files[0]
-    if (file) handleImageFile(file)
-  }, [handleImageFile])
-
-  const handleRemoveImage = useCallback(() => {
+    let alive = true
     if (!id) return
-    updateItemImage(id, '')
-    setItem(prev => prev ? { ...prev, image_data: undefined } : null)
-  }, [id])
-
-  function handleCopyVisual() {
-    if (item?.visualPrompt) {
-      navigator.clipboard.writeText(item.visualPrompt)
-      setVisualCopied(true)
-      setTimeout(() => setVisualCopied(false), 2000)
+    resolveImage(id).then((found) => {
+      if (alive) setPrintImage(found)
+    })
+    return () => {
+      alive = false
     }
-  }
+  }, [id])
 
   if (!item) return null
 
