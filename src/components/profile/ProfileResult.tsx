@@ -5,34 +5,19 @@ import {
   type Combo,
   type IntelligenceId,
 } from "@/data/intelligences";
-import { lookupProfileCombo, PROFILE_COMBOS } from "@/data/profileCombos";
-import { INTEL_ORDER } from "@/data/profileQuestions";
-
-interface ProfileScore {
-  intelligence: IntelligenceId;
-  score: number;
-  percent: number;
-  hue: string;
-}
+import {
+  computeScores,
+  getProfileCombos,
+  readManualSelection,
+} from "@/lib/profile-scores";
 
 interface Props {
   answers: (number | null)[];
+  /** When provided, used instead of reading sessionStorage. */
+  manualSelection?: string[];
+  /** Hide the "go to composer" action (e.g. in a saved report). */
+  showAction?: boolean;
 }
-
-const computeScores = (answers: (number | null)[]): ProfileScore[] =>
-  INTEL_ORDER.map((id, idx) => {
-    const a1 = answers[idx * 2];
-    const a2 = answers[idx * 2 + 1];
-    const s1 = a1 === null || a1 === undefined ? 0 : 4 - a1;
-    const s2 = a2 === null || a2 === undefined ? 0 : 4 - a2;
-    const score = s1 + s2;
-    return {
-      intelligence: id,
-      score,
-      percent: Math.round((score / 8) * 100),
-      hue: BY_ID[id].hue,
-    };
-  }).sort((a, b) => b.percent - a.percent);
 
 const ComboBlock = ({
   combo,
