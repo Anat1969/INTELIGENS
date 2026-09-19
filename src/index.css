@@ -820,4 +820,15 @@
   .print-article li { margin-bottom: 1pt; }
   .print-article .print-combo { margin-bottom: 4pt; }
   .print-article .print-combo strong { font-size: 12pt; }
+  .print-article .print-layer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 10pt;
+  }
+  .print-article .print-layer .print-img {
+    max-height: 78mm;
+    max-width: 100%;
+    object-fit: contain;
+  }
 }
+
