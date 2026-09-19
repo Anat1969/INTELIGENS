@@ -237,6 +237,24 @@ export default function IntelligencePage() {
             נוצר מהצירוף: {sourceNames}
           </p>
 
+          {chain.length > 0 && (
+            <div className="mt-3">
+              <p
+                className="font-mono-dm text-[9px] tracking-[0.2em] uppercase mb-2"
+                style={{ color: 'hsl(var(--text-dim))', opacity: 0.6 }}
+              >
+                שרשרת המקור
+              </p>
+              <p
+                className="font-sans-he text-[14px] leading-[1.9]"
+                style={{ color: 'hsl(var(--text-dim))' }}
+              >
+                {[...chain, item.name].join('  ←  ')}
+              </p>
+            </div>
+          )}
+
+
           {/* Rainbow line from source hues */}
           <div
             className="mt-8 h-[3px] w-48 rounded-full"
