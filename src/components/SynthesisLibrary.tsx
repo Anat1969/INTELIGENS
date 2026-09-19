@@ -109,21 +109,21 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
       </div>
 
       <p
-        className="font-sans-he text-[13px] leading-[1.8] mb-10 max-w-[600px]"
-        style={{ color: 'hsl(var(--text-dim))' }}
+        className="font-sans-he text-[15px] leading-[1.9] mb-10 max-w-[600px]"
+        style={{ color: 'hsla(var(--foreground), 0.8)' }}
       >
         כל אינטליגנציה שמופיעה כאן נוצרה על-ידי צירוף ספציפי.
         לחץ עליה כדי לפתוח את הדף המלא שלה.
       </p>
 
       {cards === null && (
-        <p className="font-sans-he text-[13px]" style={{ color: 'hsl(var(--text-dim))' }}>
+        <p className="font-sans-he text-[14px]" style={{ color: 'hsl(var(--text-dim))' }}>
           טוען ספרייה...
         </p>
       )}
 
       {cards !== null && totalCount === 0 && (
-        <p className="font-sans-he text-[13px]" style={{ color: 'hsl(var(--text-dim))' }}>
+        <p className="font-sans-he text-[14px]" style={{ color: 'hsl(var(--text-dim))' }}>
           המאגר עדיין ריק — כל מיזוג שתיצרו יופיע כאן.
         </p>
       )}
@@ -212,16 +212,16 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
         )}
 
         <p
-          className="font-sans-he text-[12px] leading-[1.7] mb-3"
-          style={{ color: 'hsl(var(--text-dim))' }}
+          className="font-sans-he text-[13px] leading-[1.8] mb-3"
+          style={{ color: 'hsla(var(--foreground), 0.8)' }}
         >
           נוצר מהצירוף: {item.combo}
         </p>
 
         {item.essence && (
           <p
-            className="font-sans-he text-[12px] leading-[1.7] line-clamp-2 mb-3"
-            style={{ color: 'hsl(var(--text-dim))', opacity: 0.7 }}
+            className="font-sans-he text-[13px] leading-[1.8] line-clamp-2 mb-3"
+            style={{ color: 'hsla(var(--foreground), 0.75)' }}
           >
             {item.essence}
           </p>
