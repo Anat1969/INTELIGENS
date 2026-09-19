@@ -106,14 +106,12 @@ const ProfileReport = () => {
         />
 
         <div className="mx-auto max-w-[800px] mt-12">
-          <LivingSpaceBlock
-            id={`profile-${profile.id}`}
-            visualPrompt={baseVisualPrompt(sorted[0].intelligence)}
-            onImage={() => {
-              resolvePrintImage(`profile-${profile.id}`).then(setPrintImage);
-            }}
+          <ThreeLayers
+            layers={getLayers(sorted[0].intelligence)}
+            idPrefix={`profile-${profile.id}`}
           />
         </div>
+
       </main>
 
       <PrintableArticle>
