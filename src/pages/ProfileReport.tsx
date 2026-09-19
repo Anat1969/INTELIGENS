@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { AppNav } from "@/components/AppNav";
-import { ProfileResult } from "@/components/profile/ProfileResult";
-import { PrintButton } from "@/components/print/PrintButton";
-import { PrintableArticle } from "@/components/print/PrintableArticle";
+import { MagazineArticle } from "@/components/MagazineArticle";
+import { Button } from "@/components/ui/button";
 import { fetchProfile } from "@/lib/github-store";
 import { getProfile, type SavedProfile } from "@/lib/local-profiles";
-import { computeScores, getProfileCombos } from "@/lib/profile-scores";
+import { computeScores } from "@/lib/profile-scores";
 import { BY_ID } from "@/data/intelligences";
-import { ThreeLayers } from "@/components/ThreeLayers";
-import { PrintLayers } from "@/components/print/PrintLayers";
-import { useLayerPrintImages } from "@/hooks/useLayerPrintImages";
 import { getLayers } from "@/lib/synthesize";
-
 
 const formatDate = (iso: string) => {
   const d = new Date(iso);
@@ -30,9 +25,6 @@ const ProfileReport = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<SavedProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const layerImages = useLayerPrintImages(id ? `profile-${id}` : null);
-
-
 
   useEffect(() => {
     let alive = true;
@@ -63,84 +55,59 @@ const ProfileReport = () => {
 
   if (loading || !profile) {
     return (
-      <div className="min-h-screen" style={{ background: "hsl(var(--background))" }}>
+      <div className="base-article-page min-h-screen">
         <AppNav />
-        <main className="mx-auto max-w-[1400px] px-6 py-32">
-          <p className="text-[13px]" style={{ color: "hsl(var(--text-dim))" }}>
-            טוען את הפרופיל...
-          </p>
+        <main className="pt-28 pb-20 px-5 sm:px-8">
+          <p className="mag-body">טוען את הפרופיל...</p>
         </main>
       </div>
     );
   }
 
   const sorted = computeScores(profile.answers);
-  const combos = getProfileCombos(sorted);
   const dominant = BY_ID[sorted[0].intelligence];
 
   return (
-    <div className="min-h-screen" style={{ background: "hsl(var(--background))" }}>
+    <div className="base-article-page min-h-screen">
       <AppNav />
-
-      <main dir="rtl" className="mx-auto max-w-[1400px] px-6 py-12">
-        <header className="mx-auto max-w-[800px] mb-8">
-          <h1 className="font-serif-display text-[34px] md:text-[44px] leading-[1.05] tracking-[-0.02em] text-foreground">
-            פרופיל של {profile.fillerName} · {formatDate(profile.date)}
-          </h1>
-          <div className="mt-5 flex flex-wrap items-center gap-6">
-            <PrintButton />
-            <Link
-              to="/profile"
-              className="no-print font-mono-dm text-[11px] tracking-[0.2em] hover:opacity-80"
-              style={{ color: "hsl(var(--text-dim))" }}
-            >
-              חזרה לפרופילים
-            </Link>
-          </div>
-        </header>
-
-        <ProfileResult
-          answers={profile.answers}
-          manualSelection={profile.manualSelection}
-          showAction={false}
-        />
-
-        <div className="mx-auto max-w-[800px] mt-12">
-          <ThreeLayers
-            layers={getLayers(sorted[0].intelligence)}
-            idPrefix={`profile-${profile.id}`}
-          />
+      <main className="pt-28 pb-20 px-5 sm:px-8">
+        <div className="no-print mag-topbar" style={{ gap: "18px", alignItems: "center" }}>
+          <Button type="button" className="tool-btn" onClick={() => window.print()}>
+            הורד PDF
+          </Button>
+          <Link to="/profile" className="mag-body" style={{ textDecoration: "underline" }}>
+            חזרה לפרופילים
+          </Link>
         </div>
 
+        <MagazineArticle
+          title={`פרופיל של ${profile.fillerName}`}
+          subtitle={formatDate(profile.date)}
+          sourceChain={`האינטליגנציה הדומיננטית: ${dominant.name} · ${sorted[0].percent}%`}
+          lead={dominant.description}
+          layers={getLayers(sorted[0].intelligence)}
+          idPrefix={`profile-${profile.id}`}
+          footer={`${profile.fillerName} · ${formatDate(profile.date)}`}
+        >
+          <section className="mag-section">
+            <h2 className="mag-subheading">האינטליגנציה הדומיננטית</h2>
+            <p className="mag-body">
+              {dominant.name} · {dominant.domain} · {sorted[0].percent}%
+            </p>
+          </section>
+
+          <section className="mag-section">
+            <h2 className="mag-subheading">הפרופיל המלא</h2>
+            <ul className="mag-list">
+              {sorted.map((s) => (
+                <li key={s.intelligence}>
+                  {BY_ID[s.intelligence].name} — {s.percent}%
+                </li>
+              ))}
+            </ul>
+          </section>
+        </MagazineArticle>
       </main>
-
-      <PrintableArticle>
-        <h1>פרופיל של {profile.fillerName}</h1>
-        <p className="print-sub">{formatDate(profile.date)}</p>
-        <p className="print-meta">
-          האינטליגנציה הדומיננטית: {dominant.name} · {dominant.domain} ·{" "}
-          {sorted[0].percent}%
-        </p>
-
-        <h2>הפרופיל המלא</h2>
-        <ul>
-          {sorted.map((s) => (
-            <li key={s.intelligence}>
-              {BY_ID[s.intelligence].name} — {s.percent}%
-            </li>
-          ))}
-        </ul>
-
-        <h2>השילובים שלך</h2>
-        {combos.map((c, i) => (
-          <div className="print-combo" key={i}>
-            <strong>{c.combo.name}</strong> · {c.combo.type}
-            <p>{c.combo.essence}</p>
-          </div>
-        ))}
-        <PrintLayers layers={getLayers(sorted[0].intelligence)} images={layerImages} />
-      </PrintableArticle>
-
     </div>
   );
 };

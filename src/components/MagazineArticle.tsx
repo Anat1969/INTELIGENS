@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { LayerSpread } from '@/components/LayerSpread'
 import type { IntelligenceLayers } from '@/lib/synthesize'
 
@@ -9,9 +10,10 @@ interface Props {
   layers: IntelligenceLayers
   idPrefix: string
   footer?: string
+  children?: ReactNode
 }
 
-export function MagazineArticle({ title, subtitle, sourceChain, lead, layers, idPrefix, footer }: Props) {
+export function MagazineArticle({ title, subtitle, sourceChain, lead, layers, idPrefix, footer, children }: Props) {
   return (
     <article className="mag" dir="rtl">
       <header className="mag-hero">
@@ -21,6 +23,9 @@ export function MagazineArticle({ title, subtitle, sourceChain, lead, layers, id
       </header>
 
       <p className="mag-lead">{lead}</p>
+
+      {children && <div className="mag-body-extra">{children}</div>}
+
 
       <LayerSpread
         id={`${idPrefix}-persona`}
