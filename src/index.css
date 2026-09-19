@@ -759,6 +759,7 @@
   min-height: 100vh;
   background: #fbfbf8;
   color: #1b1b1a;
+  color-scheme: light;
 }
 
 /* The article is ALWAYS light paper — the app's dark theme never applies here. */
