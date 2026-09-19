@@ -51,7 +51,7 @@ export const QuestionBlock = ({
               onClick={() => onAnswer(i)}
               className={cn(
                 "w-full text-right px-5 py-4 border rounded-sm transition-all duration-200",
-                "font-sans-he text-[15px] leading-[1.6]",
+                "font-sans-he text-[16px] leading-[1.75]",
                 "hover:border-foreground/40",
               )}
               style={
@@ -63,7 +63,7 @@ export const QuestionBlock = ({
                     }
                   : {
                       borderColor: "hsl(var(--border))",
-                      color: "hsl(var(--text-dim))",
+                      color: "hsla(var(--foreground), 0.85)",
                       backgroundColor: "transparent",
                     }
               }
