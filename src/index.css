@@ -714,6 +714,8 @@
   html, body {
     background: #fff !important;
     color: #000 !important;
+    color-scheme: light !important;
+    forced-color-adjust: none;
   }
 
   #root { display: none !important; }
