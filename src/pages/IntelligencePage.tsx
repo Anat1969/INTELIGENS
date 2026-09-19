@@ -16,9 +16,7 @@ export default function IntelligencePage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [item, setItem] = useState<LibraryItem | null>(null)
-  const [visualCopied, setVisualCopied] = useState(false)
-  const [isDragOver, setIsDragOver] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [printImage, setPrintImage] = useState<string | null>(null)
   const [chain, setChain] = useState<string[]>([])
   const [picked, setPicked] = useState<string[]>([])
 
