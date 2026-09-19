@@ -17,6 +17,76 @@ export default function IntelligencePage() {
   const [visualCopied, setVisualCopied] = useState(false)
   const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [chain, setChain] = useState<string[]>([])
+  const [picked, setPicked] = useState<string[]>([])
+  const [mergeNote, setMergeNote] = useState<string>('')
+
+  useEffect(() => {
+    setPicked([])
+    setMergeNote('')
+  }, [id])
+
+  // Walk the parent chain (oldest ancestor → current)
+  useEffect(() => {
+    let alive = true
+    async function walk() {
+      if (!item) {
+        setChain([])
+        return
+      }
+      const names: string[] = []
+      let parentId = item.parent
+      const seen = new Set<string>()
+      while (parentId && !seen.has(parentId)) {
+        seen.add(parentId)
+        const remote = (await fetchMerge(parentId)) as LibraryItem | null
+        const local = getLibraryItem(parentId)
+        const resolved = remote?.name ? remote : local
+        names.unshift(
+          resolved?.name ??
+            parentId
+              .split('-')
+              .map((sid) => (sid in BY_ID ? BY_ID[sid as IntelligenceId].name : sid))
+              .join(' + '),
+        )
+        parentId = resolved?.parent
+      }
+      if (alive) setChain(names)
+    }
+    walk()
+    return () => {
+      alive = false
+    }
+  }, [item])
+
+  const togglePick = useCallback((pid: string) => {
+    setPicked((prev) => (prev.includes(pid) ? prev.filter((p) => p !== pid) : [...prev, pid]))
+  }, [])
+
+  const handleContinueMerge = useCallback(() => {
+    if (!item || picked.length === 0) return
+    const newSourceIds = Array.from(new Set([...item.source_ids, ...picked])).sort() as IntelligenceId[]
+    const newId = newSourceIds.join('-')
+    const composed = composeIntelligence(newSourceIds)
+    const now = new Date().toISOString()
+    addToLibrary(composed, newId, { parent: item.id, combo: comboLabel(newSourceIds) })
+
+    if (hasToken()) {
+      saveMerge({
+        ...composed,
+        id: newId,
+        created_at: now,
+        date: now,
+        combo: comboLabel(newSourceIds),
+        parent: item.id,
+      }).catch(() => undefined)
+      navigate(`/intelligence/${newId}`)
+    } else {
+      setMergeNote('readonly')
+      navigate(`/intelligence/${newId}`)
+    }
+  }, [item, picked, navigate])
+
 
   useEffect(() => {
     if (!id) return
