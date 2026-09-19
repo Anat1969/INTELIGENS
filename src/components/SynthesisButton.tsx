@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { synthesizeIntelligence, SynthesizedIntelligence } from '@/lib/gemini'
-import { findExisting, saveNew } from '@/lib/sqlite-store'
+import { composeIntelligence, SynthesizedIntelligence } from '@/lib/synthesize'
+import type { IntelligenceId } from '@/data/intelligences'
 import { addToLibrary } from '@/lib/local-library'
 import SynthesisResult from './SynthesisResult'
 
@@ -16,7 +16,7 @@ interface Props {
   onNewSynthesis?: () => void
 }
 
-type Phase = 'idle' | 'checking' | 'generating' | 'done' | 'error'
+type Phase = 'idle' | 'done' | 'error'
 
 export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
   const [phase, setPhase] = useState<Phase>('idle')
@@ -48,44 +48,19 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
     }
   }, [phase])
 
-  async function handleSynthesize() {
+  function handleSynthesize() {
     if (!canSynthesize) return
 
-    setPhase('checking')
     setResult(null)
     setResultId('')
     setIsFromCache(false)
 
     try {
-      let existing: SynthesizedIntelligence | null = null
-      try {
-        existing = await findExisting(selected.map(i => i.id))
-      } catch {
-        // Server unavailable
-      }
-
-      if (existing) {
-        setResult(existing)
-        setIsFromCache(true)
-        const saved = addToLibrary(existing)
-        setResultId(saved.id)
-        setPhase('done')
-        onNewSynthesis?.()
-        return
-      }
-
-      setPhase('generating')
-      const generated = await synthesizeIntelligence(selected)
-
-      try {
-        await saveNew(generated)
-      } catch {
-        // graceful degradation
-      }
-
-      const saved = addToLibrary(generated)
+      const composed = composeIntelligence(selected.map(i => i.id as IntelligenceId))
+      const saved = addToLibrary(composed)
+      setIsFromCache(saved.created_at !== undefined && saved.id !== '' && saved.name !== composed.name)
       setResultId(saved.id)
-      setResult(generated)
+      setResult(composed)
       setPhase('done')
       onNewSynthesis?.()
     } catch (error) {
@@ -103,15 +78,7 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
   return (
     <div className="flex flex-col items-center">
       <div className="py-10 flex flex-col items-center gap-6">
-        {phase === 'idle' || phase === 'done' ? (
-          <button
-            onClick={handleSynthesize}
-            disabled={!canSynthesize}
-            className="synthesis-btn font-sans-he"
-          >
-            {promptText}
-          </button>
-        ) : phase === 'error' ? (
+        {phase === 'error' ? (
           <div className="text-center max-w-[500px]">
             <div
               className="glass-card rounded-2xl p-8"
@@ -120,11 +87,8 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
               <p className="font-mono-dm text-[14px] tracking-[0.1em] mb-3" style={{ color: 'hsl(var(--destructive))' }}>
                 שגיאה בסינתזה
               </p>
-              <p className="font-mono-dm text-[12px] mb-2" style={{ color: 'hsl(var(--foreground))', direction: 'ltr' }}>
+              <p className="font-mono-dm text-[12px] mb-4" style={{ color: 'hsl(var(--foreground))', direction: 'ltr' }}>
                 {errorMessage || 'שגיאה לא ידועה'}
-              </p>
-              <p className="font-mono-dm text-[11px] mb-4" style={{ color: 'hsl(var(--text-dim))' }}>
-                בדוק את Console (F12) לפרטים
               </p>
               <button
                 onClick={handleSynthesize}
@@ -140,18 +104,13 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-4 py-4">
-            <div className="relative flex items-center justify-center">
-              <div className="loading-orb" />
-              <div className="loading-ring" />
-            </div>
-            <p
-              className="font-mono-dm text-[13px] tracking-[0.15em]"
-              style={{ color: 'hsl(var(--text-dim))' }}
-            >
-              {phase === 'checking' ? 'בודק אם הצירוף כבר גולה' : 'מסנתז אינטליגנציה חדשה — זה יכול לקחת כמה שניות'}
-            </p>
-          </div>
+          <button
+            onClick={handleSynthesize}
+            disabled={!canSynthesize}
+            className="synthesis-btn font-sans-he"
+          >
+            {promptText}
+          </button>
         )}
       </div>
 
