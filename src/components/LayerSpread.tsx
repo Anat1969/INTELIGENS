@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type DragEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type DragEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { hasToken } from '@/lib/gh-token'
 import { saveImage } from '@/lib/github-store'
 import {
   clearLocalImage,
-  getLocalImage,
   onImageUpdated,
   resolvePrintImage,
   setLocalImage,
@@ -18,11 +17,13 @@ interface Props {
   interpretation: string
   visualPrompt: string
   index: number
+  /** Raw "H, S%, L%" hue of the intelligence, for the art-directed color field. */
+  hue?: string
 }
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'local' | 'error'
 
-export function LayerSpread({ id, title, interpretation, visualPrompt, index }: Props) {
+export function LayerSpread({ id, title, interpretation, visualPrompt, index, hue }: Props) {
   const [src, setSrc] = useState<string | null>(null)
   const [editing, setEditing] = useState(true)
   const [copied, setCopied] = useState(false)
@@ -30,6 +31,8 @@ export function LayerSpread({ id, title, interpretation, visualPrompt, index }: 
   const [status, setStatus] = useState<SaveStatus>('idle')
   const [error, setError] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const flip = index % 2 === 1
 
   const loadImage = useCallback(async () => {
     const image = await resolvePrintImage(id)
@@ -98,78 +101,91 @@ export function LayerSpread({ id, title, interpretation, visualPrompt, index }: 
     setError('')
   }
 
-  const dropHandlers = {
-    onDrop: (event: DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
-      setDragOver(false)
-      const file = event.dataTransfer.files[0]
-      if (file) readFile(file)
-    },
-    onDragOver: (event: DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
-      setDragOver(true)
-    },
-    onDragLeave: () => setDragOver(false),
-  }
+  const canDrop = editing && !src
+  const dropHandlers = canDrop
+    ? {
+        onClick: () => inputRef.current?.click(),
+        onDrop: (event: DragEvent<HTMLDivElement>) => {
+          event.preventDefault()
+          setDragOver(false)
+          const file = event.dataTransfer.files[0]
+          if (file) readFile(file)
+        },
+        onDragOver: (event: DragEvent<HTMLDivElement>) => {
+          event.preventDefault()
+          setDragOver(true)
+        },
+        onDragLeave: () => setDragOver(false),
+        role: 'button' as const,
+        tabIndex: 0,
+        onKeyDown: (event: { key: string }) => {
+          if (event.key === 'Enter' || event.key === ' ') inputRef.current?.click()
+        },
+      }
+    : {}
 
   return (
-    <section className={cn('mag-spread', index % 2 === 1 && 'mag-spread--flip')}>
-      <div className="mag-figure">
-        {src ? (
-          <img src={src} alt={title} />
-        ) : editing ? (
-          <div
-            className={cn('mag-dropzone no-print', dragOver && 'mag-dropzone--active')}
-            role="button"
-            tabIndex={0}
-            onClick={() => inputRef.current?.click()}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') inputRef.current?.click()
-            }}
-            {...dropHandlers}
-          >
-            גררו תמונה לכאן, הדביקו (Ctrl+V) או לחצו להעלאה
-          </div>
-        ) : null}
+    <section
+      className={cn('mag-layer', flip && 'mag-layer--flip')}
+      style={{ ['--layer-hue' as string]: hue ?? '260, 20%, 50%' } as CSSProperties}
+    >
+      <div
+        className={cn(
+          'mag-layer-media',
+          !src && 'mag-layer-media--placeholder',
+          canDrop && 'mag-layer-media--drop',
+          dragOver && 'mag-layer-media--over',
+        )}
+        {...dropHandlers}
+      >
+        {src && <img src={src} alt={title} />}
+        {canDrop && (
+          <span className="mag-layer-drophint no-print">
+            גררו תמונה · הדביקו (Ctrl+V) · או לחצו להעלאה
+          </span>
+        )}
       </div>
 
-      <div className="mag-copy">
-        <h2 className="mag-heading">{title}</h2>
-        <p className="mag-body">{interpretation}</p>
+      <div className="mag-layer-scrim" aria-hidden="true" />
 
-        <div className="no-print mag-tools">
+      <div className="mag-layer-text">
+        <p className="mag-layer-kicker">שכבה {index + 1} · {title}</p>
+        <h2 className="mag-layer-heading">{title}</h2>
+        <p className="mag-layer-interp">{interpretation}</p>
+
+        <div className="no-print mag-layer-tools">
           {editing ? (
             <>
-              <Button type="button" className="tool-btn" onClick={() => void copyPrompt()}>
+              <Button type="button" className="tool-btn mag-glass-btn" onClick={() => void copyPrompt()}>
                 {copied ? 'הועתק' : 'העתק פרומפט'}
               </Button>
-              <Button type="button" className="tool-btn" onClick={() => inputRef.current?.click()}>
+              <Button type="button" className="tool-btn mag-glass-btn" onClick={() => inputRef.current?.click()}>
                 {src ? 'החלפת תמונה' : 'העלאת תמונה'}
               </Button>
               {src && (
-                <Button type="button" className="tool-btn" onClick={removeImage}>
+                <Button type="button" className="tool-btn mag-glass-btn" onClick={removeImage}>
                   הסרת תמונה
                 </Button>
               )}
-              <Button type="button" className="tool-btn" onClick={() => setEditing(false)}>
+              <Button type="button" className="tool-btn mag-glass-btn" onClick={() => setEditing(false)}>
                 שמור וסגור
               </Button>
             </>
           ) : (
-            <Button type="button" className="tool-btn" onClick={() => setEditing(true)}>
+            <Button type="button" className="tool-btn mag-glass-btn" onClick={() => setEditing(true)}>
               ערוך
             </Button>
           )}
         </div>
 
-        {status === 'saving' && <p className="no-print mag-status">שומר תמונה...</p>}
-        {status === 'saved' && <p className="no-print mag-status">התמונה נשמרה</p>}
+        {status === 'saving' && <p className="no-print mag-layer-note">שומר תמונה...</p>}
+        {status === 'saved' && <p className="no-print mag-layer-note">התמונה נשמרה</p>}
         {status === 'local' && (
-          <p className="no-print mag-status">
+          <p className="no-print mag-layer-note">
             מצב קריאה בלבד — התמונה נשמרה במחשב זה בלבד. להזנת טוקן: <Link to="/settings">הגדרות</Link>
           </p>
         )}
-        {status === 'error' && <p className="no-print mag-status">שמירת התמונה נכשלה. {error}</p>}
+        {status === 'error' && <p className="no-print mag-layer-note">שמירת התמונה נכשלה. {error}</p>}
       </div>
 
       <input

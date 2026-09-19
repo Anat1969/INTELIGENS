@@ -783,118 +783,161 @@
 }
 
 .mag-hero {
-  padding-block: 34px 52px;
-  border-block: 1px solid hsla(var(--foreground), 0.12);
+  position: relative;
+  padding-block: 40px 44px;
+}
+
+.mag-hero-rule {
+  height: 3px;
+  width: clamp(120px, 22vw, 320px);
+  border-radius: 999px;
+  margin-bottom: 30px;
+  opacity: 0.92;
 }
 
 .mag-title {
   margin: 0;
   font-family: "DM Serif Display", Georgia, serif;
-  font-size: clamp(54px, 8vw, 112px);
+  font-size: clamp(52px, 9vw, 132px);
   font-weight: 400;
-  line-height: 0.98;
-  letter-spacing: 0;
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  color: #141414;
 }
 
 .mag-subtitle {
-  margin-top: 24px;
+  margin-top: 22px;
   font-family: "DM Mono", ui-monospace, monospace;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.6;
-  letter-spacing: 0.12em;
-  color: hsl(var(--text-dim));
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #6a655c;
 }
 
 .mag-chain {
-  margin-top: 12px;
-  font-size: 14px;
-  line-height: 1.7;
-  color: hsl(var(--text-dim));
+  margin-top: 10px;
+  font-family: "DM Mono", ui-monospace, monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  color: #8a857b;
 }
 
 .mag-lead {
-  max-width: 850px;
-  margin: 54px 0 76px auto;
-  font-size: 19px;
-  line-height: 1.9;
-  color: hsla(var(--foreground), 0.92);
-}
-
-.mag-spread {
-  display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
-  grid-template-areas: "figure copy";
-  align-items: center;
-  gap: clamp(36px, 7vw, 96px);
-  margin-bottom: 112px;
-  break-inside: avoid;
-}
-
-.mag-spread--flip {
-  grid-template-areas: "copy figure";
-  grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
-}
-
-.mag-figure {
-  grid-area: figure;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: 8px;
-  background: hsl(var(--surface));
-  border: 1px solid hsla(var(--foreground), 0.08);
-}
-
-.mag-figure img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-.mag-copy { grid-area: copy; }
-
-.mag-heading {
-  margin: 0 0 18px;
+  max-width: 900px;
+  margin: 40px 0 clamp(56px, 8vw, 104px);
   font-family: "DM Serif Display", Georgia, serif;
-  font-size: 38px;
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: 0;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.5;
+  color: #26241f;
 }
+
+/* ── Cinematic layer band: landscape image with text laid on top ── */
+.mag-layer {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: clamp(400px, 52vw, 640px);
+  margin-bottom: clamp(36px, 5vw, 80px);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  box-shadow: 0 30px 60px -42px rgba(0, 0, 0, 0.55);
+}
+
+.mag-layer--flip { justify-content: flex-end; }
+
+.mag-layer-media { position: absolute; inset: 0; z-index: 0; background: #16151b; }
+.mag-layer-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mag-layer-media--placeholder {
+  background:
+    radial-gradient(130% 120% at 80% 0%, hsla(var(--layer-hue), 0.75), transparent 58%),
+    radial-gradient(120% 130% at 0% 100%, hsla(var(--layer-hue), 0.45), transparent 55%),
+    linear-gradient(135deg, hsla(var(--layer-hue), 0.85), #17161d 70%);
+}
+.mag-layer-media--drop { cursor: pointer; }
+.mag-layer-media--over::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 2px dashed rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+}
+.mag-layer-drophint {
+  position: absolute;
+  inset-inline: 0;
+  top: 22px;
+  text-align: center;
+  font-family: "DM Mono", ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mag-layer-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.mag-layer:not(.mag-layer--flip) .mag-layer-scrim {
+  background:
+    linear-gradient(to top, rgba(8, 8, 12, 0.86) 4%, transparent 60%),
+    linear-gradient(to left, rgba(8, 8, 12, 0.62) 0%, transparent 56%);
+}
+.mag-layer--flip .mag-layer-scrim {
+  background:
+    linear-gradient(to top, rgba(8, 8, 12, 0.86) 4%, transparent 60%),
+    linear-gradient(to right, rgba(8, 8, 12, 0.62) 0%, transparent 56%);
+}
+
+.mag-layer-text {
+  position: relative;
+  z-index: 2;
+  max-width: min(620px, 84%);
+  padding: clamp(26px, 4vw, 58px);
+  color: #fff;
+}
+.mag-layer-kicker {
+  margin: 0 0 14px;
+  font-family: "DM Mono", ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: hsl(var(--layer-hue));
+  filter: brightness(1.75) saturate(1.2);
+}
+.mag-layer-heading {
+  margin: 0 0 16px;
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: clamp(38px, 5.2vw, 76px);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35);
+}
+.mag-layer-interp {
+  margin: 0;
+  max-width: 46ch;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.4);
+}
+.mag-layer-tools { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.mag-glass-btn {
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.42) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(6px);
+}
+.mag-glass-btn:hover { background: rgba(255, 255, 255, 0.2) !important; }
+.mag-layer-note { margin-top: 14px; font-size: 13px; line-height: 1.7; color: rgba(255, 255, 255, 0.85); }
+.mag-layer-note a { text-decoration: underline; color: #fff; }
 
 .mag-body {
   margin: 0;
   font-size: 17px;
   line-height: 1.9;
   color: hsla(var(--foreground), 0.9);
-}
-
-.mag-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 28px;
-}
-
-.mag-dropzone {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  text-align: center;
-  font-size: 15px;
-  line-height: 1.8;
-  color: hsl(var(--text-dim));
-  cursor: pointer;
-  border: 2px dashed hsla(var(--foreground), 0.12);
-  background: hsla(var(--foreground), 0.02);
-}
-
-.mag-dropzone--active {
-  color: hsl(var(--foreground));
-  border-color: hsla(var(--foreground), 0.32);
-  background: hsla(var(--foreground), 0.06);
 }
 
 .mag-status {
@@ -915,17 +958,12 @@
 }
 
 @media (max-width: 760px) {
-  .mag-hero { padding-block: 24px 36px; }
-  .mag-title { font-size: 54px; }
-  .mag-lead { margin-block: 38px 58px; }
-  .mag-spread,
-  .mag-spread--flip {
-    grid-template-columns: 1fr;
-    grid-template-areas: "figure" "copy";
-    gap: 28px;
-    margin-bottom: 76px;
-  }
-  .mag-heading { font-size: 32px; }
+  .mag-hero { padding-block: 26px 30px; }
+  .mag-title { font-size: clamp(40px, 13vw, 64px); }
+  .mag-lead { font-size: 20px; margin-block: 30px 52px; }
+  .mag-layer { min-height: 460px; }
+  .mag-layer-text { max-width: 100%; }
+  .mag-layer-heading { font-size: 40px; }
 }
 
 /* ─── Print (PDF A4) ─── */
@@ -1043,27 +1081,28 @@
     font-size: 14pt;
     line-height: 1.65;
   }
-  .mag-spread,
-  .mag-spread--flip {
+  .mag-layer {
     display: block;
-    margin-bottom: 12mm;
+    min-height: 0;
+    margin-bottom: 10mm;
+    border-radius: 0;
+    box-shadow: none;
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  .mag-figure {
-    width: 100%;
-    max-height: 80mm;
-    border-radius: 0;
-    background: transparent !important;
-    border-color: #999;
-    margin-bottom: 5mm;
+  .mag-layer-media { position: static; height: auto; background: transparent !important; }
+  .mag-layer-media--placeholder { display: none !important; }
+  .mag-layer-media img { width: 100%; max-height: 78mm; object-fit: contain; }
+  .mag-layer-scrim { display: none !important; }
+  .mag-layer-text {
+    position: static;
+    max-width: none;
+    padding: 3mm 0 0;
+    color: #000 !important;
   }
-  .mag-figure:empty { display: none; }
-  .mag-figure img {
-    max-height: 80mm;
-    object-fit: contain;
-  }
-  .mag-heading { margin-bottom: 3mm; font-size: 22pt; }
+  .mag-layer-kicker { color: #666 !important; filter: none; letter-spacing: 0.16em; }
+  .mag-layer-heading { margin: 0 0 2mm; font-size: 18pt; color: #000 !important; text-shadow: none; }
+  .mag-layer-interp { max-width: none; font-size: 12pt; line-height: 1.6; color: #000 !important; text-shadow: none; }
   .mag-body { font-size: 12pt; line-height: 1.65; }
   .mag-footer { padding-top: 4mm; border-color: #777; font-size: 9pt; }
 }

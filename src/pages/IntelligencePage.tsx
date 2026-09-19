@@ -133,6 +133,9 @@ export default function IntelligencePage() {
           layers={mergeLayers(item.source_ids as IntelligenceId[])}
           idPrefix={item.id}
           footer={new Date(item.created_at).toLocaleDateString('he-IL')}
+          hues={item.source_ids
+            .map((sid) => (sid in BY_ID ? BY_ID[sid as IntelligenceId].hue : ''))
+            .filter(Boolean)}
         >
           <section className="mag-section">
             <h2 className="mag-subheading">העוצמה</h2>

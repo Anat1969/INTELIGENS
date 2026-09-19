@@ -88,6 +88,7 @@ const ProfileReport = () => {
           layers={getLayers(sorted[0].intelligence)}
           idPrefix={`profile-${profile.id}`}
           footer={`${profile.fillerName} · ${formatDate(profile.date)}`}
+          hues={[dominant.hue]}
         >
           <section className="mag-section">
             <h2 className="mag-subheading">האינטליגנציה הדומיננטית</h2>

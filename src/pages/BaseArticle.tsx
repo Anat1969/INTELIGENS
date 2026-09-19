@@ -33,6 +33,7 @@ export default function BaseArticle() {
           layers={getLayers(intel.id)}
           idPrefix={`base-${intel.id}`}
           footer={intel.source}
+          hues={[intel.hue]}
         />
       </main>
     </div>
