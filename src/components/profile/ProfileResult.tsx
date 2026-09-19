@@ -110,7 +110,11 @@ const ComboBlock = ({
   );
 };
 
-export const ProfileResult = ({ answers }: Props) => {
+export const ProfileResult = ({
+  answers,
+  manualSelection: manualProp,
+  showAction = true,
+}: Props) => {
   const navigate = useNavigate();
   const sorted = useMemo(() => computeScores(answers), [answers]);
   const dominant = sorted[0];
