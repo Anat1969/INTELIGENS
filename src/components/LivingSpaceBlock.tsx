@@ -129,12 +129,7 @@ export function LivingSpaceBlock({ id, visualPrompt, description, onImage }: Pro
             <button
               type="button"
               onClick={handleCopy}
-              className="font-mono-dm text-[10px] tracking-[0.1em] px-4 py-2 rounded-lg transition-opacity hover:opacity-70"
-              style={{
-                color: 'hsl(var(--foreground))',
-                background: 'hsla(var(--foreground), 0.04)',
-                border: '1px solid hsla(var(--foreground), 0.12)',
-              }}
+              className="tool-btn"
             >
               {copied ? 'הועתק' : 'העתק פרומפט'}
             </button>
@@ -158,8 +153,8 @@ export function LivingSpaceBlock({ id, visualPrompt, description, onImage }: Pro
       )}
 
       <p
-        className="no-print font-sans-he text-[13px] leading-[1.9] mb-5"
-        style={{ color: 'hsl(var(--text-dim))' }}
+        className="no-print font-sans-he text-[14px] leading-[1.9] mb-5"
+        style={{ color: 'hsla(var(--foreground), 0.8)' }}
       >
         {description ?? DEFAULT_HELP}
       </p>
@@ -177,20 +172,18 @@ export function LivingSpaceBlock({ id, visualPrompt, description, onImage }: Pro
               className="w-full max-h-[500px] object-cover"
             />
           </div>
-          <div className="no-print mt-3 flex items-center gap-4">
+          <div className="no-print mt-3 flex items-center gap-3">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="font-mono-dm text-[10px] tracking-[0.15em] hover:opacity-70"
-              style={{ color: 'hsl(var(--text-dim))' }}
+              className="tool-btn"
             >
               החלפת תמונה
             </button>
             <button
               type="button"
               onClick={handleRemove}
-              className="font-mono-dm text-[10px] tracking-[0.15em] hover:opacity-70"
-              style={{ color: 'hsl(var(--text-dim))' }}
+              className="tool-btn"
             >
               הסרת תמונה
             </button>
@@ -216,7 +209,7 @@ export function LivingSpaceBlock({ id, visualPrompt, description, onImage }: Pro
             background: dragOver ? 'hsla(var(--foreground), 0.03)' : 'transparent',
           }}
         >
-          <p className="font-sans-he text-[14px]" style={{ color: 'hsl(var(--text-dim))' }}>
+          <p className="font-sans-he text-[15px]" style={{ color: 'hsla(var(--foreground), 0.8)' }}>
             גררו תמונה לכאן, הדביקו (Ctrl+V) או לחצו להעלאה
           </p>
         </div>

@@ -152,8 +152,8 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
 
         {phase === 'done' && saveState !== 'none' && (
           <p
-            className="font-sans-he text-[12px] text-center max-w-[560px] leading-[1.8]"
-            style={{ color: 'hsl(var(--text-dim))' }}
+            className="font-sans-he text-[13px] text-center max-w-[560px] leading-[1.8]"
+            style={{ color: 'hsla(var(--foreground), 0.8)' }}
           >
             {saveState === 'saving' && 'שומר למאגר...'}
             {saveState === 'saved' && 'נשמר למאגר'}

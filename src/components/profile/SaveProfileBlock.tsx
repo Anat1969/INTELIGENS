@@ -99,11 +99,7 @@ export const SaveProfileBlock = ({ answers, onSaved }: Props) => {
             type="button"
             onClick={handleSave}
             disabled={!name.trim() || status === "saving"}
-            className="rounded-sm border px-5 py-2 font-mono-dm text-[11px] tracking-[0.2em] transition-opacity hover:opacity-80 disabled:opacity-30"
-            style={{
-              borderColor: "hsl(var(--foreground))",
-              color: "hsl(var(--foreground))",
-            }}
+            className="tool-btn"
           >
             שמור פרופיל
           </button>

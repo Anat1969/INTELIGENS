@@ -203,8 +203,8 @@ export default function IntelligencePage() {
                 שרשרת המקור
               </p>
               <p
-                className="font-sans-he text-[14px] leading-[1.9]"
-                style={{ color: 'hsl(var(--text-dim))' }}
+                className="font-sans-he text-[15px] leading-[1.9]"
+                style={{ color: 'hsla(var(--foreground), 0.8)' }}
               >
                 {[...chain, item.name].join('  ←  ')}
               </p>
@@ -342,7 +342,7 @@ export default function IntelligencePage() {
             </h2>
             <p
               className="font-sans-he text-[18px] leading-[1.9]"
-              style={{ color: 'hsl(var(--text-dim))' }}
+              style={{ color: 'hsla(var(--foreground), 0.85)' }}
             >
               {item.keyQuestion}
             </p>
@@ -362,8 +362,8 @@ export default function IntelligencePage() {
             המשך למזג
           </h2>
           <p
-            className="font-sans-he text-[14px] mb-6"
-            style={{ color: 'hsl(var(--text-dim))' }}
+            className="font-sans-he text-[15px] leading-[1.8] mb-6"
+            style={{ color: 'hsla(var(--foreground), 0.8)' }}
           >
             בחרו אינטליגנציות נוספות כדי לצמוח מהמיזוג הזה לאינטליגנציה חדשה.
           </p>
@@ -374,7 +374,7 @@ export default function IntelligencePage() {
                 <button
                   key={intel.id}
                   onClick={() => togglePick(intel.id)}
-                  className="font-sans-he text-[14px] px-4 py-2 rounded-xl transition-all duration-200"
+                  className="font-sans-he text-[14px] px-4 py-2 rounded-xl transition-all duration-200 hover:brightness-125"
                   style={{
                     color: on ? `hsl(${intel.hue})` : 'hsl(var(--foreground))',
                     background: on ? `hsla(${intel.hue}, 0.12)` : 'hsla(var(--foreground), 0.03)',
@@ -389,12 +389,8 @@ export default function IntelligencePage() {
           <button
             onClick={handleContinueMerge}
             disabled={picked.length === 0}
-            className="font-sans-he text-[15px] px-6 py-3 rounded-xl transition-all duration-200 disabled:opacity-40"
-            style={{
-              color: 'hsl(var(--foreground))',
-              background: 'hsla(var(--foreground), 0.05)',
-              border: '1px solid hsla(var(--foreground), 0.12)',
-            }}
+            className="tool-btn"
+            style={{ fontFamily: 'inherit', fontSize: '14px', letterSpacing: '0.02em', padding: '12px 22px' }}
           >
             מזג ליצירת אינטליגנציה חדשה
           </button>

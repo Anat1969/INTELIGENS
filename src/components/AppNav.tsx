@@ -82,7 +82,7 @@ export const AppNav = () => {
                 key={l.to}
                 to={l.to}
                 className={cn(
-                  "font-mono-dm text-[11px] tracking-[0.15em] transition-all duration-200 py-1.5 px-3 rounded-lg",
+                  "font-mono-dm text-[12px] tracking-[0.15em] transition-all duration-200 py-1.5 px-3 rounded-lg",
                   active
                     ? "text-foreground"
                     : "hover:opacity-80",

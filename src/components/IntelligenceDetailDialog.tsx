@@ -112,8 +112,8 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
                     {combo.type}
                   </p>
                   <p
-                    className="font-sans-he text-[13px] leading-[1.8]"
-                    style={{ color: 'hsl(var(--text-dim))' }}
+                    className="font-sans-he text-[14px] leading-[1.85]"
+                    style={{ color: 'hsla(var(--foreground), 0.8)' }}
                   >
                     {firstSentence(combo.essence)}
                   </p>
