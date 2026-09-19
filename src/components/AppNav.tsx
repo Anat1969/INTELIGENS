@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 
 const links = [
   { to: "/", label: "בית" },
