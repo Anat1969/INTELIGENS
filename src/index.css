@@ -1068,3 +1068,70 @@
   .mag-footer { padding-top: 4mm; border-color: #777; font-size: 9pt; }
 }
 
+
+/* ─── Magazine body (extra editorial content) ─── */
+
+.mag-body-extra {
+  max-width: 68ch;
+  margin: 0 auto 64px;
+}
+
+.mag-section { margin-bottom: 40px; }
+
+.mag-subheading {
+  margin: 0 0 12px;
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.25;
+  color: #1b1b1a;
+}
+
+.mag-body-extra .mag-body,
+.mag-list {
+  font-size: 17px;
+  line-height: 1.9;
+  color: #1b1b1a;
+}
+
+.mag-list {
+  margin: 0;
+  padding-inline-start: 20px;
+}
+
+.mag-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mag-tag {
+  padding: 8px 16px;
+  border: 1px solid hsla(var(--foreground), 0.16);
+  border-radius: 999px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1b1b1a;
+  background: hsla(var(--foreground), 0.03);
+}
+
+.mag-quote {
+  margin: 0;
+  padding-inline-end: 20px;
+  border-inline-end: 3px solid hsla(var(--foreground), 0.25);
+  font-family: "DM Serif Display", Georgia, serif;
+  font-size: 24px;
+  font-style: italic;
+  line-height: 1.7;
+  color: #1b1b1a;
+}
+
+@media print {
+  .mag-body-extra { max-width: none; margin-bottom: 10mm; }
+  .mag-section { margin-bottom: 6mm; break-inside: avoid; page-break-inside: avoid; }
+  .mag-subheading { margin-bottom: 2mm; font-size: 16pt; }
+  .mag-body-extra .mag-body,
+  .mag-list { font-size: 12pt; line-height: 1.6; }
+  .mag-tag { padding: 1pt 4pt; border-color: #999; background: transparent !important; font-size: 11pt; }
+  .mag-quote { font-size: 14pt; border-color: #999; }
+}
