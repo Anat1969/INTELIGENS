@@ -28,7 +28,7 @@ const EN: Record<IntelligenceId, { domain: string; keyword: string }> = {
   kinesthetic: { domain: 'body', keyword: 'touch' },
   interpersonal: { domain: 'society', keyword: 'presence' },
   intrapersonal: { domain: 'inwardness', keyword: 'clarity' },
-  naturalistic: { domain: 'systems', keyword: 'pattern' },
+  naturalist: { domain: 'systems', keyword: 'pattern' },
   existential: { domain: 'depth', keyword: 'meaning' },
   emotional: { domain: 'heart', keyword: 'resonance' },
   digital: { domain: 'technology', keyword: 'logic' },
