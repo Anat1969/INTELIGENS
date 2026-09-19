@@ -126,8 +126,18 @@ export function LivingSpaceBlock({
         className="font-mono-dm text-[10px] tracking-[0.25em] uppercase mb-6"
         style={{ color: 'hsl(var(--text-dim))' }}
       >
-        מרחב מחיה
+        {title ?? 'מרחב מחיה'}
       </h2>
+
+      {interpretation && (
+        <p
+          className="font-sans-he text-[16px] leading-[1.9] mb-6"
+          style={{ color: 'hsla(var(--foreground), 0.9)' }}
+        >
+          {interpretation}
+        </p>
+      )}
+
 
       {visualPrompt && (
         <div className="no-print mb-6">
