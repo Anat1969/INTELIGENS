@@ -1,3 +1,5 @@
+
+> **הערה (עדכון):** שרת הפיתוח המקומי (Express + SQLite, `server.js`) הוסר מהפרויקט. האפליקציה פועלת כ-SPA של Vite מול Lovable Cloud בלבד; התיעוד על השרת המקומי להלן היסטורי.
 # 🔧 Getting Supabase Credentials from Lovable
 
 Your Lovable project **already has Supabase integrated**. Here's how to find the credentials:
