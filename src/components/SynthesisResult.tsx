@@ -1,4 +1,4 @@
-import { SynthesizedIntelligence } from '@/lib/gemini'
+import { SynthesizedIntelligence } from '@/lib/synthesize'
 import { Copy, Check, Image, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'

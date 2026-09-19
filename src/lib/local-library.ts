@@ -1,6 +1,6 @@
 // src/lib/local-library.ts
 // Client-side library using localStorage (works everywhere including Lovable)
-import { SynthesizedIntelligence } from './gemini'
+import { SynthesizedIntelligence } from './synthesize'
 
 const STORAGE_KEY = 'intelligence-library'
 

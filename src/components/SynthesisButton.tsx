@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { composeIntelligence, SynthesizedIntelligence } from '@/lib/synthesize'
 import type { IntelligenceId } from '@/data/intelligences'
-import { addToLibrary } from '@/lib/local-library'
+import { addToLibrary, getLibrary } from '@/lib/local-library'
 import SynthesisResult from './SynthesisResult'
 
 interface Intelligence {
@@ -57,8 +57,12 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
 
     try {
       const composed = composeIntelligence(selected.map(i => i.id as IntelligenceId))
+      const key = [...composed.source_ids].sort().join('+')
+      const existed = getLibrary().some(
+        i => [...i.source_ids].sort().join('+') === key,
+      )
       const saved = addToLibrary(composed)
-      setIsFromCache(saved.created_at !== undefined && saved.id !== '' && saved.name !== composed.name)
+      setIsFromCache(existed)
       setResultId(saved.id)
       setResult(composed)
       setPhase('done')
