@@ -145,10 +145,9 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
             ))}
           </>
         )}
-        {printImage && (
-          <img className="print-img" src={printImage} alt={intel.name} />
-        )}
+        <PrintLayers layers={getLayers(intel.id)} images={layerImages} />
       </PrintableArticle>
+
     </>
   )
 }
