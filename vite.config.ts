@@ -5,6 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // Served at root on Lovable; under /INTELIGENS/ on GitHub Pages (GH_PAGES=true in the Actions build).
+  base: process.env.GH_PAGES === "true" ? "/INTELIGENS/" : "/",
   server: {
     host: "localhost",
     port: 8080,
