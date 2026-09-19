@@ -138,10 +138,9 @@ const ProfileReport = () => {
             <p>{c.combo.essence}</p>
           </div>
         ))}
-        {printImage && (
-          <img className="print-img" src={printImage} alt={profile.fillerName} />
-        )}
+        <PrintLayers layers={getLayers(sorted[0].intelligence)} images={layerImages} />
       </PrintableArticle>
+
     </div>
   );
 };
