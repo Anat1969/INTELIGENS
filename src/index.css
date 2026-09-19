@@ -759,19 +759,12 @@
   min-height: 100vh;
   background: #fbfbf8;
   color: #1b1b1a;
+  color-scheme: light;
 }
 
-.dark .base-article-page {
-  --background: 20 5% 11%;
-  --foreground: 60 5% 92%;
-  --surface: 20 5% 14%;
-  --surface-elevated: 20 5% 17%;
-  --text-dim: 45 4% 67%;
-  --border: 30 5% 27%;
-  --ring: 60 5% 92%;
-  background: #1e1c1b;
-  color: #ececea;
-}
+/* The article is ALWAYS light paper — the app's dark theme never applies here. */
+/* (Dark-theme overrides intentionally removed: the article stays white paper
+   in both light and dark app modes, per the white-background requirement.) */
 
 .mag-topbar {
   width: min(1180px, 100%);
@@ -786,11 +779,7 @@
   padding: clamp(24px, 4vw, 56px);
   background: #ffffff;
   color: #1b1b1a;
-}
-
-.dark .mag {
-  background: #1e1c1b;
-  color: #ececea;
+  color-scheme: light;
 }
 
 .mag-hero {
