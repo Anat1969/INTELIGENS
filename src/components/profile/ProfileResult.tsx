@@ -64,7 +64,7 @@ const ComboBlock = ({
           >
             המהות
           </div>
-          <p className="text-[14px] leading-[1.85] text-foreground">{combo.essence}</p>
+          <p className="text-[15px] leading-[1.9] text-foreground">{combo.essence}</p>
         </div>
         <div>
           <div
@@ -73,7 +73,7 @@ const ComboBlock = ({
           >
             הכוח
           </div>
-          <p className="text-[14px] leading-[1.85] text-foreground">{combo.power}</p>
+          <p className="text-[15px] leading-[1.9] text-foreground">{combo.power}</p>
         </div>
       </div>
 
@@ -181,8 +181,8 @@ export const ProfileResult = ({
           {dominantIntel.domain}
         </div>
         <p
-          className="mt-4 text-[15px] leading-[1.8]"
-          style={{ color: "hsl(var(--text-dim))" }}
+          className="mt-4 text-[16px] leading-[1.85]"
+          style={{ color: "hsla(var(--foreground), 0.85)" }}
         >
           {dominantIntel.description}
         </p>
@@ -222,8 +222,8 @@ export const ProfileResult = ({
             return (
               <div key={s.intelligence} className="flex items-center gap-3">
                 <span
-                  className="font-sans-he text-[13px] min-w-[140px] text-right"
-                  style={{ color: "hsl(var(--text-dim))" }}
+                  className="font-sans-he text-[14px] min-w-[140px] text-right"
+                  style={{ color: "hsla(var(--foreground), 0.85)" }}
                 >
                   {intel.name}
                 </span>
@@ -241,8 +241,8 @@ export const ProfileResult = ({
                   />
                 </div>
                 <span
-                  className="font-mono-dm text-[11px] min-w-[36px] text-left"
-                  style={{ color: "hsl(var(--text-dim))" }}
+                  className="font-mono-dm text-[12px] min-w-[36px] text-left"
+                  style={{ color: "hsla(var(--foreground), 0.8)" }}
                 >
                   {s.percent}%
                 </span>
