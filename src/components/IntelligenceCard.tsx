@@ -130,6 +130,30 @@ const IntelligenceCardBase = ({ intel, selected, onToggle }: Props) => {
             {intel.keyword}
           </span>
 
+          {onOpenDetails && (
+            <span
+              role="button"
+              tabIndex={0}
+              aria-label={`פרטים על ${intel.name}`}
+              title="פרטים והורדת PDF"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenDetails(intel);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onOpenDetails(intel);
+                }
+              }}
+              className="shrink-0 grid place-items-center w-6 h-6 rounded-full transition-opacity opacity-40 hover:opacity-100"
+              style={{ border: `1px solid hsla(${hue}, 0.4)` }}
+            >
+              <Info size={12} style={{ color: `hsl(${hue})` }} />
+            </span>
+          )}
+
           {selected && (
             <div
               className="w-2.5 h-2.5 rounded-full shrink-0"
