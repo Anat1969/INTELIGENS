@@ -971,7 +971,7 @@
 .print-root { display: none; }
 
 @media print {
-  @page { size: A4; margin: 16mm; }
+  @page { size: A4 portrait; margin: 12mm; }
 
   html, body {
     background: #fff !important;
@@ -1057,54 +1057,89 @@
   body:has(.mag) nav,
   body:has(.mag) .no-print { display: none !important; }
 
+  /* One-page portrait flyer: a designed composition, not a spilling flow. */
   .mag {
     width: 100%;
     margin: 0;
     padding: 0;
     background: #fff !important;
-    color: #000 !important;
+    color: #111 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
-  .mag * {
-    color: #000 !important;
-    box-shadow: none !important;
-  }
-  .mag-hero {
-    padding: 0 0 10mm;
-    border-color: #777;
-  }
-  .mag-title { font-size: 42pt; line-height: 1; }
-  .mag-subtitle { margin-top: 5mm; font-size: 10pt; }
-  .mag-chain { font-size: 9pt; }
+  .mag * { box-shadow: none !important; }
+
+  .mag-hero { padding: 0 0 4mm; }
+  .mag-hero-rule { height: 2.4pt; width: 44mm; margin-bottom: 4mm; }
+  .mag-title { font-size: 27pt; line-height: 1; color: #111 !important; }
+  .mag-subtitle { margin-top: 2.5mm; font-size: 8.5pt; letter-spacing: 0.16em; color: #555 !important; }
+  .mag-chain { margin-top: 1.5mm; font-size: 8pt; color: #777 !important; }
+
   .mag-lead {
     max-width: none;
-    margin: 9mm 0 12mm;
-    font-size: 14pt;
-    line-height: 1.65;
+    margin: 4mm 0 6mm;
+    font-size: 11.5pt;
+    line-height: 1.5;
+    color: #26241f !important;
   }
+
+  /* Drop supplementary editorial to keep everything on one concentrated page */
+  .mag-body-extra { display: none !important; }
+
   .mag-layer {
-    display: block;
+    display: grid;
+    grid-template-columns: 56mm 1fr;
+    gap: 6mm;
+    align-items: start;
     min-height: 0;
-    margin-bottom: 10mm;
+    margin: 0 0 5.5mm;
     border-radius: 0;
     box-shadow: none;
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  .mag-layer-media { position: static; height: auto; background: transparent !important; }
-  .mag-layer-media--placeholder { display: none !important; }
-  .mag-layer-media img { width: 100%; max-height: 78mm; object-fit: contain; }
-  .mag-layer-scrim { display: none !important; }
-  .mag-layer-text {
+  .mag-layer-media {
     position: static;
-    max-width: none;
-    padding: 3mm 0 0;
-    color: #000 !important;
+    width: 56mm;
+    height: 31.5mm;
+    overflow: hidden;
+    border-radius: 2px;
+    background: #eee;
   }
-  .mag-layer-kicker { color: #666 !important; filter: none; letter-spacing: 0.16em; }
-  .mag-layer-heading { margin: 0 0 2mm; font-size: 18pt; color: #000 !important; text-shadow: none; }
-  .mag-layer-interp { max-width: none; font-size: 12pt; line-height: 1.6; color: #000 !important; text-shadow: none; }
-  .mag-body { font-size: 12pt; line-height: 1.65; }
-  .mag-footer { padding-top: 4mm; border-color: #777; font-size: 9pt; }
+  .mag-layer-media img { width: 100%; height: 100%; object-fit: cover; }
+  .mag-layer-media--placeholder {
+    display: block !important;
+    background: linear-gradient(135deg, hsl(var(--layer-hue)), #2a2730) !important;
+  }
+  .mag-layer-drophint,
+  .mag-layer-scrim { display: none !important; }
+
+  .mag-layer-text { position: static; max-width: none; padding: 0; color: #111 !important; }
+  .mag-layer-heading { display: none !important; }
+  .mag-layer-kicker {
+    margin: 0 0 2.5mm;
+    padding-bottom: 1.5mm;
+    font-size: 9.5pt;
+    letter-spacing: 0.1em;
+    color: hsl(var(--layer-hue)) !important;
+    filter: none;
+    border-bottom: 0.75pt solid hsl(var(--layer-hue));
+  }
+  .mag-layer-interp {
+    max-width: none;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    color: #1a1a1a !important;
+    text-shadow: none;
+  }
+
+  .mag-footer {
+    margin-top: 4mm;
+    padding-top: 3mm;
+    border-color: #999;
+    font-size: 8.5pt;
+    color: #777 !important;
+  }
 }
 
 
