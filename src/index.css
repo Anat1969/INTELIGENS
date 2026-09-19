@@ -718,6 +718,7 @@
     forced-color-adjust: none;
   }
 
+  body > *:not(.print-root) { display: none !important; }
   #root { display: none !important; }
   .no-print { display: none !important; }
 
