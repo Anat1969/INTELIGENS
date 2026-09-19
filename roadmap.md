@@ -9,4 +9,4 @@
 - [x] Scope the base article to light paper and friendly dark colors.
 - [x] Add persona images, fallbacks, and article navigation to intelligence cards.
 - [x] Remove the base detail dialog from the grid and verify selection remains independent.
-- [ ] Verify build plus light/dark article and card navigation behavior.
+- [x] Verify build plus light/dark article and card navigation behavior.
