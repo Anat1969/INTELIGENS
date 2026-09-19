@@ -3,12 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 
 const links = [
   { to: "/", label: "בית" },
   { to: "/composer", label: "מפת האינטליגנציות" },
   { to: "/profile", label: "הפרופיל שלך" },
   { to: "/trust", label: "אמון ופרטיות" },
+  { to: "/settings", label: "הגדרות" },
 ];
 
 const ThemeToggle = () => {
@@ -43,6 +45,7 @@ export const AppNav = () => {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { hasToken } = useGitHubAuth();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -138,6 +141,24 @@ export const AppNav = () => {
               <ThemeToggle />
             </div>
           </div>
+        </div>
+      )}
+
+      {!hasToken && (
+        <div
+          dir="rtl"
+          className="border-t text-center"
+          style={{
+            borderColor: "hsla(var(--foreground), 0.06)",
+            background: "hsla(var(--surface), 0.6)",
+          }}
+        >
+          <p className="mx-auto max-w-[1400px] px-6 py-1.5 text-[11px]" style={{ color: "hsl(var(--text-dim))" }}>
+            מצב קריאה בלבד — להזנת טוקן לעריכה:{" "}
+            <Link to="/settings" className="underline hover:opacity-80" style={{ color: "hsl(var(--foreground))" }}>
+              הגדרות
+            </Link>
+          </p>
         </div>
       )}
     </nav>
