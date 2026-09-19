@@ -114,7 +114,7 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenArticle }: Prop
 
       <div className="relative z-10 flex items-stretch gap-4">
         <div
-          className="relative w-28 sm:w-32 shrink-0 self-stretch min-h-28 overflow-hidden rounded-md border"
+          className="relative w-40 sm:w-56 shrink-0 self-start aspect-video overflow-hidden rounded-md border"
           style={{
             borderColor: selected ? `hsla(${hue}, 0.42)` : "hsla(var(--foreground), 0.1)",
             background: personaImage

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "next-themes";
-import { Moon, Sun, Menu, X, SquarePen } from "lucide-react";
+import { Moon, Sun, Menu, X, SquarePen, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 
@@ -58,6 +58,7 @@ const ThemeToggle = () => {
 
 export const AppNav = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { hasToken } = useGitHubAuth();
@@ -81,13 +82,27 @@ export const AppNav = () => {
       }}
     >
       <div className="mx-auto max-w-[1400px] px-6 md:px-10 h-[64px] flex items-center justify-between">
-        <Link
-          to="/"
-          className="font-serif-display text-[17px] hover:opacity-80 transition-opacity"
-          style={{ color: "hsl(var(--foreground))" }}
-        >
-          Intelligence Composer
-        </Link>
+        <div className="flex items-center gap-2">
+          {pathname !== "/" && (
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              aria-label="חזרה"
+              title="חזרה"
+              className="p-2 rounded-lg hover:opacity-70 transition-all duration-200"
+              style={{ color: "hsl(var(--text-dim))" }}
+            >
+              <ArrowRight size={18} />
+            </button>
+          )}
+          <Link
+            to="/"
+            className="font-serif-display text-[17px] hover:opacity-80 transition-opacity"
+            style={{ color: "hsl(var(--foreground))" }}
+          >
+            Intelligence Composer
+          </Link>
+        </div>
 
         <div className="hidden md:flex items-center gap-6">
           {links.map((l) => {

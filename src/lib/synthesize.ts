@@ -79,6 +79,37 @@ function personalize(text: string, ids: IntelligenceId[], kind: 'essence' | 'pow
   return `${text} בפועל מדובר ביכולת לנוע בין ${joinHe(domains)} בתוך אותה משימה, בלי לאבד את הדיוק של אף אחד מהם.`
 }
 
+// Unique, deterministic name for a combination not in the curated COMBOS table,
+// derived from the specific keywords of the combined intelligences (fixes the
+// repeated generic "חושב הגבול" name). The connective varies by a hash of the ids.
+const NAME_TEMPLATES: ((a: string, b: string) => string)[] = [
+  (a, b) => `בין ${a} ל${b}`,
+  (a, b) => `צומת ${a} ו${b}`,
+  (a, b) => `מזיגת ${a} ו${b}`,
+  (a, b) => `${a} של ${b}`,
+  (a, b) => `${a} פוגשת ${b}`,
+  (a, b) => `שדה ${a}–${b}`,
+]
+
+function hashIds(ids: IntelligenceId[]): number {
+  let h = 2166136261
+  const s = ids.join('+')
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+function uniqueMergeName(ids: IntelligenceId[]): string {
+  const kws = ids.map((id) => BY_ID[id]?.keyword).filter(Boolean) as string[]
+  if (kws.length === 0) return 'מיזוג'
+  if (kws.length === 1) return kws[0]
+  const tpl = NAME_TEMPLATES[hashIds(ids) % NAME_TEMPLATES.length]
+  const name = tpl(kws[0], kws[1])
+  return kws.length > 2 ? `${name} ועוד` : name
+}
+
 export function composeIntelligence(
   sourceIds: IntelligenceId[],
 ): SynthesizedIntelligence {
@@ -88,7 +119,7 @@ export function composeIntelligence(
   const isPredefined = key in COMBOS
 
   return {
-    name: base.name,
+    name: isPredefined ? base.name : uniqueMergeName(ids),
     type: base.type,
     essence: isPredefined ? base.essence : personalize(base.essence, ids, 'essence'),
     power: isPredefined ? base.power : personalize(base.power, ids, 'power'),
