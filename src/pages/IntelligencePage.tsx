@@ -78,11 +78,8 @@ export default function IntelligencePage() {
         combo: comboLabel(newSourceIds),
         parent: item.id,
       }).catch(() => undefined)
-      navigate(`/intelligence/${newId}`)
-    } else {
-      setMergeNote('readonly')
-      navigate(`/intelligence/${newId}`)
     }
+    navigate(`/intelligence/${newId}`)
   }, [item, picked, navigate])
 
 
