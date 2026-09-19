@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { getLibraryItem, addToLibrary, type LibraryItem } from '@/lib/local-library'
 import { fetchMerge, saveMerge } from '@/lib/github-store'
 import { hasToken } from '@/lib/gh-token'
-import { resolveImage } from '@/lib/living-image'
+import { resolvePrintImage } from '@/lib/living-image'
 import { composeIntelligence, comboLabel } from '@/lib/synthesize'
 import { BY_ID, INTELLIGENCES, type IntelligenceId } from '@/data/intelligences'
 import { ArrowRight } from 'lucide-react'
@@ -110,11 +110,11 @@ export default function IntelligencePage() {
     }
   }, [id, navigate])
 
-  // Image shown in the printed report: GitHub first, local cache as fallback
+  // The printed report always receives an embedded, already-loaded image.
   useEffect(() => {
     let alive = true
     if (!id) return
-    resolveImage(id).then((found) => {
+    resolvePrintImage(id).then((found) => {
       if (alive) setPrintImage(found)
     })
     return () => {
@@ -188,7 +188,7 @@ export default function IntelligencePage() {
           </p>
 
           <p
-            className="mt-3 font-sans-he text-[15px]"
+            className="mt-3 font-sans-he text-[17px] leading-[1.9]"
             style={{ color: 'hsl(var(--foreground))' }}
           >
             נוצר מהצירוף: {sourceNames}
@@ -203,7 +203,7 @@ export default function IntelligencePage() {
                 שרשרת המקור
               </p>
               <p
-                className="font-sans-he text-[15px] leading-[1.9]"
+                className="font-sans-he text-[17px] leading-[1.9]"
                 style={{ color: 'hsla(var(--foreground), 0.8)' }}
               >
                 {[...chain, item.name].join('  ←  ')}
@@ -230,7 +230,13 @@ export default function IntelligencePage() {
         </header>
 
         {/* Living space (prompt + GitHub-backed image) */}
-        <LivingSpaceBlock id={item.id} visualPrompt={item.visualPrompt} onImage={setPrintImage} />
+        <LivingSpaceBlock
+          id={item.id}
+          visualPrompt={item.visualPrompt}
+          onImage={() => {
+            resolvePrintImage(item.id).then(setPrintImage)
+          }}
+        />
 
         {/* Source intelligences */}
         <div
@@ -297,7 +303,7 @@ export default function IntelligencePage() {
             {item.roles.map((role, i) => (
               <span
                 key={role}
-                className="font-sans-he text-[15px] px-5 py-2.5 rounded-xl"
+                className="font-sans-he text-[17px] px-5 py-2.5 rounded-xl"
                 style={{
                   color: 'hsl(var(--foreground))',
                   background: sourceHues[i % sourceHues.length]
@@ -362,7 +368,7 @@ export default function IntelligencePage() {
             המשך למזג
           </h2>
           <p
-            className="font-sans-he text-[15px] leading-[1.8] mb-6"
+            className="font-sans-he text-[17px] leading-[1.9] mb-6"
             style={{ color: 'hsla(var(--foreground), 0.8)' }}
           >
             בחרו אינטליגנציות נוספות כדי לצמוח מהמיזוג הזה לאינטליגנציה חדשה.
@@ -374,7 +380,7 @@ export default function IntelligencePage() {
                 <button
                   key={intel.id}
                   onClick={() => togglePick(intel.id)}
-                  className="font-sans-he text-[14px] px-4 py-2 rounded-xl transition-all duration-200 hover:brightness-125"
+                  className="font-sans-he text-[16px] px-4 py-2 rounded-xl transition-all duration-200 hover:brightness-125"
                   style={{
                     color: on ? `hsl(${intel.hue})` : 'hsl(var(--foreground))',
                     background: on ? `hsla(${intel.hue}, 0.12)` : 'hsla(var(--foreground), 0.03)',

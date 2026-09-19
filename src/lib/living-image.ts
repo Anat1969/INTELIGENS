@@ -28,8 +28,8 @@ export function clearLocalImage(id: string): void {
   }
 }
 
-export function remoteImageUrl(id: string): string {
-  return `${imageUrl(id)}?t=${Date.now()}`;
+export function remoteImageUrl(id: string, cacheBuster = Date.now()): string {
+  return `${imageUrl(id)}?t=${cacheBuster}`;
 }
 
 /** Resolve the best available image: GitHub first, then the local cache. */
@@ -45,4 +45,25 @@ export function resolveImage(id: string): Promise<string | null> {
     probe.onerror = () => resolve(getLocalImage(id));
     probe.src = url;
   });
+}
+
+/** Resolve an image into a stable, embedded source that Chromium can print reliably. */
+export async function resolvePrintImage(id: string): Promise<string | null> {
+  const local = getLocalImage(id);
+  if (local) return local;
+
+  const stableRemoteUrl = remoteImageUrl(id, Date.now());
+  try {
+    const response = await fetch(stableRemoteUrl, { cache: "no-store" });
+    if (!response.ok) return getLocalImage(id);
+    const blob = await response.blob();
+    return await new Promise<string | null>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : null);
+      reader.onerror = () => resolve(getLocalImage(id));
+      reader.readAsDataURL(blob);
+    });
+  } catch {
+    return getLocalImage(id);
+  }
 }

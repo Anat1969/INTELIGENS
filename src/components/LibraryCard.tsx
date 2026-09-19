@@ -62,8 +62,8 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
           <div className="h-px w-full mb-4" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
 
           <p
-            className="font-sans-he text-[12px] leading-[1.8] mb-4"
-            style={{ color: 'hsl(var(--text-dim))' }}
+            className="font-sans-he text-[16px] leading-[1.9] mb-4"
+            style={{ color: 'hsla(var(--foreground), 0.9)' }}
           >
             {essence}
           </p>
@@ -95,7 +95,7 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
 
           {keyQuestion && (
             <p
-              className="font-sans-he text-[11px] leading-[1.7] mb-3 pr-3"
+              className="font-sans-he text-[16px] leading-[1.9] mb-3 pr-3"
               style={{
                 color: 'hsla(340, 70%, 60%, 0.7)',
                 borderRight: '2px solid hsla(340, 70%, 60%, 0.2)',
