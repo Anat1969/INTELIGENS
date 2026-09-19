@@ -22,10 +22,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment files with secret keys (server-side)
+# Environment files with secret keys
+.env
 .env.local
 .env.*.local
 
-# Local SQLite database
-db/
 *.timestamp-*.mjs
