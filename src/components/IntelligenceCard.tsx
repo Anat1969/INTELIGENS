@@ -1,4 +1,5 @@
 import { memo, useRef, useCallback } from "react";
+import { Info } from "lucide-react";
 import type { Intelligence } from "@/data/intelligences";
 import { cn } from "@/lib/utils";
 
@@ -6,9 +7,10 @@ interface Props {
   intel: Intelligence;
   selected: boolean;
   onToggle: (id: Intelligence["id"]) => void;
+  onOpenDetails?: (intel: Intelligence) => void;
 }
 
-const IntelligenceCardBase = ({ intel, selected, onToggle }: Props) => {
+const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenDetails }: Props) => {
   const isExt = intel.group === "extension";
   const hue = intel.hue;
   const cardRef = useRef<HTMLButtonElement>(null);
