@@ -4,6 +4,23 @@ import { imageUrl } from "./github-store";
 
 export const imageKey = (id: string) => `img-${id}`;
 
+const IMAGE_UPDATED_EVENT = "living-image:updated";
+
+function dispatchImageUpdated(id: string): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(IMAGE_UPDATED_EVENT, { detail: { id } }));
+}
+
+export function onImageUpdated(cb: (id: string) => void): () => void {
+  if (typeof window === "undefined") return () => undefined;
+  const listener = (event: Event) => {
+    const detail = (event as CustomEvent<{ id?: string }>).detail;
+    if (detail?.id) cb(detail.id);
+  };
+  window.addEventListener(IMAGE_UPDATED_EVENT, listener);
+  return () => window.removeEventListener(IMAGE_UPDATED_EVENT, listener);
+}
+
 export function getLocalImage(id: string): string | null {
   try {
     return localStorage.getItem(imageKey(id));
@@ -18,6 +35,7 @@ export function setLocalImage(id: string, dataUrl: string): void {
   } catch {
     /* ignore quota errors */
   }
+  dispatchImageUpdated(id);
 }
 
 export function clearLocalImage(id: string): void {
@@ -26,6 +44,7 @@ export function clearLocalImage(id: string): void {
   } catch {
     /* ignore */
   }
+  dispatchImageUpdated(id);
 }
 
 export function remoteImageUrl(id: string, cacheBuster = Date.now()): string {
