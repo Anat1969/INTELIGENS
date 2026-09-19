@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type DragEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
 import { hasToken } from '@/lib/gh-token'
 import { saveImage } from '@/lib/github-store'
 import {
@@ -39,7 +40,7 @@ export function LayerSpread({ id, title, interpretation, visualPrompt, index }: 
   useEffect(() => {
     void loadImage()
     return onImageUpdated((updatedId) => {
-      if (updatedId === id) void loadImage()
+      if (updatedId === id) void resolvePrintImage(id).then(setSrc)
     })
   }, [id, loadImage])
 
@@ -98,13 +99,13 @@ export function LayerSpread({ id, title, interpretation, visualPrompt, index }: 
   }
 
   const dropHandlers = {
-    onDrop: (event: React.DragEvent<HTMLDivElement>) => {
+    onDrop: (event: DragEvent<HTMLDivElement>) => {
       event.preventDefault()
       setDragOver(false)
       const file = event.dataTransfer.files[0]
       if (file) readFile(file)
     },
-    onDragOver: (event: React.DragEvent<HTMLDivElement>) => {
+    onDragOver: (event: DragEvent<HTMLDivElement>) => {
       event.preventDefault()
       setDragOver(true)
     },
@@ -139,25 +140,25 @@ export function LayerSpread({ id, title, interpretation, visualPrompt, index }: 
         <div className="no-print mag-tools">
           {editing ? (
             <>
-              <button type="button" className="tool-btn" onClick={() => void copyPrompt()}>
+              <Button type="button" className="tool-btn" onClick={() => void copyPrompt()}>
                 {copied ? 'הועתק' : 'העתק פרומפט'}
-              </button>
-              <button type="button" className="tool-btn" onClick={() => inputRef.current?.click()}>
+              </Button>
+              <Button type="button" className="tool-btn" onClick={() => inputRef.current?.click()}>
                 {src ? 'החלפת תמונה' : 'העלאת תמונה'}
-              </button>
+              </Button>
               {src && (
-                <button type="button" className="tool-btn" onClick={removeImage}>
+                <Button type="button" className="tool-btn" onClick={removeImage}>
                   הסרת תמונה
-                </button>
+                </Button>
               )}
-              <button type="button" className="tool-btn" onClick={() => setEditing(false)}>
+              <Button type="button" className="tool-btn" onClick={() => setEditing(false)}>
                 שמור וסגור
-              </button>
+              </Button>
             </>
           ) : (
-            <button type="button" className="tool-btn" onClick={() => setEditing(true)}>
+            <Button type="button" className="tool-btn" onClick={() => setEditing(true)}>
               ערוך
-            </button>
+            </Button>
           )}
         </div>
 

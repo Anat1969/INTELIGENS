@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AppNav } from '@/components/AppNav'
 import { MagazineArticle } from '@/components/MagazineArticle'
+import { Button } from '@/components/ui/button'
 import { BY_ID, type IntelligenceId } from '@/data/intelligences'
 import { getLayers } from '@/lib/synthesize'
 
@@ -21,9 +22,9 @@ export default function BaseArticle() {
       <AppNav />
       <main className="pt-28 pb-20 px-5 sm:px-8">
         <div className="no-print mag-topbar">
-          <button type="button" className="tool-btn" onClick={() => window.print()}>
+          <Button type="button" className="tool-btn" onClick={() => window.print()}>
             הורד PDF
-          </button>
+          </Button>
         </div>
         <MagazineArticle
           title={intel.name}
