@@ -387,52 +387,6 @@ export default function IntelligencePage() {
           </section>
         )}
 
-        {/* Visual Prompt */}
-        {item.visualPrompt && (
-          <section className="mb-16">
-            <div
-              className="h-px w-full mb-12"
-              style={{ background: 'hsla(var(--foreground), 0.06)' }}
-            />
-            <div className="flex items-center justify-between mb-6">
-              <h2
-                className="font-mono-dm text-[10px] tracking-[0.25em] uppercase flex items-center gap-2"
-                style={{ color: 'hsla(170, 70%, 55%, 0.7)' }}
-              >
-                <Image size={14} />
-                פרומפט ויזואלי
-              </h2>
-              <button
-                onClick={handleCopyVisual}
-                className="flex items-center gap-2 font-mono-dm text-[10px] tracking-[0.1em] px-4 py-2 rounded-lg transition-all duration-200 hover:opacity-70"
-                style={{
-                  color: 'hsla(170, 70%, 55%, 0.8)',
-                  background: 'hsla(170, 70%, 55%, 0.06)',
-                  border: '1px solid hsla(170, 70%, 55%, 0.15)',
-                }}
-              >
-                {visualCopied ? <Check size={12} /> : <Copy size={12} />}
-                {visualCopied ? 'הועתק' : 'העתק פרומפט'}
-              </button>
-            </div>
-            <div
-              className="p-6 rounded-xl"
-              style={{
-                background: 'hsla(170, 70%, 55%, 0.04)',
-                border: '1px solid hsla(170, 70%, 55%, 0.1)',
-                direction: 'ltr',
-              }}
-            >
-              <p
-                className="font-mono-dm text-[13px] leading-[1.9]"
-                style={{ color: 'hsl(var(--text-dim))' }}
-              >
-                {item.visualPrompt}
-              </p>
-            </div>
-          </section>
-        )}
-
         {/* Continue merging */}
         <section className="mb-16">
           <div
