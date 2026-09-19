@@ -44,6 +44,7 @@ export function addToLibrary(
     ...intelligence,
     id: id ?? generateId(),
     created_at: new Date().toISOString(),
+    ...(extra ?? {}),
   }
   items.unshift(item)
   saveAll(items)
