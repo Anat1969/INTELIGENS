@@ -1,12 +1,14 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { useEffect, useState, useRef, useCallback } from 'react'
-import { getLibraryItem, updateItemImage, addToLibrary, type LibraryItem } from '@/lib/local-library'
+import { useEffect, useState, useCallback } from 'react'
+import { getLibraryItem, addToLibrary, type LibraryItem } from '@/lib/local-library'
 import { fetchMerge, saveMerge } from '@/lib/github-store'
 import { hasToken } from '@/lib/gh-token'
+import { resolveImage } from '@/lib/living-image'
 import { composeIntelligence, comboLabel } from '@/lib/synthesize'
 import { BY_ID, INTELLIGENCES, type IntelligenceId } from '@/data/intelligences'
-import { ArrowRight, Upload, Image, Copy, Check, Trash2 } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { AppNav } from '@/components/AppNav'
+import { LivingSpaceBlock } from '@/components/LivingSpaceBlock'
 import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
 
@@ -14,9 +16,7 @@ export default function IntelligencePage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [item, setItem] = useState<LibraryItem | null>(null)
-  const [visualCopied, setVisualCopied] = useState(false)
-  const [isDragOver, setIsDragOver] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [printImage, setPrintImage] = useState<string | null>(null)
   const [chain, setChain] = useState<string[]>([])
   const [picked, setPicked] = useState<string[]>([])
 
@@ -110,55 +110,17 @@ export default function IntelligencePage() {
     }
   }, [id, navigate])
 
-  const handleImageFile = useCallback((file: File) => {
-    if (!file.type.startsWith('image/') || !id) return
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const data = e.target?.result as string
-      updateItemImage(id, data)
-      setItem(prev => prev ? { ...prev, image_data: data } : null)
-    }
-    reader.readAsDataURL(file)
-  }, [id])
-
-  const handlePaste = useCallback((e: ClipboardEvent) => {
-    const items = e.clipboardData?.items
-    if (!items) return
-    for (const clipItem of Array.from(items)) {
-      if (clipItem.type.startsWith('image/')) {
-        e.preventDefault()
-        const file = clipItem.getAsFile()
-        if (file) handleImageFile(file)
-        break
-      }
-    }
-  }, [handleImageFile])
-
+  // Image shown in the printed report: GitHub first, local cache as fallback
   useEffect(() => {
-    document.addEventListener('paste', handlePaste)
-    return () => document.removeEventListener('paste', handlePaste)
-  }, [handlePaste])
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-    const file = e.dataTransfer.files[0]
-    if (file) handleImageFile(file)
-  }, [handleImageFile])
-
-  const handleRemoveImage = useCallback(() => {
+    let alive = true
     if (!id) return
-    updateItemImage(id, '')
-    setItem(prev => prev ? { ...prev, image_data: undefined } : null)
-  }, [id])
-
-  function handleCopyVisual() {
-    if (item?.visualPrompt) {
-      navigator.clipboard.writeText(item.visualPrompt)
-      setVisualCopied(true)
-      setTimeout(() => setVisualCopied(false), 2000)
+    resolveImage(id).then((found) => {
+      if (alive) setPrintImage(found)
+    })
+    return () => {
+      alive = false
     }
-  }
+  }, [id])
 
   if (!item) return null
 
@@ -267,74 +229,8 @@ export default function IntelligencePage() {
           </div>
         </header>
 
-        {/* Image Section */}
-        <section className="mb-16">
-          {item.image_data ? (
-            <div className="relative group">
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{ border: '1px solid hsla(var(--foreground), 0.06)' }}
-              >
-                <img
-                  src={item.image_data}
-                  alt={item.name}
-                  className="w-full max-h-[500px] object-cover"
-                />
-              </div>
-              <button
-                onClick={handleRemoveImage}
-                className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-lg"
-                style={{
-                  background: 'hsla(0, 0%, 0%, 0.6)',
-                  color: 'white',
-                }}
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-          ) : (
-            <div
-              onDrop={handleDrop}
-              onDragOver={(e) => { e.preventDefault(); setIsDragOver(true) }}
-              onDragLeave={() => setIsDragOver(false)}
-              onClick={() => fileInputRef.current?.click()}
-              className="cursor-pointer rounded-2xl flex flex-col items-center justify-center gap-4 py-16 transition-all duration-200"
-              style={{
-                border: `2px dashed ${isDragOver ? 'hsla(var(--foreground), 0.3)' : 'hsla(var(--foreground), 0.08)'}`,
-                background: isDragOver ? 'hsla(var(--foreground), 0.03)' : 'transparent',
-              }}
-            >
-              <Upload
-                size={32}
-                style={{ color: 'hsl(var(--text-dim))', opacity: 0.3 }}
-              />
-              <div className="text-center">
-                <p
-                  className="font-sans-he text-[14px]"
-                  style={{ color: 'hsl(var(--text-dim))' }}
-                >
-                  גרור תמונה לכאן, הדבק (Ctrl+V) או לחץ להעלאה
-                </p>
-                <p
-                  className="font-mono-dm text-[10px] mt-2"
-                  style={{ color: 'hsl(var(--text-dim))', opacity: 0.5 }}
-                >
-                  צור תמונה עם הפרומפט הויזואלי והדבק אותה כאן
-                </p>
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file) handleImageFile(file)
-                }}
-              />
-            </div>
-          )}
-        </section>
+        {/* Living space (prompt + GitHub-backed image) */}
+        <LivingSpaceBlock id={item.id} visualPrompt={item.visualPrompt} onImage={setPrintImage} />
 
         {/* Source intelligences */}
         <div
@@ -453,52 +349,6 @@ export default function IntelligencePage() {
           </section>
         )}
 
-        {/* Visual Prompt */}
-        {item.visualPrompt && (
-          <section className="mb-16">
-            <div
-              className="h-px w-full mb-12"
-              style={{ background: 'hsla(var(--foreground), 0.06)' }}
-            />
-            <div className="flex items-center justify-between mb-6">
-              <h2
-                className="font-mono-dm text-[10px] tracking-[0.25em] uppercase flex items-center gap-2"
-                style={{ color: 'hsla(170, 70%, 55%, 0.7)' }}
-              >
-                <Image size={14} />
-                פרומפט ויזואלי
-              </h2>
-              <button
-                onClick={handleCopyVisual}
-                className="flex items-center gap-2 font-mono-dm text-[10px] tracking-[0.1em] px-4 py-2 rounded-lg transition-all duration-200 hover:opacity-70"
-                style={{
-                  color: 'hsla(170, 70%, 55%, 0.8)',
-                  background: 'hsla(170, 70%, 55%, 0.06)',
-                  border: '1px solid hsla(170, 70%, 55%, 0.15)',
-                }}
-              >
-                {visualCopied ? <Check size={12} /> : <Copy size={12} />}
-                {visualCopied ? 'הועתק' : 'העתק פרומפט'}
-              </button>
-            </div>
-            <div
-              className="p-6 rounded-xl"
-              style={{
-                background: 'hsla(170, 70%, 55%, 0.04)',
-                border: '1px solid hsla(170, 70%, 55%, 0.1)',
-                direction: 'ltr',
-              }}
-            >
-              <p
-                className="font-mono-dm text-[13px] leading-[1.9]"
-                style={{ color: 'hsl(var(--text-dim))' }}
-              >
-                {item.visualPrompt}
-              </p>
-            </div>
-          </section>
-        )}
-
         {/* Continue merging */}
         <section className="mb-16">
           <div
@@ -584,8 +434,8 @@ export default function IntelligencePage() {
           <p className="print-meta">שרשרת המקור: {[...chain, item.name].join(' ← ')}</p>
         )}
 
-        {item.image_data && (
-          <img className="print-img" src={item.image_data} alt={item.name} />
+        {printImage && (
+          <img className="print-img" src={printImage} alt={item.name} />
         )}
 
         <h2>הגרעין</h2>
