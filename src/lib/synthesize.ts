@@ -6,6 +6,7 @@ import {
   type IntelligenceId,
 } from '@/data/intelligences'
 import { LAYERS, type LayerSlots } from '@/data/intelligenceLayers'
+import { DESIGN_LAYERS, type DesignSlots } from '@/data/intelligenceDesign'
 
 export interface SynthesizedIntelligence {
   name: string
@@ -136,8 +137,8 @@ export function composeIntelligence(
 
 export interface IntelligenceLayers {
   type: string
-  prompts: { persona: string; space: string; building: string }
-  interp: { persona: string; space: string; building: string }
+  prompts: { persona: string; design: string; space: string; building: string }
+  interp: { persona: string; design: string; space: string; building: string }
 }
 
 const PERSONA_SUFFIX =
@@ -146,9 +147,15 @@ const SPACE_SUFFIX =
   'no people, bold, forward-looking, innovative contemporary architecture, Professional architecture photography, documentary realism, natural light, 16:9, No text, No words, No writing, No frame divisions.'
 const BUILDING_SUFFIX =
   'bold, forward-looking, innovative contemporary architecture, Professional architecture photography, documentary realism, natural light, 16:9, No text, No words, No writing, No frame divisions.'
+const DESIGN_SUFFIX =
+  'close-up textures and overlapping planes, no space, no figure, no building, a pure design-language moodboard as a single composition, Editorial material study, documentary realism, natural light, 16:9, No text, No words, No writing, No frame divisions.'
 
 function personaPromptFrom(type: string, p: LayerSlots['persona']): string {
   return `A documentary portrait of ${p.archetype}, ${p.action}, in ${p.setting}, ${p.light}, ${p.materials}, ${PERSONA_SUFFIX}`
+}
+
+function designPromptFrom(type: string, d: DesignSlots): string {
+  return `An abstract material and aesthetic study for ${type}, ${d.materials}, ${d.geometry}, ${d.light}, ${d.color}, ${DESIGN_SUFFIX}`
 }
 
 function spacePromptFrom(type: string, s: LayerSlots['space']): string {
@@ -162,6 +169,10 @@ function buildingPromptFrom(type: string, b: LayerSlots['building']): string {
 export function personaPrompt(id: IntelligenceId): string {
   const L = LAYERS[id]
   return personaPromptFrom(L.type, L.persona)
+}
+
+export function designPrompt(id: IntelligenceId): string {
+  return designPromptFrom(LAYERS[id].type, DESIGN_LAYERS[id])
 }
 
 export function spacePrompt(id: IntelligenceId): string {
@@ -178,8 +189,13 @@ export function getLayers(id: IntelligenceId): IntelligenceLayers {
   const L = LAYERS[id]
   return {
     type: L.type,
-    prompts: { persona: personaPrompt(id), space: spacePrompt(id), building: buildingPrompt(id) },
-    interp: L.interp,
+    prompts: {
+      persona: personaPrompt(id),
+      design: designPrompt(id),
+      space: spacePrompt(id),
+      building: buildingPrompt(id),
+    },
+    interp: { ...L.interp, design: DESIGN_LAYERS[id].interp },
   }
 }
 
@@ -212,7 +228,9 @@ export function mergeLayers(sourceIds: IntelligenceId[]): IntelligenceLayers {
   const first = sources[0] ?? LAYERS.linguistic
   const type = `the fusion of ${sources.map((s) => s.type).join(' and ')}`
 
+  const firstDesign = DESIGN_LAYERS[ids[0]]
   const persona = { ...first.persona, materials: unionMaterials(sources.map((s) => s.persona.materials)) }
+  const design = { ...firstDesign, materials: unionMaterials(ids.map((id) => DESIGN_LAYERS[id].materials)) }
   const space = { ...first.space, materials: unionMaterials(sources.map((s) => s.space.materials)) }
   const building = { ...first.building, materials: unionMaterials(sources.map((s) => s.building.materials)) }
 
@@ -222,11 +240,13 @@ export function mergeLayers(sourceIds: IntelligenceId[]): IntelligenceLayers {
     type,
     prompts: {
       persona: personaPromptFrom(type, persona),
+      design: designPromptFrom(type, design),
       space: spacePromptFrom(type, space),
       building: buildingPromptFrom(type, building),
     },
     interp: {
       persona: `שילוב של ${sourceNames}: ${first.interp.persona}`,
+      design: `שילוב של ${sourceNames}: ${firstDesign.interp}`,
       space: `שילוב של ${sourceNames}: ${first.interp.space}`,
       building: `שילוב של ${sourceNames}: ${first.interp.building}`,
     },

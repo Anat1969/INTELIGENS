@@ -15,8 +15,8 @@ interface Props {
   hues?: string[]
 }
 
-const LAYER_TITLES = ['אישיות', 'מרחב מחיה', 'מבנה וסביבה'] as const
-const LAYER_KEYS = ['persona', 'space', 'building'] as const
+const LAYER_TITLES = ['אישיות', 'שפה עיצובית', 'מרחב מחיה', 'מבנה וסביבה'] as const
+const LAYER_KEYS = ['persona', 'design', 'space', 'building'] as const
 
 export function MagazineArticle({
   title,
