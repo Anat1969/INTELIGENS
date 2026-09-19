@@ -45,6 +45,7 @@ export const AppNav = () => {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { hasToken } = useGitHubAuth();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
