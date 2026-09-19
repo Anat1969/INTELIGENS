@@ -267,74 +267,8 @@ export default function IntelligencePage() {
           </div>
         </header>
 
-        {/* Image Section */}
-        <section className="mb-16">
-          {item.image_data ? (
-            <div className="relative group">
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{ border: '1px solid hsla(var(--foreground), 0.06)' }}
-              >
-                <img
-                  src={item.image_data}
-                  alt={item.name}
-                  className="w-full max-h-[500px] object-cover"
-                />
-              </div>
-              <button
-                onClick={handleRemoveImage}
-                className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity p-2 rounded-lg"
-                style={{
-                  background: 'hsla(0, 0%, 0%, 0.6)',
-                  color: 'white',
-                }}
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-          ) : (
-            <div
-              onDrop={handleDrop}
-              onDragOver={(e) => { e.preventDefault(); setIsDragOver(true) }}
-              onDragLeave={() => setIsDragOver(false)}
-              onClick={() => fileInputRef.current?.click()}
-              className="cursor-pointer rounded-2xl flex flex-col items-center justify-center gap-4 py-16 transition-all duration-200"
-              style={{
-                border: `2px dashed ${isDragOver ? 'hsla(var(--foreground), 0.3)' : 'hsla(var(--foreground), 0.08)'}`,
-                background: isDragOver ? 'hsla(var(--foreground), 0.03)' : 'transparent',
-              }}
-            >
-              <Upload
-                size={32}
-                style={{ color: 'hsl(var(--text-dim))', opacity: 0.3 }}
-              />
-              <div className="text-center">
-                <p
-                  className="font-sans-he text-[14px]"
-                  style={{ color: 'hsl(var(--text-dim))' }}
-                >
-                  גרור תמונה לכאן, הדבק (Ctrl+V) או לחץ להעלאה
-                </p>
-                <p
-                  className="font-mono-dm text-[10px] mt-2"
-                  style={{ color: 'hsl(var(--text-dim))', opacity: 0.5 }}
-                >
-                  צור תמונה עם הפרומפט הויזואלי והדבק אותה כאן
-                </p>
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file) handleImageFile(file)
-                }}
-              />
-            </div>
-          )}
-        </section>
+        {/* Living space (prompt + GitHub-backed image) */}
+        <LivingSpaceBlock id={item.id} visualPrompt={item.visualPrompt} />
 
         {/* Source intelligences */}
         <div
