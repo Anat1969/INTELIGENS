@@ -113,8 +113,8 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenDetails }: Prop
           </div>
 
           <p
-            className="mt-1 text-[13px] leading-[1.8] line-clamp-2"
-            style={{ color: "hsla(var(--foreground), 0.75)" }}
+            className="mt-1 text-[16px] leading-[1.9] line-clamp-2"
+            style={{ color: "hsla(var(--foreground), 0.9)" }}
           >
             {intel.description}
           </p>

@@ -107,7 +107,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
       </p>
 
       <p
-        className="mt-2 font-sans-he text-[14px]"
+        className="mt-2 font-sans-he text-[16px] leading-[1.9]"
         style={{ color: 'hsla(var(--foreground), 0.8)' }}
       >
         נוצר מהצירוף: {comboLabel(result.source_ids as IntelligenceId[])}
@@ -128,7 +128,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
             הגרעין
           </h4>
           <p
-            className="font-sans-he text-[15px] leading-[1.85]"
+            className="font-sans-he text-[17px] leading-[1.9]"
             style={{ color: 'hsl(var(--foreground))' }}
           >
             {result.essence}
@@ -143,7 +143,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
             העוצמה
           </h4>
           <p
-            className="font-sans-he text-[15px] leading-[1.85]"
+            className="font-sans-he text-[17px] leading-[1.9]"
             style={{ color: 'hsl(var(--foreground))' }}
           >
             {result.power}
@@ -165,7 +165,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
           {result.roles.map(role => (
             <span
               key={role}
-              className="font-sans-he text-[13px] px-4 py-2 rounded-xl"
+              className="font-sans-he text-[16px] px-4 py-2 rounded-xl"
               style={{
                 color: 'hsl(var(--foreground))',
                 background: 'hsla(var(--foreground), 0.04)',
@@ -204,7 +204,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
             שאלת מפתח
           </h4>
           <p
-            className="font-sans-he text-[15px] leading-[1.9]"
+            className="font-sans-he text-[17px] leading-[1.9]"
             style={{ color: 'hsla(var(--foreground), 0.85)' }}
           >
             {result.keyQuestion}

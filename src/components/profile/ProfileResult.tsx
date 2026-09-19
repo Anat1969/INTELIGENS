@@ -64,7 +64,7 @@ const ComboBlock = ({
           >
             המהות
           </div>
-          <p className="text-[15px] leading-[1.9] text-foreground">{combo.essence}</p>
+          <p className="text-[17px] leading-[1.9] text-foreground">{combo.essence}</p>
         </div>
         <div>
           <div
@@ -73,7 +73,7 @@ const ComboBlock = ({
           >
             הכוח
           </div>
-          <p className="text-[15px] leading-[1.9] text-foreground">{combo.power}</p>
+          <p className="text-[17px] leading-[1.9] text-foreground">{combo.power}</p>
         </div>
       </div>
 
@@ -181,8 +181,8 @@ export const ProfileResult = ({
           {dominantIntel.domain}
         </div>
         <p
-          className="mt-4 text-[16px] leading-[1.85]"
-          style={{ color: "hsla(var(--foreground), 0.85)" }}
+           className="mt-4 text-[17px] leading-[1.9]"
+           style={{ color: "hsla(var(--foreground), 0.9)" }}
         >
           {dominantIntel.description}
         </p>
@@ -222,8 +222,8 @@ export const ProfileResult = ({
             return (
               <div key={s.intelligence} className="flex items-center gap-3">
                 <span
-                  className="font-sans-he text-[14px] min-w-[140px] text-right"
-                  style={{ color: "hsla(var(--foreground), 0.85)" }}
+                   className="font-sans-he text-[16px] min-w-[150px] text-right"
+                   style={{ color: "hsla(var(--foreground), 0.9)" }}
                 >
                   {intel.name}
                 </span>
@@ -297,7 +297,7 @@ export const ProfileResult = ({
                       className="flex items-center gap-2 text-right justify-end"
                     >
                       <span
-                        className="font-sans-he text-[13px]"
+                         className="font-sans-he text-[16px]"
                         style={{ color: "hsl(var(--foreground))" }}
                       >
                         {intel.name}
@@ -339,7 +339,7 @@ export const ProfileResult = ({
                       className="flex items-center gap-2 text-right justify-end"
                     >
                       <span
-                        className="font-sans-he text-[13px]"
+                         className="font-sans-he text-[16px]"
                         style={{ color: "hsl(var(--foreground))" }}
                       >
                         {intel.name}

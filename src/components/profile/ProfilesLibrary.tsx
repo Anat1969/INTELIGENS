@@ -56,13 +56,13 @@ export const ProfilesLibrary = ({ refreshKey = 0 }: { refreshKey?: number }) => 
       </div>
 
       {rows === null && (
-        <p className="text-[13px]" style={{ color: "hsl(var(--text-dim))" }}>
+        <p className="text-[16px]" style={{ color: "hsla(var(--foreground), 0.8)" }}>
           טוען פרופילים...
         </p>
       )}
 
       {rows !== null && rows.length === 0 && (
-        <p className="text-[13px]" style={{ color: "hsl(var(--text-dim))" }}>
+        <p className="text-[16px]" style={{ color: "hsla(var(--foreground), 0.8)" }}>
           עדיין לא נשמרו פרופילים.
         </p>
       )}
@@ -76,7 +76,7 @@ export const ProfilesLibrary = ({ refreshKey = 0 }: { refreshKey?: number }) => 
               className="flex items-center justify-between border-b py-3 transition-opacity hover:opacity-70"
               style={{ borderColor: "hsla(var(--foreground), 0.08)" }}
             >
-              <span className="font-sans-he text-[14px] text-foreground">
+              <span className="font-sans-he text-[16px] text-foreground">
                 {r.fillerName}
               </span>
               <span

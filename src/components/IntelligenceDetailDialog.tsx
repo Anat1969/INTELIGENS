@@ -5,7 +5,7 @@ import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
 import { LivingSpaceBlock } from '@/components/LivingSpaceBlock'
 import { baseVisualPrompt } from '@/lib/synthesize'
-import { resolveImage } from '@/lib/living-image'
+import { resolvePrintImage } from '@/lib/living-image'
 
 interface Props {
   intel: Intelligence | null
@@ -37,7 +37,7 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
   useEffect(() => {
     let alive = true
     if (!intel) return
-    resolveImage(`base-${intel.id}`).then((found) => {
+    resolvePrintImage(`base-${intel.id}`).then((found) => {
       if (alive) setPrintImage(found)
     })
     return () => {
@@ -82,7 +82,7 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
             {intel.domain} · {intel.keyword}
           </DialogDescription>
 
-          <p className="font-sans-he text-[15px] leading-[1.9] text-foreground/90">
+          <p className="font-sans-he text-[17px] leading-[1.9] text-foreground/90">
             {intel.description}
           </p>
 
@@ -112,7 +112,7 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
                     {combo.type}
                   </p>
                   <p
-                    className="font-sans-he text-[14px] leading-[1.85]"
+                    className="font-sans-he text-[16px] leading-[1.9]"
                     style={{ color: 'hsla(var(--foreground), 0.8)' }}
                   >
                     {firstSentence(combo.essence)}
@@ -123,7 +123,13 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
           )}
 
           <div className="pt-2">
-            <LivingSpaceBlock id={`base-${intel.id}`} visualPrompt={baseVisualPrompt(intel.id)} />
+            <LivingSpaceBlock
+              id={`base-${intel.id}`}
+              visualPrompt={baseVisualPrompt(intel.id)}
+              onImage={() => {
+                resolvePrintImage(`base-${intel.id}`).then(setPrintImage)
+              }}
+            />
           </div>
 
           <div className="pt-2">

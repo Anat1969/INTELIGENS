@@ -10,7 +10,7 @@ import { computeScores, getProfileCombos } from "@/lib/profile-scores";
 import { BY_ID } from "@/data/intelligences";
 import { LivingSpaceBlock } from "@/components/LivingSpaceBlock";
 import { baseVisualPrompt } from "@/lib/synthesize";
-import { resolveImage } from "@/lib/living-image";
+import { resolvePrintImage } from "@/lib/living-image";
 
 const formatDate = (iso: string) => {
   const d = new Date(iso);
@@ -33,7 +33,7 @@ const ProfileReport = () => {
   useEffect(() => {
     let alive = true;
     if (!id) return;
-    resolveImage(`profile-${id}`).then((found) => {
+    resolvePrintImage(`profile-${id}`).then((found) => {
       if (alive) setPrintImage(found);
     });
     return () => {
@@ -116,6 +116,9 @@ const ProfileReport = () => {
           <LivingSpaceBlock
             id={`profile-${profile.id}`}
             visualPrompt={baseVisualPrompt(sorted[0].intelligence)}
+            onImage={() => {
+              resolvePrintImage(`profile-${profile.id}`).then(setPrintImage);
+            }}
           />
         </div>
       </main>

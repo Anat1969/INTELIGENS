@@ -37,7 +37,7 @@ export const QuestionBlock = ({
         שאלה {question.number}
       </div>
 
-      <h2 className="mt-3 font-serif-display text-[24px] md:text-[28px] leading-[1.4] text-foreground">
+      <h2 className="mt-3 font-serif-display text-[28px] md:text-[32px] leading-[1.4] text-foreground">
         {question.text}
       </h2>
 
@@ -51,7 +51,7 @@ export const QuestionBlock = ({
               onClick={() => onAnswer(i)}
               className={cn(
                 "w-full text-right px-5 py-4 border rounded-sm transition-all duration-200",
-                "font-sans-he text-[16px] leading-[1.75]",
+                "font-sans-he text-[17px] leading-[1.9]",
                 "hover:border-foreground/40",
               )}
               style={
