@@ -19,11 +19,9 @@ export default function IntelligencePage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [chain, setChain] = useState<string[]>([])
   const [picked, setPicked] = useState<string[]>([])
-  const [mergeNote, setMergeNote] = useState<string>('')
 
   useEffect(() => {
     setPicked([])
-    setMergeNote('')
   }, [id])
 
   // Walk the parent chain (oldest ancestor → current)
