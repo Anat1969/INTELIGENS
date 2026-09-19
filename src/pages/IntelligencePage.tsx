@@ -507,6 +507,9 @@ export default function IntelligencePage() {
           צירוף של {item.source_ids.length} · {sourceNames} ·{' '}
           {new Date(item.created_at).toLocaleDateString('he-IL')}
         </p>
+        {chain.length > 0 && (
+          <p className="print-meta">שרשרת המקור: {[...chain, item.name].join(' ← ')}</p>
+        )}
 
         {item.image_data && (
           <img className="print-img" src={item.image_data} alt={item.name} />
