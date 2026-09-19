@@ -26,7 +26,16 @@ function loadAll(): LibraryItem[] {
 }
 
 function saveAll(items: LibraryItem[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+  // The library index must stay small: base64 images are cached separately
+  // (IndexedDB + GitHub), so never persist image_data here. Keeping it out
+  // guarantees this write stays well under the localStorage quota.
+  const slim = items.map(({ image_data: _image_data, ...rest }) => rest)
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(slim))
+  } catch {
+    // Quota or private-mode failure: never let a cache write crash the app.
+    // The GitHub store remains the source of truth for saved merges.
+  }
 }
 
 export function addToLibrary(

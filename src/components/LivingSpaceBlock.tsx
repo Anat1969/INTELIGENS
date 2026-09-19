@@ -8,6 +8,7 @@ import {
   remoteImageUrl,
   setLocalImage,
 } from '@/lib/living-image'
+import { compressImage } from '@/lib/image-compress'
 
 interface Props {
   id: string
@@ -49,14 +50,16 @@ export function LivingSpaceBlock({
   }, [id])
 
   const handleRemoteError = useCallback(() => {
-    const local = getLocalImage(id)
-    setSrc(local)
-    onImage?.(local)
+    void getLocalImage(id).then((local) => {
+      setSrc(local)
+      onImage?.(local)
+    })
   }, [id, onImage])
 
   const handleNewImage = useCallback(
-    async (dataUrl: string) => {
-      setLocalImage(id, dataUrl)
+    async (rawDataUrl: string) => {
+      const dataUrl = await compressImage(rawDataUrl)
+      void setLocalImage(id, dataUrl)
       setSrc(dataUrl)
       onImage?.(dataUrl)
       if (!hasToken()) {
