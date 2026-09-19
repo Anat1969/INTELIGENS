@@ -1,4 +1,4 @@
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { COMBOS, BY_ID, type Intelligence } from '@/data/intelligences'
 import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
@@ -55,15 +55,15 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
             </span>
           </div>
 
-          <h2 className="font-serif-display text-[30px] leading-tight text-foreground">
+          <DialogTitle className="font-serif-display text-[30px] leading-tight text-foreground text-right">
             {intel.name}
-          </h2>
-          <p
-            className="font-mono-dm text-[11px] tracking-[0.15em] uppercase"
+          </DialogTitle>
+          <DialogDescription
+            className="font-mono-dm text-[11px] tracking-[0.15em] uppercase text-right"
             style={{ color: `hsl(${intel.hue})` }}
           >
             {intel.domain} · {intel.keyword}
-          </p>
+          </DialogDescription>
 
           <p className="font-sans-he text-[15px] leading-[1.9] text-foreground/90">
             {intel.description}
