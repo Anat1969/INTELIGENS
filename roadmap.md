@@ -6,7 +6,7 @@
 - [x] Add the isolated base-intelligence magazine article page and shared spread components.
 - [x] Add local image update events and magazine screen/print styling.
 - [x] Verify musical article on wide/narrow screens, image editing, and A4 PDF output.
-- [ ] Scope the base article to light paper and friendly dark colors.
-- [ ] Add persona images, fallbacks, and article navigation to intelligence cards.
-- [ ] Remove the base detail dialog from the grid and verify selection remains independent.
+- [x] Scope the base article to light paper and friendly dark colors.
+- [x] Add persona images, fallbacks, and article navigation to intelligence cards.
+- [x] Remove the base detail dialog from the grid and verify selection remains independent.
 - [ ] Verify build plus light/dark article and card navigation behavior.

@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { INTELLIGENCES, type Intelligence, type IntelligenceId } from "@/data/intelligences";
+import { useNavigate } from "react-router-dom";
+import { INTELLIGENCES, type IntelligenceId } from "@/data/intelligences";
 import { IntelligenceCard } from "./IntelligenceCard";
-import { IntelligenceDetailDialog } from "./IntelligenceDetailDialog";
 
 interface Props {
   selected: IntelligenceId[];
@@ -9,9 +8,9 @@ interface Props {
 }
 
 export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
+  const navigate = useNavigate();
   const gardner = INTELLIGENCES.filter((i) => i.group === "gardner");
   const extensions = INTELLIGENCES.filter((i) => i.group === "extension");
-  const [detail, setDetail] = useState<Intelligence | null>(null);
 
   return (
     <div className="space-y-10">
@@ -28,7 +27,7 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
             intel={intel}
             selected={selected.includes(intel.id)}
             onToggle={onToggle}
-            onOpenDetails={setDetail}
+            onOpenArticle={(id) => navigate(`/intelligence/base/${id}`)}
           />
         ))}
       </div>
@@ -72,12 +71,10 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
             intel={intel}
             selected={selected.includes(intel.id)}
             onToggle={onToggle}
-            onOpenDetails={setDetail}
+            onOpenArticle={(id) => navigate(`/intelligence/base/${id}`)}
           />
         ))}
       </div>
-
-      <IntelligenceDetailDialog intel={detail} onClose={() => setDetail(null)} />
     </div>
   );
 };
