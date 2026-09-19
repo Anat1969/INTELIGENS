@@ -1024,9 +1024,7 @@
   }
   .mag-spread,
   .mag-spread--flip {
-    grid-template-columns: 1fr;
-    grid-template-areas: "figure" "copy";
-    gap: 5mm;
+    display: block;
     margin-bottom: 12mm;
     break-inside: avoid;
     page-break-inside: avoid;
@@ -1037,6 +1035,7 @@
     border-radius: 0;
     background: transparent !important;
     border-color: #999;
+    margin-bottom: 5mm;
   }
   .mag-figure:empty { display: none; }
   .mag-figure img {
