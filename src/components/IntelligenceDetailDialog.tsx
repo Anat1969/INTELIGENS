@@ -114,14 +114,9 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
           )}
 
           <div className="pt-2">
-            <LivingSpaceBlock
-              id={`base-${intel.id}`}
-              visualPrompt={baseVisualPrompt(intel.id)}
-              onImage={() => {
-                resolvePrintImage(`base-${intel.id}`).then(setPrintImage)
-              }}
-            />
+            <ThreeLayers layers={getLayers(intel.id)} idPrefix={`base-${intel.id}`} />
           </div>
+
 
           <div className="pt-2">
             <PrintButton />
