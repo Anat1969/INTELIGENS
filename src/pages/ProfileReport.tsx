@@ -8,6 +8,9 @@ import { fetchProfile } from "@/lib/github-store";
 import { getProfile, type SavedProfile } from "@/lib/local-profiles";
 import { computeScores, getProfileCombos } from "@/lib/profile-scores";
 import { BY_ID } from "@/data/intelligences";
+import { LivingSpaceBlock } from "@/components/LivingSpaceBlock";
+import { baseVisualPrompt } from "@/lib/synthesize";
+import { resolveImage } from "@/lib/living-image";
 
 const formatDate = (iso: string) => {
   const d = new Date(iso);
@@ -25,6 +28,18 @@ const ProfileReport = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<SavedProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [printImage, setPrintImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    if (!id) return;
+    resolveImage(`profile-${id}`).then((found) => {
+      if (alive) setPrintImage(found);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [id]);
 
   useEffect(() => {
     let alive = true;
@@ -96,6 +111,13 @@ const ProfileReport = () => {
           manualSelection={profile.manualSelection}
           showAction={false}
         />
+
+        <div className="mx-auto max-w-[800px] mt-12">
+          <LivingSpaceBlock
+            id={`profile-${profile.id}`}
+            visualPrompt={baseVisualPrompt(sorted[0].intelligence)}
+          />
+        </div>
       </main>
 
       <PrintableArticle>
@@ -122,6 +144,9 @@ const ProfileReport = () => {
             <p>{c.combo.essence}</p>
           </div>
         ))}
+        {printImage && (
+          <img className="print-img" src={printImage} alt={profile.fillerName} />
+        )}
       </PrintableArticle>
     </div>
   );

@@ -123,6 +123,10 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
           )}
 
           <div className="pt-2">
+            <LivingSpaceBlock id={`base-${intel.id}`} visualPrompt={baseVisualPrompt(intel.id)} />
+          </div>
+
+          <div className="pt-2">
             <PrintButton />
           </div>
         </DialogContent>
@@ -148,6 +152,9 @@ export function IntelligenceDetailDialog({ intel, onClose }: Props) {
               </div>
             ))}
           </>
+        )}
+        {printImage && (
+          <img className="print-img" src={printImage} alt={intel.name} />
         )}
       </PrintableArticle>
     </>
