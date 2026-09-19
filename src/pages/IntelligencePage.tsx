@@ -220,14 +220,12 @@ export default function IntelligencePage() {
           </div>
         </header>
 
-        {/* Living space (prompt + GitHub-backed image) */}
-        <LivingSpaceBlock
-          id={item.id}
-          visualPrompt={item.visualPrompt}
-          onImage={() => {
-            resolvePrintImage(item.id).then(setPrintImage)
-          }}
+        {/* Three layers (persona → space → building) */}
+        <ThreeLayers
+          layers={mergeLayers(item.source_ids as IntelligenceId[])}
+          idPrefix={item.id}
         />
+
 
         {/* Source intelligences */}
         <div
