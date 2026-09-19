@@ -760,6 +760,7 @@
   background: #fbfbf8;
   color: #1b1b1a;
   color-scheme: light;
+  overflow-x: clip;
 }
 
 /* The article is ALWAYS light paper — the app's dark theme never applies here. */
@@ -774,12 +775,21 @@
 }
 
 .mag {
-  width: min(1180px, 100%);
-  margin: 0 auto;
-  padding: clamp(24px, 4vw, 56px);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   background: #ffffff;
   color: #1b1b1a;
   color-scheme: light;
+}
+
+/* Text columns keep a readable inset; the image bands go full-bleed. */
+.mag-hero,
+.mag-lead,
+.mag-body-extra,
+.mag-footer {
+  padding-inline: clamp(12px, 4vw, 60px);
 }
 
 .mag-hero {
@@ -836,10 +846,11 @@
 .mag-layer {
   position: relative;
   isolation: isolate;
-  width: 100%;
-  min-height: clamp(400px, 52vw, 640px);
-  margin-bottom: clamp(36px, 5vw, 80px);
-  border-radius: 6px;
+  width: 100vw;
+  max-width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  min-height: clamp(420px, 56vw, 720px);
+  margin-bottom: clamp(0px, 2vw, 24px);
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -1066,19 +1077,23 @@
     color: #111 !important;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 271mm;
   }
   .mag * { box-shadow: none !important; }
 
-  .mag-hero { padding: 0 0 4mm; }
-  .mag-hero-rule { height: 2.4pt; width: 44mm; margin-bottom: 4mm; }
-  .mag-title { font-size: 27pt; line-height: 1; color: #111 !important; }
+  .mag-hero { padding: 0 0 5mm; }
+  .mag-hero-rule { height: 3pt; width: 56mm; margin-bottom: 5mm; }
+  .mag-title { font-size: 34pt; line-height: 1; color: #111 !important; }
   .mag-subtitle { margin-top: 2.5mm; font-size: 8.5pt; letter-spacing: 0.16em; color: #555 !important; }
   .mag-chain { margin-top: 1.5mm; font-size: 8pt; color: #777 !important; }
 
   .mag-lead {
     max-width: none;
-    margin: 4mm 0 6mm;
-    font-size: 11.5pt;
+    margin: 5mm 0 7mm;
+    font-size: 13pt;
     line-height: 1.5;
     color: #26241f !important;
   }
@@ -1088,11 +1103,13 @@
 
   .mag-layer {
     display: grid;
-    grid-template-columns: 56mm 1fr;
-    gap: 6mm;
-    align-items: start;
+    grid-template-columns: 80mm 1fr;
+    gap: 9mm;
+    align-items: center;
+    width: auto;
+    max-width: none;
     min-height: 0;
-    margin: 0 0 5.5mm;
+    margin: 0 !important;
     border-radius: 0;
     box-shadow: none;
     break-inside: avoid;
@@ -1100,8 +1117,8 @@
   }
   .mag-layer-media {
     position: static;
-    width: 56mm;
-    height: 31.5mm;
+    width: 80mm;
+    height: 45mm;
     overflow: hidden;
     border-radius: 2px;
     background: #eee;
@@ -1117,18 +1134,18 @@
   .mag-layer-text { position: static; max-width: none; padding: 0; color: #111 !important; }
   .mag-layer-heading { display: none !important; }
   .mag-layer-kicker {
-    margin: 0 0 2.5mm;
-    padding-bottom: 1.5mm;
-    font-size: 9.5pt;
+    margin: 0 0 3mm;
+    padding-bottom: 2mm;
+    font-size: 11pt;
     letter-spacing: 0.1em;
     color: hsl(var(--layer-hue)) !important;
     filter: none;
-    border-bottom: 0.75pt solid hsl(var(--layer-hue));
+    border-bottom: 1pt solid hsl(var(--layer-hue));
   }
   .mag-layer-interp {
     max-width: none;
-    font-size: 10.5pt;
-    line-height: 1.55;
+    font-size: 12pt;
+    line-height: 1.6;
     color: #1a1a1a !important;
     text-shadow: none;
   }
