@@ -1,7 +1,11 @@
+import { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { COMBOS, BY_ID, type Intelligence } from '@/data/intelligences'
 import { PrintButton } from '@/components/print/PrintButton'
 import { PrintableArticle } from '@/components/print/PrintableArticle'
+import { LivingSpaceBlock } from '@/components/LivingSpaceBlock'
+import { baseVisualPrompt } from '@/lib/synthesize'
+import { resolveImage } from '@/lib/living-image'
 
 interface Props {
   intel: Intelligence | null
