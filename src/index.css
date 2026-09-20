@@ -207,6 +207,37 @@
     cursor: default;
     transform: none;
   }
+
+  /* Cover image uploader (merge cards + synthesis result) */
+  .cover-chip {
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: hsl(var(--foreground));
+    background: hsla(var(--background), 0.72);
+    border: 1px solid hsla(var(--foreground), 0.18);
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 200ms ease, border-color 200ms ease;
+  }
+
+  .cover-chip:hover {
+    background: hsla(var(--background), 0.92);
+    border-color: hsla(var(--foreground), 0.32);
+  }
+
+  .cover-status {
+    font-family: "Heebo", ui-sans-serif, system-ui, sans-serif;
+    font-size: 12px;
+    line-height: 1.7;
+    color: hsl(var(--text-dim));
+  }
+
+  .cover-status--error {
+    color: hsl(22, 80%, 55%);
+  }
 }
 
 /* ─── Hero Landing ─── */

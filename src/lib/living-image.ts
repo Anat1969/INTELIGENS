@@ -12,6 +12,9 @@ import { imageUrl } from "./github-store";
 
 export const imageKey = (id: string) => `img-${id}`;
 
+/** Storage id for a merge's single "cover" image (shown on its library card). */
+export const coverImageId = (mergeId: string) => `${mergeId}-cover`;
+
 const IMAGE_UPDATED_EVENT = "living-image:updated";
 
 const DB_NAME = "inteligens";

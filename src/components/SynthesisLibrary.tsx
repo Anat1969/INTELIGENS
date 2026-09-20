@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getLibrary } from '@/lib/local-library'
 import { fetchIndex } from '@/lib/github-store'
+import { coverImageId } from '@/lib/living-image'
 import { BY_ID, type IntelligenceId } from '@/data/intelligences'
+import { CoverUploader } from '@/components/CoverUploader'
 
 interface Props {
   refreshKey?: number
@@ -176,9 +178,8 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
       : 'hsla(var(--foreground), 0.1)'
 
   return (
-    <button
-      onClick={onClick}
-      className="library-card-3d text-right w-full transition-all duration-200 hover:translate-y-[-2px]"
+    <div
+      className="library-card-3d w-full transition-all duration-200 hover:translate-y-[-2px]"
       style={{
         background: 'hsla(var(--surface), 0.5)',
         border: '1px solid hsla(var(--foreground), 0.06)',
@@ -186,14 +187,14 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
         overflow: 'hidden',
       }}
     >
-      {item.image_data ? (
-        <div className="w-full h-32 overflow-hidden">
-          <img src={item.image_data} alt={item.name} className="w-full h-full object-cover" />
-        </div>
-      ) : (
-        <div className="w-full h-2" style={{ background: gradientLine }} />
-      )}
+      <CoverUploader
+        id={coverImageId(item.id)}
+        variant="card"
+        gradient={gradientLine}
+        fallbackSrc={item.image_data}
+      />
 
+      <button onClick={onClick} className="text-right w-full block">
       <div className="p-5">
         <h3
           className="font-serif-display text-[17px] leading-[1.3] mb-2"
@@ -242,6 +243,7 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
           </span>
         </div>
       </div>
-    </button>
+      </button>
+    </div>
   )
 }

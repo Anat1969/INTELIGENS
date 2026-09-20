@@ -3,6 +3,8 @@ import type { IntelligenceId } from '@/data/intelligences'
 import { Copy, Check, Image, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { CoverUploader } from '@/components/CoverUploader'
+import { coverImageId } from '@/lib/living-image'
 
 interface Props {
   result: SynthesizedIntelligence
@@ -247,6 +249,19 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
               {result.visualPrompt}
             </p>
           </div>
+
+          {itemId && (
+            <div className="mt-6">
+              <h4
+                className="font-mono-dm text-[11px] tracking-[0.2em] uppercase mb-4 flex items-center gap-2"
+                style={{ color: 'hsla(170, 70%, 55%, 0.8)' }}
+              >
+                <Image size={14} />
+                תמונת המיזוג
+              </h4>
+              <CoverUploader id={coverImageId(itemId)} variant="panel" />
+            </div>
+          )}
         </div>
       )}
     </div>
