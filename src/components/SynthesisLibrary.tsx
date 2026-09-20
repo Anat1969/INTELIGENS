@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getLibrary } from '@/lib/local-library'
 import { fetchIndex } from '@/lib/github-store'
 import { coverImageId } from '@/lib/living-image'
+import { mergeCoverPrompt } from '@/lib/synthesize'
 import { BY_ID, type IntelligenceId } from '@/data/intelligences'
 import { CoverUploader } from '@/components/CoverUploader'
 
@@ -177,6 +178,13 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
       ? `hsl(${sourceHues[0]})`
       : 'hsla(var(--foreground), 0.1)'
 
+  // Deterministic prompt for the merge's cover image — regenerable even for
+  // merges created before the prompt was surfaced on the card.
+  const validIds = item.source_ids.filter((sid) => sid in BY_ID) as IntelligenceId[]
+  const coverPrompt = validIds.length === item.source_ids.length && validIds.length >= 1
+    ? mergeCoverPrompt(validIds)
+    : undefined
+
   return (
     <div
       className="library-card-3d w-full transition-all duration-200 hover:translate-y-[-2px]"
@@ -192,6 +200,7 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
         variant="card"
         gradient={gradientLine}
         fallbackSrc={item.image_data}
+        visualPrompt={coverPrompt}
       />
 
       <button onClick={onClick} className="text-right w-full block">

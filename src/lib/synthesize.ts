@@ -64,6 +64,17 @@ function buildVisualPrompt(ids: IntelligenceId[]): string {
   return `An abstract living space where ${domains} fuse into a single dwelling of thought. Light moves through translucent layers of ${keywords}, each surface holding the memory of a different way of knowing. No figures, no text — only architecture made of attention.`
 }
 
+/**
+ * The prompt for a merge's single "cover" image, shown inside the square frame
+ * on its library card. Same design language as the merge's own visual prompt,
+ * with an explicit square (1:1) framing so the result fits the frame. Fully
+ * deterministic from the source ids, so it can be regenerated for merges that
+ * were created before this prompt was surfaced.
+ */
+export function mergeCoverPrompt(sourceIds: IntelligenceId[]): string {
+  return `${buildVisualPrompt(sortedIds(sourceIds))} A single square 1:1 composition, centered and filling the frame edge to edge. Professional photography, documentary realism, natural light. No text, no words, no writing, no frame divisions.`
+}
+
 function buildKeyQuestion(ids: IntelligenceId[]): string {
   const names = ids.map((id) => BY_ID[id]?.name ?? id)
   const domains = ids.map((id) => BY_ID[id]?.domain ?? '')

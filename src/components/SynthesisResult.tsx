@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CoverUploader } from '@/components/CoverUploader'
 import { coverImageId } from '@/lib/living-image'
+import { mergeCoverPrompt } from '@/lib/synthesize'
 
 interface Props {
   result: SynthesizedIntelligence
@@ -259,7 +260,11 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
                 <Image size={14} />
                 תמונת המיזוג
               </h4>
-              <CoverUploader id={coverImageId(itemId)} variant="panel" />
+              <CoverUploader
+                id={coverImageId(itemId)}
+                variant="panel"
+                visualPrompt={mergeCoverPrompt(result.source_ids as IntelligenceId[])}
+              />
             </div>
           )}
         </div>
