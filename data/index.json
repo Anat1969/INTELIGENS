@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-01T09:33:08.392Z",
+  "updatedAt": "2026-10-20T13:38:29.655Z",
   "merges": [
     {
       "id": "digital-emotional",
@@ -43,6 +43,13 @@
       "combo": "דיגיטלית-מערכתית + גופנית-קינסתטית",
       "date": "2026-10-01T09:17:23.717Z",
       "path": "data/library/merges/digital-kinesthetic.json"
+    },
+    {
+      "id": "existential-kinesthetic",
+      "name": "משמעות של מגע",
+      "combo": "קיומית-פילוסופית + גופנית-קינסתטית",
+      "date": "2026-10-20T13:38:26.685Z",
+      "path": "data/library/merges/existential-kinesthetic.json"
     }
   ],
   "profiles": [
