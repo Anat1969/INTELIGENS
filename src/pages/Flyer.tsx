@@ -137,6 +137,22 @@ export default function Flyer() {
           <h1 className="flyer-name">{fusion.name}</h1>
           <p className="flyer-type">{fusion.type}</p>
 
+          <dl className="flyer-mech">
+            {(
+              [
+                ['החיכוך', fusion.friction],
+                ['ההשתלה', fusion.transplant],
+                ['הגדרה', fusion.definition],
+                ['איך מזהים אותה', fusion.recognize],
+              ] as const
+            ).map(([label, text]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>{text}</dd>
+              </div>
+            ))}
+          </dl>
+
           <div className="flyer-grid">
             <figure className="flyer-frame">
               <div className="flyer-frame-image">

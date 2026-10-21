@@ -22,6 +22,13 @@ const ARC: { key: 'mind' | 'heart' | 'gut' | 'intuition'; no: string; label: str
   { key: 'intuition', no: '04', label: 'אינטואיציה בפעולה', hint: 'הרגע שבו זה קורה מעצמו' },
 ]
 
+const MECHANISM: { key: 'friction' | 'transplant' | 'definition' | 'recognize'; no: string; label: string }[] = [
+  { key: 'friction', no: 'א', label: 'החיכוך' },
+  { key: 'transplant', no: 'ב', label: 'ההשתלה' },
+  { key: 'definition', no: 'ג', label: 'הגדרה' },
+  { key: 'recognize', no: 'ד', label: 'איך מזהים אותה' },
+]
+
 /** Adds `is-in` to every `.reveal-up` child once it scrolls into view. */
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null)
@@ -100,6 +107,23 @@ export function FusionView({ fusion, itemId, compact = false, showArticleLink = 
           <p className="fusion-distill">{fusion.distillation}</p>
         </header>
       )}
+
+      <section className="fusion-mechanism reveal-up" aria-label="איך נוצר המיזוג">
+        <h3 className="fusion-label">איך נוצר המיזוג</h3>
+        <p className="fusion-mechanism-lead">
+          כל אינטליגנציה רואה משהו ועיוורת למשהו אחר. המיזוג מתחיל במקום שבו השתיים מתנגשות, ממשיך בהשתלת הפעולה של אחת על החומר של השנייה, ונגמר ביכולת חדשה שאפשר לזהות באדם.
+        </p>
+        <dl className="fusion-mechanism-grid">
+          {MECHANISM.map((m) => (
+            <div key={m.key} className={`fusion-mech fusion-mech--${m.key}`}>
+              <dt>
+                <span className="fusion-step-no">{m.no}</span> {m.label}
+              </dt>
+              <dd>{fusion[m.key]}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       <ol className="fusion-arc" aria-label="מהשכל אל הפעולה">
         {ARC.map((step, idx) => (
