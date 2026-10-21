@@ -2,7 +2,7 @@ import { useState } from "react";
 import { AppNav } from "@/components/AppNav";
 import { clearToken, getToken, setToken } from "@/lib/gh-token";
 import { validateConnection, type ConnectionResult } from "@/lib/github-store";
-import { DATA_OWNER, DATA_REPO } from "@/lib/repo-config";
+import { DATA_BRANCH, DATA_OWNER, DATA_REPO } from "@/lib/repo-config";
 
 const Settings = () => {
   const [value, setValue] = useState(() => getToken() ?? "");
@@ -154,7 +154,7 @@ const Settings = () => {
             >
               <li>היכנסו לחשבון GitHub שלכם ופתחו: Settings → Developer settings → Personal access tokens → Fine-grained tokens.</li>
               <li>לחצו על Generate new token, תנו שם ותאריך תפוגה.</li>
-              <li>ב-Repository access בחרו Only select repositories וסמנו את המאגר {DATA_OWNER}/{DATA_REPO}.</li>
+              <li>ב-Repository access בחרו Only select repositories וסמנו את המאגר {DATA_OWNER}/{DATA_REPO} (התוכן נשמר בענף {DATA_BRANCH}).</li>
               <li>ב-Repository permissions הגדירו את ההרשאה Contents למצב Read and write. אין צורך בהרשאות נוספות.</li>
               <li>צרו את הטוקן, העתיקו אותו והדביקו אותו בשדה שלמעלה, ואז לחצו שמור ולאחר מכן בדיקת חיבור.</li>
               <li>שמרו את הטוקן במקום מאובטח: GitHub לא יציג אותו שוב. אם הוא נחשף — מחקו אותו ב-GitHub וצרו חדש.</li>
