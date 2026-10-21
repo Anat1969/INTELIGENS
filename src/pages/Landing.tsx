@@ -93,7 +93,7 @@ export default function Landing() {
 
         <div className="hero-content px-6">
           <h1 className="hero-title font-serif-display">
-            Intelligence Composer
+            מפת האינטליגנציות
           </h1>
 
           <p
@@ -281,7 +281,7 @@ export default function Landing() {
           className="font-serif-display text-[18px] mb-2"
           style={{ color: "hsl(var(--text-dim))" }}
         >
-          Intelligence Composer
+          מפת האינטליגנציות
         </p>
         <p
           className="font-mono-dm text-[10px] tracking-[0.2em]"

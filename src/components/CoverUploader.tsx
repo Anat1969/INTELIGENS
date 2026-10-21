@@ -381,7 +381,7 @@ export function CoverUploader({
           className="no-print w-full flex items-center justify-center gap-2 py-2 transition-colors duration-200 cover-prompt-btn"
         >
           <span className="font-mono-dm text-[10px] tracking-[0.12em] uppercase">
-            {copied ? 'הפרומפט הועתק ✓' : 'העתק פרומפט לתמונה'}
+            {copied ? 'הפרומפט הועתק' : 'העתק פרומפט לתמונה'}
           </span>
         </button>
       )}

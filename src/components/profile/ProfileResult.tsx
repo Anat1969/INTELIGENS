@@ -287,7 +287,7 @@ export const ProfileResult = ({
                 {manualSelection.map((id) => {
                   const intel = BY_ID[id];
                   const measuredHigh = measuredSet.has(id);
-                  const indicator = measuredHigh ? "✓" : "↓";
+                  const indicator = measuredHigh ? "תואם" : "נמוך במדידה";
                   const color = measuredHigh
                     ? "hsl(var(--text-dim))"
                     : "hsl(22, 80%, 55%)";
@@ -303,7 +303,7 @@ export const ProfileResult = ({
                         {intel.name}
                       </span>
                       <span
-                        className="font-mono-dm text-[12px] inline-block w-3 text-center"
+                        className="font-mono-dm text-[11px] inline-block whitespace-nowrap"
                         style={{ color }}
                       >
                         {indicator}
@@ -329,7 +329,7 @@ export const ProfileResult = ({
                 {sorted.slice(0, Math.max(3, manualSelection.length)).map((s) => {
                   const intel = BY_ID[s.intelligence];
                   const inManual = manualSet.has(s.intelligence);
-                  const indicator = inManual ? "✓" : "↑";
+                  const indicator = inManual ? "תואם" : "גבוה במדידה";
                   const color = inManual
                     ? "hsl(var(--text-dim))"
                     : "hsl(148, 60%, 42%)";
@@ -345,7 +345,7 @@ export const ProfileResult = ({
                         {intel.name}
                       </span>
                       <span
-                        className="font-mono-dm text-[12px] inline-block w-3 text-center"
+                        className="font-mono-dm text-[11px] inline-block whitespace-nowrap"
                         style={{ color }}
                       >
                         {indicator}

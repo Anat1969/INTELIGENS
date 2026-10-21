@@ -6,6 +6,8 @@ import { addToLibrary, getLibrary } from '@/lib/local-library'
 import { hasToken } from '@/lib/gh-token'
 import { saveMerge } from '@/lib/github-store'
 import SynthesisResult from './SynthesisResult'
+import FusionView from './FusionView'
+import { composeFusion } from '@/lib/fusion'
 
 interface Intelligence {
   id: string
@@ -106,11 +108,11 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
     }
   }
 
-  let promptText = 'בחר לפחות שתי אינטליגנציות'
-  if (selected.length === 1) promptText = 'בחר עוד אינטליגנציה אחת לפחות'
-  if (selected.length === 2) promptText = 'סנתז את הכישור שנוצר →'
-  if (selected.length === 3) promptText = 'סנתז את המשולש שנוצר →'
-  if (selected.length >= 4) promptText = 'סנתז את הכישור הרב-ממדי →'
+  let promptText = 'בחרו לפחות שתי אינטליגנציות'
+  if (selected.length === 1) promptText = 'בחרו עוד אינטליגנציה אחת לפחות'
+  if (selected.length === 2) promptText = 'מזגו לאינטליגנציה חדשה'
+  if (selected.length === 3) promptText = 'מזגו את המשולש'
+  if (selected.length >= 4) promptText = 'מזגו לאינטליגנציה רב־שכבתית'
 
   return (
     <div className="flex flex-col items-center">
@@ -168,10 +170,15 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
         )}
       </div>
 
-      <div ref={resultRef}>
-        {phase === 'done' && result && (
-          <SynthesisResult result={result} isFromCache={isFromCache} itemId={resultId} />
-        )}
+      <div ref={resultRef} className="w-full" style={{ scrollMarginTop: 120 }}>
+        {phase === 'done' && result && (() => {
+          const fusion = composeFusion(result.source_ids as IntelligenceId[])
+          return fusion ? (
+            <FusionView fusion={fusion} itemId={resultId} />
+          ) : (
+            <SynthesisResult result={result} isFromCache={isFromCache} itemId={resultId} />
+          )
+        })()}
       </div>
     </div>
   )

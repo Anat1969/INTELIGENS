@@ -1,3 +1,4 @@
+import { composeFusion } from '@/lib/fusion'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getLibrary } from '@/lib/local-library'
@@ -67,7 +68,14 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
           local: true,
         }))
 
-      if (alive) setCards([...remote, ...local])
+      // Curated fusion cards give every merge its current name and distillation.
+      const withFusion = [...remote, ...local].map(c => {
+        const f = composeFusion(c.source_ids.filter(sid => sid in BY_ID) as IntelligenceId[])
+        return f && f.ids.length === c.source_ids.length
+          ? { ...c, name: f.name, type: f.type, essence: f.distillation }
+          : c
+      })
+      if (alive) setCards(withFusion)
     }
 
     load()

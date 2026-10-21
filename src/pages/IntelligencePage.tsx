@@ -8,6 +8,8 @@ import { BY_ID, INTELLIGENCES, type IntelligenceId } from '@/data/intelligences'
 import { AppNav } from '@/components/AppNav'
 import { MagazineArticle } from '@/components/MagazineArticle'
 import { Button } from '@/components/ui/button'
+import FusionView from '@/components/FusionView'
+import { composeFusion } from '@/lib/fusion'
 
 export default function IntelligencePage() {
   const { id } = useParams<{ id: string }>()
@@ -107,6 +109,8 @@ export default function IntelligencePage() {
 
   if (!item) return null
 
+  const fusion = composeFusion(item.source_ids as IntelligenceId[])
+
   const sourceNames = item.source_ids
     .map((sid) => (sid in BY_ID ? BY_ID[sid as keyof typeof BY_ID].name : sid))
     .join(' + ')
@@ -116,20 +120,25 @@ export default function IntelligencePage() {
       <AppNav />
       <main className="pt-28 pb-20 px-5 sm:px-8">
         <div className="no-print mag-topbar">
+          {fusion && (
+            <Link to={`/flyer?selected=${[...item.source_ids].sort().join(',')}`} className="tool-btn tool-btn--primary">
+              פלייר להדפסה ולשיתוף
+            </Link>
+          )}
           <Button type="button" className="tool-btn" onClick={() => window.print()}>
             הורד PDF
           </Button>
         </div>
 
         <MagazineArticle
-          title={item.name}
-          subtitle={item.type}
+          title={fusion?.name ?? item.name}
+          subtitle={fusion?.type ?? item.type}
           sourceChain={
             chain.length > 0
-              ? `שרשרת המקור: ${[...chain, item.name].join('  ←  ')}`
+              ? `שרשרת המקור: ${[...chain, item.name].join(' / ')}`
               : `נוצר מהצירוף: ${sourceNames}`
           }
-          lead={item.essence}
+          lead={fusion?.distillation ?? item.essence}
           layers={mergeLayers(item.source_ids as IntelligenceId[])}
           idPrefix={item.id}
           footer={new Date(item.created_at).toLocaleDateString('he-IL')}
@@ -137,6 +146,12 @@ export default function IntelligencePage() {
             .map((sid) => (sid in BY_ID ? BY_ID[sid as IntelligenceId].hue : ''))
             .filter(Boolean)}
         >
+          {fusion ? (
+            <section className="mag-section">
+              <FusionView fusion={fusion} itemId={item.id} compact showArticleLink={false} />
+            </section>
+          ) : (
+            <>
           <section className="mag-section">
             <h2 className="mag-subheading">העוצמה</h2>
             <p className="mag-body">{item.power}</p>
@@ -162,6 +177,8 @@ export default function IntelligencePage() {
               <h2 className="mag-subheading">שאלת מפתח</h2>
               <p className="mag-body">{item.keyQuestion}</p>
             </section>
+          )}
+            </>
           )}
         </MagazineArticle>
 

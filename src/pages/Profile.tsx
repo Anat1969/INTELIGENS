@@ -155,7 +155,7 @@ const Profile = () => {
               className="font-mono-dm text-[11px] tracking-[0.25em] uppercase disabled:opacity-30 hover:opacity-80 transition-opacity"
               style={{ color: "hsl(var(--text-dim))" }}
             >
-              ← חזור
+              חזרה
             </button>
             <button
               type="button"
