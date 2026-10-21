@@ -1514,3 +1514,20 @@ body:has(.flyer-page) { page: flyer; }
 .flyer-pull { margin: 0; font-size: calc(3.2cqw * var(--t, 1)); font-weight: 200; line-height: 1.3; letter-spacing: -0.01em; padding-inline-start: 3cqw; border-inline-start: 0.5cqw solid; border-image: var(--flyer-band) 1; }
 .flyer-roles { display: flex; flex-wrap: wrap; gap: 1cqw; margin-top: 2cqw; }
 .flyer-roles span { font-size: 1.45cqw; padding: 0.5cqw 1.4cqw; border: 1px solid hsl(220, 13%, 85%); border-radius: 999px; }
+
+/* ─── Fusion mechanism: friction, transplant, definition, recognition ─── */
+.fusion-mechanism { margin-top: 8px; margin-bottom: 36px; padding: 28px 30px 30px; border-radius: 20px; background: linear-gradient(160deg, hsl(0, 0%, 100%), hsl(220, 20%, 97%)); border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-soft); }
+.fusion-mechanism-lead { font-size: 16px; line-height: 1.8; color: hsl(var(--text-dim)); max-width: 760px; }
+.fusion-mechanism-grid { margin: 22px 0 0; display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) { .fusion-mechanism-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fusion-mech { position: relative; padding: 18px 20px; padding-inline-start: 24px; border-radius: 14px; background: hsl(0, 0%, 100%); border: 1px solid hsl(var(--border)); }
+.fusion-mech::before { content: ""; position: absolute; inset-block: 14px; inset-inline-start: 0; width: 3px; border-radius: 3px; background: var(--fusion-rail); }
+.fusion-mech dt { font-size: 16px; font-weight: 500; }
+.fusion-mech dd { margin: 8px 0 0; font-size: 16.5px; line-height: 1.75; }
+.fusion-mech--friction dd { font-weight: 300; font-size: 19px; line-height: 1.55; }
+.fusion-mech--recognize { background: hsl(var(--surface)); }
+
+.flyer-mech { margin: 3cqw 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.6cqw; }
+.flyer-mech > div { padding-inline-start: 1.2cqw; border-inline-start: 0.3cqw solid hsl(220, 13%, 82%); }
+.flyer-mech dt { font-size: calc(1.35cqw * var(--t, 1)); font-weight: 600; }
+.flyer-mech dd { margin: 0.4cqw 0 0; font-size: calc(1.45cqw * var(--t, 1)); line-height: 1.45; }

@@ -18,6 +18,11 @@ export interface Fusion {
   visual: string
   imagePrompt: string
   roles: string[]
+  /** How the merge mechanism produced this intelligence. */
+  friction: string
+  transplant: string
+  definition: string
+  recognize: string
 }
 
 export interface FusionLayer {
@@ -164,6 +169,12 @@ export function fusionPlainText(f: ComposedFusion): string {
     `נוצרה מהצירוף: ${src}`,
     '',
     f.distillation,
+    '',
+    'איך נוצר המיזוג',
+    `החיכוך: ${f.friction}`,
+    `ההשתלה: ${f.transplant}`,
+    `הגדרה: ${f.definition}`,
+    `איך מזהים אותה: ${f.recognize}`,
     '',
     `שכל: ${f.mind}`,
     '',

@@ -1,7 +1,7 @@
 """Merge fusion card JSON batches into src/data/fusions.ts (run: python3 scripts/build-fusions.py a.json b.json ...)."""
 import json, sys, itertools
 IDS = ["linguistic","logical","spatial","musical","kinesthetic","interpersonal","intrapersonal","naturalist","existential","emotional","digital","systems"]
-FIELDS = ["name","type","distillation","mind","heart","gut","intuition","practice","novelty","insight","visual","imagePrompt","roles"]
+FIELDS = ["name","type","distillation","friction","transplant","definition","recognize","mind","heart","gut","intuition","practice","novelty","insight","visual","imagePrompt","roles"]
 SUFFIX = "Documentary realism, Professional architecture photography, 1:1 --no text, words, writing, frame divisions"
 data = {}
 for path in sys.argv[1:]:
