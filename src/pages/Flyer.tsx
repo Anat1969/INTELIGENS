@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AppNav } from '@/components/AppNav'
 import { CoverUploader } from '@/components/CoverUploader'
@@ -19,6 +19,7 @@ const deep = (hue: string) => hue.replace(/(\d+)%\s*$/, '30%')
 export default function Flyer() {
   const [params] = useSearchParams()
   const [shared, setShared] = useState('')
+  const pageRef = useRef<HTMLElement>(null)
 
   const ids = useMemo(
     () =>
@@ -29,6 +30,26 @@ export default function Flyer() {
     [params],
   )
   const fusion = composeFusion(ids)
+  const fitKey = ids.join(',')
+
+  // Long cards shrink their text step by step until the page holds exactly one A4 sheet.
+  useLayoutEffect(() => {
+    const page = pageRef.current
+    if (!page) return
+    const fit = () => {
+      let t = 1
+      page.style.setProperty('--t', '1')
+      while (page.scrollHeight > page.clientHeight + 1 && t > 0.72) {
+        t -= 0.03
+        page.style.setProperty('--t', t.toFixed(2))
+      }
+    }
+    fit()
+    void document.fonts?.ready.then(fit)
+    const ro = new ResizeObserver(fit)
+    ro.observe(page)
+    return () => ro.disconnect()
+  }, [fitKey])
 
   if (!fusion) {
     return (
@@ -98,7 +119,7 @@ export default function Flyer() {
           {shared && <span className="flyer-note" aria-live="polite">{shared}</span>}
         </div>
 
-        <article className="flyer-page" dir="rtl" style={{ ['--flyer-band' as string]: band, ['--flyer-wash' as string]: wash }}>
+        <article ref={pageRef} className="flyer-page" dir="rtl" style={{ ['--flyer-band' as string]: band, ['--flyer-wash' as string]: wash }}>
           <div className="flyer-band" aria-hidden="true" />
 
           <header className="flyer-head">

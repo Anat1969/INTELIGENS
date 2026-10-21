@@ -17,8 +17,8 @@ const toolClass =
   "font-mono-dm text-[11px] tracking-[0.08em] whitespace-nowrap py-1.5 px-3 rounded-lg border transition-all duration-200 hover:opacity-80 hover:-translate-y-px";
 const toolStyle = {
   color: "hsl(var(--text-dim))",
-  background: "hsla(var(--surface), 0.5)",
-  borderColor: "hsla(var(--foreground), 0.08)",
+  background: "hsl(var(--surface) / 0.5)",
+  borderColor: "hsl(var(--foreground) / 0.08)",
   boxShadow: "0 1px 2px hsla(220, 30%, 10%, 0.06)",
 };
 
@@ -91,7 +91,7 @@ export const AppNav = () => {
         scrolled ? "status-bar-glass" : "",
       )}
       style={{
-        backgroundColor: scrolled ? "hsla(var(--background), 0.86)" : "hsla(var(--background), 0.6)",
+        backgroundColor: scrolled ? "hsl(var(--background) / 0.86)" : "hsl(var(--background) / 0.6)",
         boxShadow: scrolled ? "0 1px 0 hsl(var(--border)), 0 12px 28px -18px hsla(220, 30%, 10%, 0.25)" : "none",
       }}
     >
@@ -129,7 +129,7 @@ export const AppNav = () => {
                 )}
                 style={{
                   color: active ? undefined : "hsl(var(--text-dim))",
-                  background: active ? "hsla(var(--foreground), 0.06)" : "transparent",
+                  background: active ? "hsl(var(--foreground) / 0.06)" : "transparent",
                 }}
               >
                 {l.label}
@@ -160,8 +160,8 @@ export const AppNav = () => {
         <div
           className="xl:hidden border-t"
           style={{
-            borderColor: "hsla(var(--foreground), 0.06)",
-            background: "hsla(var(--background), 0.95)",
+            borderColor: "hsl(var(--foreground) / 0.06)",
+            background: "hsl(var(--background) / 0.95)",
             backdropFilter: "blur(20px)",
           }}
         >
@@ -189,14 +189,14 @@ export const AppNav = () => {
                   className="font-mono-dm text-[12px] tracking-[0.15em] py-3 px-4 rounded-xl transition-all"
                   style={{
                     color: active ? "hsl(var(--foreground))" : "hsl(var(--text-dim))",
-                    background: active ? "hsla(var(--foreground), 0.06)" : "transparent",
+                    background: active ? "hsl(var(--foreground) / 0.06)" : "transparent",
                   }}
                 >
                   {l.label}
                 </Link>
               );
             })}
-            <div className="pt-3 border-t flex flex-wrap justify-start gap-2" style={{ borderColor: "hsla(var(--foreground), 0.06)" }}>
+            <div className="pt-3 border-t flex flex-wrap justify-start gap-2" style={{ borderColor: "hsl(var(--foreground) / 0.06)" }}>
               <ExternalTools />
               <InstallButton />
               </div>
@@ -209,8 +209,8 @@ export const AppNav = () => {
           dir="rtl"
           className="border-t text-center"
           style={{
-            borderColor: "hsla(var(--foreground), 0.06)",
-            background: "hsla(var(--surface), 0.6)",
+            borderColor: "hsl(var(--foreground) / 0.06)",
+            background: "hsl(var(--surface) / 0.6)",
           }}
         >
           <p className="mx-auto max-w-[1400px] px-6 py-1.5 text-[11px]" style={{ color: "hsl(var(--text-dim))" }}>

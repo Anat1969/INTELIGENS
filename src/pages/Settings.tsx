@@ -64,7 +64,7 @@ const Settings = () => {
 
         <section
           className="rounded-2xl p-6 mb-8"
-          style={{ background: "hsla(var(--surface), 0.5)", border: "1px solid hsla(var(--foreground), 0.08)" }}
+          style={{ background: "hsl(var(--surface) / 0.5)", border: "1px solid hsl(var(--foreground) / 0.08)" }}
         >
           <label
             className="block font-mono-dm text-[11px] tracking-[0.15em] mb-3"
@@ -82,8 +82,8 @@ const Settings = () => {
             placeholder="github_pat_..."
             className="w-full rounded-xl px-4 py-3 text-[14px] outline-none"
             style={{
-              background: "hsla(var(--background), 0.6)",
-              border: "1px solid hsla(var(--foreground), 0.12)",
+              background: "hsl(var(--background) / 0.6)",
+              border: "1px solid hsl(var(--foreground) / 0.12)",
               color: "hsl(var(--foreground))",
             }}
           />
@@ -93,7 +93,7 @@ const Settings = () => {
               type="button"
               onClick={handleSave}
               className="rounded-xl px-5 py-2.5 text-[13px] transition-opacity hover:opacity-80"
-              style={{ background: "hsla(var(--foreground), 0.1)", color: "hsl(var(--foreground))" }}
+              style={{ background: "hsl(var(--foreground) / 0.1)", color: "hsl(var(--foreground))" }}
             >
               שמור
             </button>
@@ -101,7 +101,7 @@ const Settings = () => {
               type="button"
               onClick={handleClear}
               className="rounded-xl px-5 py-2.5 text-[13px] transition-opacity hover:opacity-80"
-              style={{ border: "1px solid hsla(var(--foreground), 0.12)", color: "hsl(var(--text-dim))" }}
+              style={{ border: "1px solid hsl(var(--foreground) / 0.12)", color: "hsl(var(--text-dim))" }}
             >
               מחק טוקן
             </button>
@@ -110,7 +110,7 @@ const Settings = () => {
               onClick={handleCheck}
               disabled={checking}
               className="rounded-xl px-5 py-2.5 text-[13px] transition-opacity hover:opacity-80 disabled:opacity-50"
-              style={{ border: "1px solid hsla(var(--foreground), 0.12)", color: "hsl(var(--text-dim))" }}
+              style={{ border: "1px solid hsl(var(--foreground) / 0.12)", color: "hsl(var(--text-dim))" }}
             >
               {checking ? "בודק..." : "בדיקת חיבור"}
             </button>
@@ -135,7 +135,7 @@ const Settings = () => {
 
         <section
           className="rounded-2xl p-6"
-          style={{ background: "hsla(var(--surface), 0.4)", border: "1px solid hsla(var(--foreground), 0.08)" }}
+          style={{ background: "hsl(var(--surface) / 0.4)", border: "1px solid hsl(var(--foreground) / 0.08)" }}
         >
           <button
             type="button"

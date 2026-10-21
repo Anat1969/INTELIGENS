@@ -182,7 +182,7 @@ export const ProfileResult = ({
         </div>
         <p
            className="mt-4 text-[17px] leading-[1.9]"
-           style={{ color: "hsla(var(--foreground), 0.9)" }}
+           style={{ color: "hsl(var(--foreground) / 0.9)" }}
         >
           {dominantIntel.description}
         </p>
@@ -223,7 +223,7 @@ export const ProfileResult = ({
               <div key={s.intelligence} className="flex items-center gap-3">
                 <span
                    className="font-sans-he text-[16px] min-w-[150px] text-right"
-                   style={{ color: "hsla(var(--foreground), 0.9)" }}
+                   style={{ color: "hsl(var(--foreground) / 0.9)" }}
                 >
                   {intel.name}
                 </span>
@@ -242,7 +242,7 @@ export const ProfileResult = ({
                 </div>
                 <span
                   className="font-mono-dm text-[12px] min-w-[36px] text-left"
-                  style={{ color: "hsla(var(--foreground), 0.8)" }}
+                  style={{ color: "hsl(var(--foreground) / 0.8)" }}
                 >
                   {s.percent}%
                 </span>

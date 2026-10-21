@@ -108,7 +108,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
 
       <p
         className="mt-2 font-sans-he text-[16px] leading-[1.9]"
-        style={{ color: 'hsla(var(--foreground), 0.8)' }}
+        style={{ color: 'hsl(var(--foreground) / 0.8)' }}
       >
         נוצר מהצירוף: {comboLabel(result.source_ids as IntelligenceId[])}
       </p>
@@ -151,7 +151,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
         </div>
       </div>
 
-      <div className="mt-8 h-px w-full" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
+      <div className="mt-8 h-px w-full" style={{ background: 'hsl(var(--foreground) / 0.06)' }} />
 
       {/* Roles */}
       <div className="mt-8">
@@ -168,8 +168,8 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
               className="font-sans-he text-[16px] px-4 py-2 rounded-xl"
               style={{
                 color: 'hsl(var(--foreground))',
-                background: 'hsla(var(--foreground), 0.04)',
-                border: '1px solid hsla(var(--foreground), 0.08)',
+                background: 'hsl(var(--foreground) / 0.04)',
+                border: '1px solid hsl(var(--foreground) / 0.08)',
               }}
             >
               {role}
@@ -182,7 +182,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
       <div
         className="mt-8 p-6 rounded-2xl"
         style={{
-          background: 'hsla(var(--surface), 0.5)',
+          background: 'hsl(var(--surface) / 0.5)',
           borderRight: '3px solid hsla(260, 70%, 60%, 0.5)',
         }}
       >
@@ -205,7 +205,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
           </h4>
           <p
             className="font-sans-he text-[17px] leading-[1.9]"
-            style={{ color: 'hsla(var(--foreground), 0.85)' }}
+            style={{ color: 'hsl(var(--foreground) / 0.85)' }}
           >
             {result.keyQuestion}
           </p>
@@ -215,7 +215,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
       {/* Visual Prompt */}
       {result.visualPrompt && (
         <div className="mt-8">
-          <div className="h-px w-full mb-6" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
+          <div className="h-px w-full mb-6" style={{ background: 'hsl(var(--foreground) / 0.06)' }} />
           <div className="flex items-center justify-between mb-4">
             <h4
               className="font-mono-dm text-[11px] tracking-[0.2em] uppercase flex items-center gap-2"
@@ -240,7 +240,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
           >
             <p
               className="font-mono-dm text-[13px] leading-[1.85]"
-              style={{ color: 'hsla(var(--foreground), 0.8)' }}
+              style={{ color: 'hsl(var(--foreground) / 0.8)' }}
             >
               {result.visualPrompt}
             </p>

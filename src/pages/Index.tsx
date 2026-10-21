@@ -70,7 +70,7 @@ const Index = () => {
       <AppNav />
       <StatusBar selected={selected} onClear={clear} />
 
-      <main className="mx-auto max-w-[1400px] px-6 pt-36 pb-20">
+      <main className="mx-auto max-w-[1400px] px-6 pt-44 pb-20">
         <header className="mb-16">
           <h1 className="font-serif-display text-[44px] md:text-[56px] leading-[1.05] tracking-[-0.02em] text-foreground">
             מפת האינטליגנציות

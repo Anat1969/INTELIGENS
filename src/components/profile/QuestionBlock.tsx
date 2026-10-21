@@ -63,7 +63,7 @@ export const QuestionBlock = ({
                     }
                   : {
                       borderColor: "hsl(var(--border))",
-                      color: "hsla(var(--foreground), 0.85)",
+                      color: "hsl(var(--foreground) / 0.85)",
                       backgroundColor: "transparent",
                     }
               }

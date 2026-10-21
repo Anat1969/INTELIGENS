@@ -1,4 +1,5 @@
 import { BY_ID, type IntelligenceId } from "@/data/intelligences";
+import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 
 interface Props {
   selected: IntelligenceId[];
@@ -6,13 +7,15 @@ interface Props {
 }
 
 export const StatusBar = ({ selected, onClear }: Props) => {
+  // The read-only notice adds a thin row under the top bar; sit below it.
+  const { hasToken } = useGitHubAuth();
   return (
     <div
-      className="fixed top-[64px] left-0 right-0 z-40 status-bar-glass transition-all duration-300"
+      className={`fixed ${hasToken ? "top-[64px]" : "top-[92px]"} left-0 right-0 z-40 status-bar-glass transition-all duration-300`}
       style={{
         backgroundColor: selected.length > 0
-          ? "hsla(var(--background), 0.85)"
-          : "hsla(var(--background), 0.7)",
+          ? "hsl(var(--background) / 0.85)"
+          : "hsl(var(--background) / 0.7)",
       }}
     >
       <div className="mx-auto max-w-[1400px] px-6 h-[56px] flex items-center gap-4">
@@ -57,7 +60,7 @@ export const StatusBar = ({ selected, onClear }: Props) => {
           className="shrink-0 px-3 py-1.5 rounded-lg font-mono-dm text-[11px] tracking-[0.08em] transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed hover:opacity-70"
           style={{
             color: "hsl(var(--text-dim))",
-            background: "hsla(var(--foreground), 0.05)",
+            background: "hsl(var(--foreground) / 0.05)",
           }}
           aria-label="נקה בחירה"
         >

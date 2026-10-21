@@ -134,8 +134,8 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
                 className="font-mono-dm text-[12px] px-5 py-2.5 rounded-xl transition-all duration-200 hover:opacity-70"
                 style={{
                   color: 'hsl(var(--foreground))',
-                  border: '1px solid hsla(var(--foreground), 0.15)',
-                  background: 'hsla(var(--surface), 0.5)',
+                  border: '1px solid hsl(var(--foreground) / 0.15)',
+                  background: 'hsl(var(--surface) / 0.5)',
                 }}
               >
                 נסה שוב
@@ -155,7 +155,7 @@ export default function SynthesisButton({ selected, onNewSynthesis }: Props) {
         {phase === 'done' && saveState !== 'none' && (
           <p
             className="font-sans-he text-[13px] text-center max-w-[560px] leading-[1.8]"
-            style={{ color: 'hsla(var(--foreground), 0.8)' }}
+            style={{ color: 'hsl(var(--foreground) / 0.8)' }}
           >
             {saveState === 'saving' && 'שומר למאגר...'}
             {saveState === 'saved' && 'נשמר למאגר'}

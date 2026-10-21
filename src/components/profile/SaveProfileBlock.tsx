@@ -77,7 +77,7 @@ export const SaveProfileBlock = ({ answers, onSaved }: Props) => {
     <section dir="rtl" className="no-print mx-auto max-w-[680px] mt-16">
       <div
         className="rounded-sm border p-6"
-        style={{ borderColor: "hsla(var(--foreground), 0.12)" }}
+        style={{ borderColor: "hsl(var(--foreground) / 0.12)" }}
       >
         <div
           className="font-mono-dm text-[10px] tracking-[0.3em] uppercase mb-4"
@@ -93,7 +93,7 @@ export const SaveProfileBlock = ({ answers, onSaved }: Props) => {
             onChange={(e) => setName(e.target.value)}
             placeholder="שם פרטי"
             className="flex-1 rounded-sm border bg-transparent px-3 py-2 text-[14px] text-foreground outline-none"
-            style={{ borderColor: "hsla(var(--foreground), 0.18)" }}
+            style={{ borderColor: "hsl(var(--foreground) / 0.18)" }}
           />
           <button
             type="button"

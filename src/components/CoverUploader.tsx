@@ -216,7 +216,7 @@ export function CoverUploader({
           <div className="flex flex-col items-center">
             <div
               className="rounded-xl overflow-hidden w-full max-w-[360px] aspect-square"
-              style={{ border: '1px solid hsla(var(--foreground), 0.08)' }}
+              style={{ border: '1px solid hsl(var(--foreground) / 0.08)' }}
             >
               <img
                 src={src}
@@ -254,17 +254,17 @@ export function CoverUploader({
               style={{
                 border: `2px dashed ${
                   dragOver
-                    ? 'hsla(var(--foreground), 0.3)'
-                    : 'hsla(var(--foreground), 0.12)'
+                    ? 'hsl(var(--foreground) / 0.3)'
+                    : 'hsl(var(--foreground) / 0.12)'
                 }`,
                 background: dragOver
-                  ? 'hsla(var(--foreground), 0.04)'
+                  ? 'hsl(var(--foreground) / 0.04)'
                   : 'transparent',
               }}
             >
               <span
                 className="font-sans-he text-[15px]"
-                style={{ color: 'hsla(var(--foreground), 0.85)' }}
+                style={{ color: 'hsl(var(--foreground) / 0.85)' }}
               >
                 גררו תמונה לכאן · הדביקו (Ctrl+V) · או לחצו להעלאה
               </span>
@@ -299,12 +299,12 @@ export function CoverUploader({
       <div
         className="relative w-full aspect-square overflow-hidden"
         style={{
-          borderBottom: '1px solid hsla(var(--foreground), 0.06)',
+          borderBottom: '1px solid hsl(var(--foreground) / 0.06)',
         }}
       >
         <span
           className="absolute top-0 left-0 right-0 h-1 z-10"
-          style={{ background: gradient ?? 'hsla(var(--foreground), 0.1)' }}
+          style={{ background: gradient ?? 'hsl(var(--foreground) / 0.1)' }}
           aria-hidden="true"
         />
 
@@ -348,18 +348,18 @@ export function CoverUploader({
             className="no-print absolute inset-0 m-2 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all duration-200 text-center px-3"
             style={{
               background: dragOver
-                ? 'hsla(var(--foreground), 0.05)'
-                : 'hsla(var(--foreground), 0.02)',
+                ? 'hsl(var(--foreground) / 0.05)'
+                : 'hsl(var(--foreground) / 0.02)',
               border: `2px dashed ${
                 dragOver
-                  ? 'hsla(var(--foreground), 0.3)'
-                  : 'hsla(var(--foreground), 0.12)'
+                  ? 'hsl(var(--foreground) / 0.3)'
+                  : 'hsl(var(--foreground) / 0.12)'
               }`,
             }}
           >
             <span
               className="font-sans-he text-[13px]"
-              style={{ color: 'hsla(var(--foreground), 0.75)' }}
+              style={{ color: 'hsl(var(--foreground) / 0.75)' }}
             >
               הוסיפו תמונה למיזוג
             </span>
