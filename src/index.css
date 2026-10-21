@@ -1334,6 +1334,8 @@
   text-align: right;
   font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
   color: hsl(var(--foreground));
+  /* Columns follow the width FusionView actually gets (it also sits inside the narrow article column), not the viewport. */
+  container-type: inline-size;
 }
 .fusion .reveal-up { opacity: 0; transform: translateY(18px); transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1), transform 700ms cubic-bezier(0.16, 1, 0.3, 1); }
 .fusion .reveal-up.is-in { opacity: 1; transform: none; }
@@ -1379,7 +1381,7 @@
 .fusion-step-hint { font-size: 13px; color: hsl(var(--text-dim)); }
 .fusion-step-text { margin-top: 12px; font-size: 17.5px; line-height: 1.85; }
 .fusion-step--4 .fusion-step-text { font-size: 18.5px; }
-@media (max-width: 720px) {
+@container (max-width: 720px) {
   .fusion-step--1, .fusion-step--2, .fusion-step--3, .fusion-step--4 { margin-inline: 0; }
   .fusion-step { padding: 22px 22px 24px; padding-inline-start: 26px; }
 }
@@ -1403,11 +1405,12 @@
 
 .fusion-visual { margin-top: 48px; }
 .fusion-visual-grid { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 820px) { .fusion-visual-grid { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: start; } }
+@container (min-width: 760px) { .fusion-visual-grid { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: start; } }
 .fusion-frame {
   margin: 0; background: hsl(0, 0%, 100%); padding: 14px 14px 18px; border-radius: 6px;
   border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-deep);
   transform: rotate(-0.6deg);
+  width: 100%; max-width: 440px;
 }
 .fusion-frame-image { border-radius: 3px; overflow: hidden; background: hsl(var(--surface)); }
 .fusion-frame-caption { display: flex; flex-direction: column; gap: 4px; padding: 14px 4px 0; }
@@ -1422,7 +1425,7 @@
 .fusion-hint { margin-top: 12px; font-size: 13px; line-height: 1.7; color: hsl(var(--text-dim)); }
 
 .fusion-meta { margin-top: 44px; display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 820px) { .fusion-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@container (min-width: 620px) { .fusion-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .fusion-tags { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
 .fusion-tag { font-size: 15px; padding: 7px 14px; border-radius: 999px; border: 1px solid hsl(var(--border)); background: hsl(var(--surface-elevated)); }
 .fusion-tag--link { transition: border-color 200ms ease, transform 200ms ease; }
