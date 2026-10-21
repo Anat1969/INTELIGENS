@@ -1,6 +1,5 @@
 import { SynthesizedIntelligence, comboLabel } from '@/lib/synthesize'
 import type { IntelligenceId } from '@/data/intelligences'
-import { Copy, Check, Image, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CoverUploader } from '@/components/CoverUploader'
@@ -76,7 +75,6 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
               onClick={() => navigate(`/intelligence/${itemId}`)}
               className="tool-btn"
             >
-              <ExternalLink size={12} />
               פתח מאמר
             </button>
           )}
@@ -86,7 +84,6 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
           onClick={handleCopy}
           className="tool-btn"
         >
-          {copied ? <Check size={12} /> : <Copy size={12} />}
           {copied ? 'הועתק' : 'העתק'}
         </button>
       </div>
@@ -224,14 +221,12 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
               className="font-mono-dm text-[11px] tracking-[0.2em] uppercase flex items-center gap-2"
               style={{ color: 'hsla(170, 70%, 55%, 0.8)' }}
             >
-              <Image size={14} />
               פרומפט ויזואלי
             </h4>
             <button
               onClick={handleCopyVisual}
               className="tool-btn"
             >
-              {visualCopied ? <Check size={12} /> : <Copy size={12} />}
               {visualCopied ? 'הועתק' : 'העתק פרומפט'}
             </button>
           </div>
@@ -257,8 +252,7 @@ export default function SynthesisResult({ result, isFromCache, itemId }: Props) 
                 className="font-mono-dm text-[11px] tracking-[0.2em] uppercase mb-4 flex items-center gap-2"
                 style={{ color: 'hsla(170, 70%, 55%, 0.8)' }}
               >
-                <Image size={14} />
-                תמונת המיזוג
+                  תמונת המיזוג
               </h4>
               <CoverUploader
                 id={coverImageId(itemId)}

@@ -1,5 +1,4 @@
 import { BY_ID, type IntelligenceId } from "@/data/intelligences";
-import { X } from "lucide-react";
 
 interface Props {
   selected: IntelligenceId[];
@@ -55,14 +54,14 @@ export const StatusBar = ({ selected, onClear }: Props) => {
           type="button"
           onClick={onClear}
           disabled={selected.length === 0}
-          className="shrink-0 p-2 rounded-lg transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed hover:opacity-70"
+          className="shrink-0 px-3 py-1.5 rounded-lg font-mono-dm text-[11px] tracking-[0.08em] transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed hover:opacity-70"
           style={{
             color: "hsl(var(--text-dim))",
             background: "hsla(var(--foreground), 0.05)",
           }}
           aria-label="נקה בחירה"
         >
-          <X size={14} />
+          ניקוי
         </button>
       </div>
     </div>

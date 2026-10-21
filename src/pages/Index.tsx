@@ -29,7 +29,18 @@ const Index = () => {
     }
   }, [selected]);
 
+  // Mirror the selection into the address so "העתקת קישור" shares this exact state.
+  const hydrated = useRef(false);
   useEffect(() => {
+    if (!hydrated.current) return;
+    const url = new URL(window.location.href);
+    if (selected.length) url.searchParams.set("selected", selected.join(","));
+    else url.searchParams.delete("selected");
+    window.history.replaceState(window.history.state, "", url);
+  }, [selected]);
+
+  useEffect(() => {
+    hydrated.current = true;
     const params = new URLSearchParams(window.location.search);
     const raw = params.get("selected");
     if (!raw) return;

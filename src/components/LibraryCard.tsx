@@ -1,5 +1,4 @@
 import { SynthesizedIntelligence } from '@/lib/synthesize'
-import { ChevronDown, Copy, Check, Image } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
@@ -113,7 +112,6 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
                   className="font-mono-dm text-[8px] tracking-[0.15em] uppercase flex items-center gap-1.5"
                   style={{ color: 'hsla(170, 70%, 55%, 0.7)' }}
                 >
-                  <Image size={10} />
                   פרומפט ויזואלי
                 </span>
                 <button
@@ -125,7 +123,6 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
                     border: '1px solid hsla(170, 70%, 55%, 0.12)',
                   }}
                 >
-                  {visualCopied ? <Check size={9} /> : <Copy size={9} />}
                   {visualCopied ? 'הועתק' : 'העתק'}
                 </button>
               </div>
@@ -157,15 +154,12 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
       )}
 
       <div className="absolute bottom-3 left-3">
-        <ChevronDown
-          size={12}
-          className="transition-transform duration-200"
-          style={{
-            color: 'hsl(var(--text-dim))',
-            opacity: 0.3,
-            transform: isExpanded ? 'rotate(180deg)' : 'none',
-          }}
-        />
+        <span
+          className="font-mono-dm text-[9px] tracking-[0.1em]"
+          style={{ color: 'hsl(var(--text-dim))', opacity: 0.5 }}
+        >
+          {isExpanded ? 'סגירה' : 'פתיחה'}
+        </span>
       </div>
     </div>
   )

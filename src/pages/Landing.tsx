@@ -2,7 +2,6 @@ import { useEffect, useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { AppNav } from "@/components/AppNav";
 import { INTELLIGENCES } from "@/data/intelligences";
-import { Sparkles, Brain, Compass, ArrowDown } from "lucide-react";
 
 const PARTICLE_COUNT = 24;
 
@@ -46,19 +45,16 @@ function HeroParticles() {
 
 const features = [
   {
-    icon: Brain,
     title: "12 אינטליגנציות",
     description: "מבוסס על תיאוריית האינטליגנציות המרובות של גארדנר, עם הרחבות מודרניות",
     hue: "260, 70%, 60%",
   },
   {
-    icon: Sparkles,
     title: "סינתזה עם AI",
     description: "בינה מלאכותית מזהה את האינטליגנציה החדשה שנולדת מהשילוב שבחרת",
     hue: "200, 85%, 55%",
   },
   {
-    icon: Compass,
     title: "פרופיל אישי",
     description: "גלה את הפרופיל האינטליגנטי שלך דרך שאלון ייחודי ומעמיק",
     hue: "340, 70%, 58%",
@@ -129,7 +125,9 @@ export default function Landing() {
         </div>
 
         <div className="hero-scroll-indicator">
-          <ArrowDown size={20} style={{ color: "hsl(var(--text-dim))" }} />
+          <span className="font-mono-dm text-[10px] tracking-[0.3em]" style={{ color: "hsl(var(--text-dim))" }}>
+            גלילה
+          </span>
         </div>
       </section>
 
@@ -161,7 +159,9 @@ export default function Landing() {
                     boxShadow: `0 0 24px hsla(${f.hue}, 0.15)`,
                   }}
                 >
-                  <f.icon size={22} style={{ color: `hsl(${f.hue})` }} />
+                  <span className="font-mono-dm text-[13px] tracking-[0.1em]" style={{ color: `hsl(${f.hue})` }}>
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
                 </div>
 
                 <h3
