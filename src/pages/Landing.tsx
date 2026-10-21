@@ -93,7 +93,7 @@ export default function Landing() {
 
         <div className="hero-content px-6">
           <h1 className="hero-title font-serif-display">
-            Intelligence Composer
+            מפת האינטליגנציות
           </h1>
 
           <p
@@ -255,7 +255,7 @@ export default function Landing() {
       </section>
 
       {/* ─── Stats ─── */}
-      <section className="py-24 md:py-32 px-6" style={{ background: "hsla(var(--surface), 0.5)" }}>
+      <section className="py-24 md:py-32 px-6" style={{ background: "hsl(var(--surface) / 0.5)" }}>
         <div className="section-fade-in mx-auto max-w-[1000px] grid gap-8 md:grid-cols-3 text-center">
           {[
             { num: "12", label: "אינטליגנציות בסיס" },
@@ -281,7 +281,7 @@ export default function Landing() {
           className="font-serif-display text-[18px] mb-2"
           style={{ color: "hsl(var(--text-dim))" }}
         >
-          Intelligence Composer
+          מפת האינטליגנציות
         </p>
         <p
           className="font-mono-dm text-[10px] tracking-[0.2em]"

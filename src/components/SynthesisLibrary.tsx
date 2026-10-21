@@ -1,3 +1,4 @@
+import { composeFusion } from '@/lib/fusion'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getLibrary } from '@/lib/local-library'
@@ -67,7 +68,14 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
           local: true,
         }))
 
-      if (alive) setCards([...remote, ...local])
+      // Curated fusion cards give every merge its current name and distillation.
+      const withFusion = [...remote, ...local].map(c => {
+        const f = composeFusion(c.source_ids.filter(sid => sid in BY_ID) as IntelligenceId[])
+        return f && f.ids.length === c.source_ids.length
+          ? { ...c, name: f.name, type: f.type, essence: f.distillation }
+          : c
+      })
+      if (alive) setCards(withFusion)
     }
 
     load()
@@ -98,7 +106,7 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
   }
 
   return (
-    <section className="mt-24 pt-12" style={{ borderTop: '1px solid hsla(var(--foreground), 0.06)' }}>
+    <section className="mt-24 pt-12" style={{ borderTop: '1px solid hsl(var(--foreground) / 0.06)' }}>
       <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-3 mb-8">
         <h2 className="font-serif-display text-[28px]" style={{ color: 'hsl(var(--foreground))' }}>
           ספריית הגילויים
@@ -113,20 +121,20 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
 
       <p
         className="font-sans-he text-[17px] leading-[1.9] mb-10 max-w-[600px]"
-        style={{ color: 'hsla(var(--foreground), 0.8)' }}
+        style={{ color: 'hsl(var(--foreground) / 0.8)' }}
       >
         כל אינטליגנציה שמופיעה כאן נוצרה על-ידי צירוף ספציפי.
         לחץ עליה כדי לפתוח את הדף המלא שלה.
       </p>
 
       {cards === null && (
-        <p className="font-sans-he text-[16px]" style={{ color: 'hsla(var(--foreground), 0.8)' }}>
+        <p className="font-sans-he text-[16px]" style={{ color: 'hsl(var(--foreground) / 0.8)' }}>
           טוען ספרייה...
         </p>
       )}
 
       {cards !== null && totalCount === 0 && (
-        <p className="font-sans-he text-[16px]" style={{ color: 'hsla(var(--foreground), 0.8)' }}>
+        <p className="font-sans-he text-[16px]" style={{ color: 'hsl(var(--foreground) / 0.8)' }}>
           המאגר עדיין ריק — כל מיזוג שתיצרו יופיע כאן.
         </p>
       )}
@@ -147,13 +155,13 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
               className="font-mono-dm text-[9px] tracking-[0.15em] px-2 py-1 rounded-md"
               style={{
                 color: 'hsl(var(--text-dim))',
-                background: 'hsla(var(--foreground), 0.04)',
+                background: 'hsl(var(--foreground) / 0.04)',
                 opacity: 0.6,
               }}
             >
               {items.length}
             </span>
-            <div className="flex-1 h-px" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
+            <div className="flex-1 h-px" style={{ background: 'hsl(var(--foreground) / 0.06)' }} />
           </div>
 
           <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
@@ -176,7 +184,7 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
     ? `linear-gradient(90deg, ${sourceHues.map(h => `hsl(${h})`).join(', ')})`
     : sourceHues[0]
       ? `hsl(${sourceHues[0]})`
-      : 'hsla(var(--foreground), 0.1)'
+      : 'hsl(var(--foreground) / 0.1)'
 
   // Deterministic prompt for the merge's cover image — regenerable even for
   // merges created before the prompt was surfaced on the card.
@@ -189,8 +197,8 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
     <div
       className="library-card-3d w-full transition-all duration-200 hover:translate-y-[-2px]"
       style={{
-        background: 'hsla(var(--surface), 0.5)',
-        border: '1px solid hsla(var(--foreground), 0.06)',
+        background: 'hsl(var(--surface) / 0.5)',
+        border: '1px solid hsl(var(--foreground) / 0.06)',
         padding: '0',
         overflow: 'hidden',
       }}
@@ -223,7 +231,7 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
 
         <p
           className="font-sans-he text-[16px] leading-[1.9] mb-3"
-          style={{ color: 'hsla(var(--foreground), 0.9)' }}
+          style={{ color: 'hsl(var(--foreground) / 0.9)' }}
         >
           נוצר מהצירוף: {item.combo}
         </p>
@@ -231,7 +239,7 @@ function LibraryItemCard({ item, onClick }: { item: Card; onClick: () => void })
         {item.essence && (
           <p
             className="font-sans-he text-[16px] leading-[1.9] line-clamp-2 mb-3"
-            style={{ color: 'hsla(var(--foreground), 0.85)' }}
+            style={{ color: 'hsl(var(--foreground) / 0.85)' }}
           >
             {item.essence}
           </p>

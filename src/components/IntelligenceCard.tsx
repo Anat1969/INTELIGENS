@@ -87,7 +87,7 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenArticle }: Prop
         backgroundColor: selected
           ? `hsla(${hue}, 0.08)`
           : isExt
-            ? "hsla(var(--surface), 0.3)"
+            ? "hsl(var(--surface) / 0.3)"
             : "hsl(var(--surface))",
         borderRadius: "14px",
         opacity: isExt && !selected ? 0.75 : 1,
@@ -116,7 +116,7 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenArticle }: Prop
         <div
           className="relative w-40 sm:w-56 shrink-0 self-start aspect-video overflow-hidden rounded-md border"
           style={{
-            borderColor: selected ? `hsla(${hue}, 0.42)` : "hsla(var(--foreground), 0.1)",
+            borderColor: selected ? `hsla(${hue}, 0.42)` : "hsl(var(--foreground) / 0.1)",
             background: personaImage
               ? "hsl(var(--surface-elevated))"
               : `linear-gradient(145deg, hsla(${hue}, 0.34), hsla(${hue}, 0.06))`,
@@ -161,7 +161,7 @@ const IntelligenceCardBase = ({ intel, selected, onToggle, onOpenArticle }: Prop
 
           <p
             className="mt-2 text-[16px] leading-[1.75]"
-            style={{ color: "hsla(var(--foreground), 0.9)" }}
+            style={{ color: "hsl(var(--foreground) / 0.9)" }}
           >
             {intel.description}
           </p>

@@ -54,15 +54,12 @@ const Index = () => {
   }, []);
 
   const background = useMemo(() => {
-    if (selected.length === 0)
-      return "radial-gradient(ellipse 80% 50% at 50% 0%, hsla(260, 60%, 30%, 0.06), hsl(var(--background)))";
-    const colors = selected.map((id) => BY_ID[id].hue);
-    if (colors.length === 1)
-      return `radial-gradient(ellipse at 50% 0%, hsla(${colors[0]}, 0.12), hsl(var(--background)) 60%)`;
-    const stops = colors
-      .map((c, i) => `hsla(${c}, 0.08) ${(i / (colors.length - 1)) * 100}%`)
+    if (selected.length === 0) return "hsl(var(--background))";
+    const glow = selected
+      .slice(0, 3)
+      .map((id, i) => `radial-gradient(ellipse 60% 40% at ${20 + i * 30}% 0%, hsla(${BY_ID[id].hue}, 0.07), transparent 70%)`)
       .join(", ");
-    return `linear-gradient(135deg, ${stops}), radial-gradient(ellipse at 50% 0%, hsla(260, 60%, 30%, 0.05), transparent), hsl(var(--background))`;
+    return `${glow}, hsl(var(--background))`;
   }, [selected]);
 
   return (
@@ -73,7 +70,7 @@ const Index = () => {
       <AppNav />
       <StatusBar selected={selected} onClear={clear} />
 
-      <main className="mx-auto max-w-[1400px] px-6 pt-36 pb-20">
+      <main className="mx-auto max-w-[1400px] px-6 pt-44 pb-20">
         <header className="mb-16">
           <h1 className="font-serif-display text-[44px] md:text-[56px] leading-[1.05] tracking-[-0.02em] text-foreground">
             מפת האינטליגנציות

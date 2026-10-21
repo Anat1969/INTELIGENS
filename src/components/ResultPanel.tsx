@@ -67,7 +67,7 @@ export const ResultPanel = ({ combo, selectedIds }: Props) => {
           className="reveal-2 mt-4 text-center font-mono-dm text-[10px] tracking-[0.1em] px-4 py-2 rounded-lg mx-auto w-fit"
           style={{
             color: "hsl(var(--text-dim))",
-            background: "hsla(var(--foreground), 0.03)",
+            background: "hsl(var(--foreground) / 0.03)",
           }}
         >
           צירוף זה כולל אינטליגנציה שאינה חלק מהתיאוריה המקורית של גארדנר
@@ -132,7 +132,7 @@ export const ResultPanel = ({ combo, selectedIds }: Props) => {
       <blockquote
         className="reveal-5 mt-14 mx-auto max-w-[760px] p-6 rounded-2xl"
         style={{
-          background: "hsla(var(--surface), 0.4)",
+          background: "hsl(var(--surface) / 0.4)",
           borderRight: `3px solid transparent`,
           borderImage: `${gradient} 1`,
           borderImageSlice: 1,

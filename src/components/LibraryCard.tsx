@@ -26,10 +26,10 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
       onClick={onToggle}
       className={cn("library-card-3d cursor-pointer text-right", isExpanded && "expanded")}
       style={{
-        background: isExpanded ? 'hsla(var(--surface), 0.8)' : 'hsla(var(--surface), 0.4)',
+        background: isExpanded ? 'hsl(var(--surface) / 0.8)' : 'hsl(var(--surface) / 0.4)',
         border: isExpanded
           ? '1px solid hsla(260, 70%, 60%, 0.2)'
-          : '1px solid hsla(var(--foreground), 0.06)',
+          : '1px solid hsl(var(--foreground) / 0.06)',
         padding: isExpanded ? '24px 20px' : '20px 18px',
       }}
     >
@@ -58,11 +58,11 @@ export default function LibraryCard({ intelligence, isExpanded, onToggle }: Prop
 
       {isExpanded && (
         <div style={{ animation: 'resultReveal 300ms ease forwards' }}>
-          <div className="h-px w-full mb-4" style={{ background: 'hsla(var(--foreground), 0.06)' }} />
+          <div className="h-px w-full mb-4" style={{ background: 'hsl(var(--foreground) / 0.06)' }} />
 
           <p
             className="font-sans-he text-[16px] leading-[1.9] mb-4"
-            style={{ color: 'hsla(var(--foreground), 0.9)' }}
+            style={{ color: 'hsl(var(--foreground) / 0.9)' }}
           >
             {essence}
           </p>

@@ -7,7 +7,7 @@ import { initPwa } from "./lib/pwa";
 initPwa();
 
 createRoot(document.getElementById("root")!).render(
-  <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+  <ThemeProvider attribute="class" forcedTheme="light" defaultTheme="light" enableSystem={false}>
     <App />
   </ThemeProvider>,
 );

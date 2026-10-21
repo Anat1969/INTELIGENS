@@ -1,6 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 import { DEV_CHAT_URL, RESEARCH_PROJECT_URL } from "@/lib/app-links";
@@ -18,9 +17,9 @@ const toolClass =
   "font-mono-dm text-[11px] tracking-[0.08em] whitespace-nowrap py-1.5 px-3 rounded-lg border transition-all duration-200 hover:opacity-80 hover:-translate-y-px";
 const toolStyle = {
   color: "hsl(var(--text-dim))",
-  background: "hsla(var(--surface), 0.5)",
-  borderColor: "hsla(var(--foreground), 0.08)",
-  boxShadow: "0 1px 2px hsla(0, 0%, 0%, 0.15)",
+  background: "hsl(var(--surface) / 0.5)",
+  borderColor: "hsl(var(--foreground) / 0.08)",
+  boxShadow: "0 1px 2px hsla(220, 30%, 10%, 0.06)",
 };
 
 /** Copies the current address, including state such as ?selected= on the composer. */
@@ -59,25 +58,6 @@ const InstallButton = () => {
   );
 };
 
-const ThemeToggle = () => {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
-  const isDark = resolvedTheme === "dark";
-
-  return (
-    <button type="button" onClick={() => setTheme(isDark ? "light" : "dark")} className={toolClass} style={toolStyle}>
-      {isDark ? "מצב בהיר" : "מצב כהה"}
-    </button>
-  );
-};
-
 const ExternalTools = () => (
   <>
     <a href={DEV_CHAT_URL} target="_blank" rel="noopener noreferrer" className={toolClass} style={toolStyle}>
@@ -111,18 +91,18 @@ export const AppNav = () => {
         scrolled ? "status-bar-glass" : "",
       )}
       style={{
-        backgroundColor: scrolled ? "hsla(var(--background), 0.8)" : "transparent",
-        boxShadow: scrolled ? "0 8px 24px -12px hsla(0, 0%, 0%, 0.35)" : "none",
+        backgroundColor: scrolled ? "hsl(var(--background) / 0.86)" : "hsl(var(--background) / 0.6)",
+        boxShadow: scrolled ? "0 1px 0 hsl(var(--border)), 0 12px 28px -18px hsla(220, 30%, 10%, 0.25)" : "none",
       }}
     >
       <div className="mx-auto max-w-[1400px] px-4 md:px-10 h-[64px] flex items-center justify-between gap-3 min-w-0">
         <div className="flex items-center gap-3 min-w-0">
           <Link
             to="/"
-            className="font-serif-display text-[17px] whitespace-nowrap hover:opacity-80 transition-opacity"
+            className="font-sans-he font-medium text-[16px] tracking-[0.01em] whitespace-nowrap hover:opacity-80 transition-opacity"
             style={{ color: "hsl(var(--foreground))" }}
           >
-            Intelligence Composer
+            מפת האינטליגנציות
           </Link>
           {pathname !== "/" && (
             <button
@@ -149,7 +129,7 @@ export const AppNav = () => {
                 )}
                 style={{
                   color: active ? undefined : "hsl(var(--text-dim))",
-                  background: active ? "hsla(var(--foreground), 0.06)" : "transparent",
+                  background: active ? "hsl(var(--foreground) / 0.06)" : "transparent",
                 }}
               >
                 {l.label}
@@ -163,7 +143,6 @@ export const AppNav = () => {
           <div className="hidden xl:flex items-center gap-2">
             <ExternalTools />
             <InstallButton />
-            <ThemeToggle />
           </div>
           <button
             type="button"
@@ -181,8 +160,8 @@ export const AppNav = () => {
         <div
           className="xl:hidden border-t"
           style={{
-            borderColor: "hsla(var(--foreground), 0.06)",
-            background: "hsla(var(--background), 0.95)",
+            borderColor: "hsl(var(--foreground) / 0.06)",
+            background: "hsl(var(--background) / 0.95)",
             backdropFilter: "blur(20px)",
           }}
         >
@@ -210,18 +189,17 @@ export const AppNav = () => {
                   className="font-mono-dm text-[12px] tracking-[0.15em] py-3 px-4 rounded-xl transition-all"
                   style={{
                     color: active ? "hsl(var(--foreground))" : "hsl(var(--text-dim))",
-                    background: active ? "hsla(var(--foreground), 0.06)" : "transparent",
+                    background: active ? "hsl(var(--foreground) / 0.06)" : "transparent",
                   }}
                 >
                   {l.label}
                 </Link>
               );
             })}
-            <div className="pt-3 border-t flex flex-wrap justify-start gap-2" style={{ borderColor: "hsla(var(--foreground), 0.06)" }}>
+            <div className="pt-3 border-t flex flex-wrap justify-start gap-2" style={{ borderColor: "hsl(var(--foreground) / 0.06)" }}>
               <ExternalTools />
               <InstallButton />
-              <ThemeToggle />
-            </div>
+              </div>
           </div>
         </div>
       )}
@@ -231,8 +209,8 @@ export const AppNav = () => {
           dir="rtl"
           className="border-t text-center"
           style={{
-            borderColor: "hsla(var(--foreground), 0.06)",
-            background: "hsla(var(--surface), 0.6)",
+            borderColor: "hsl(var(--foreground) / 0.06)",
+            background: "hsl(var(--surface) / 0.6)",
           }}
         >
           <p className="mx-auto max-w-[1400px] px-6 py-1.5 text-[11px]" style={{ color: "hsl(var(--text-dim))" }}>

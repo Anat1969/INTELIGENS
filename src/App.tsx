@@ -12,6 +12,7 @@ import BaseArticle from "./pages/BaseArticle.tsx";
 import Trust from "./pages/Trust.tsx";
 import Settings from "./pages/Settings.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Flyer from "./pages/Flyer.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/profile/:id" element={<ProfileReport />} />
           <Route path="/trust" element={<Trust />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/flyer" element={<Flyer />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

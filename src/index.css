@@ -4,111 +4,153 @@
 
 @layer base {
   :root {
-    --background: 240 33% 5%;
-    --foreground: 240 22% 88%;
+    --background: 0 0% 100%;
+    --foreground: 220 16% 11%;
 
-    --surface: 240 30% 8%;
-    --surface-elevated: 240 28% 11%;
-    --text-dim: 240 14% 47%;
+    --surface: 220 16% 97%;
+    --surface-elevated: 0 0% 100%;
+    --text-dim: 220 9% 38%;
 
-    --card: 240 30% 8%;
-    --card-foreground: 240 22% 88%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 16% 11%;
 
-    --popover: 240 30% 8%;
-    --popover-foreground: 240 22% 88%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 16% 11%;
 
-    --primary: 240 22% 88%;
-    --primary-foreground: 240 33% 5%;
+    --primary: 220 16% 11%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 25% 12%;
-    --secondary-foreground: 240 22% 88%;
+    --secondary: 220 14% 95%;
+    --secondary-foreground: 220 16% 11%;
 
-    --muted: 240 25% 12%;
-    --muted-foreground: 240 14% 47%;
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 9% 38%;
 
-    --accent: 240 25% 12%;
-    --accent-foreground: 240 22% 88%;
+    --accent: 220 14% 93%;
+    --accent-foreground: 220 16% 11%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 24% 15%;
-    --input: 240 24% 15%;
-    --ring: 240 22% 88%;
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 220 16% 11%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 240 33% 5%;
-    --sidebar-foreground: 240 22% 88%;
-    --sidebar-primary: 240 22% 88%;
-    --sidebar-primary-foreground: 240 33% 5%;
-    --sidebar-accent: 240 25% 12%;
-    --sidebar-accent-foreground: 240 22% 88%;
-    --sidebar-border: 240 24% 15%;
-    --sidebar-ring: 240 22% 88%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 16% 11%;
+    --sidebar-primary: 220 16% 11%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 95%;
+    --sidebar-accent-foreground: 220 16% 11%;
+    --sidebar-border: 220 13% 88%;
+    --sidebar-ring: 220 16% 11%;
 
-    --glow-primary: 260 80% 65%;
-    --glow-secondary: 200 90% 60%;
+    --glow-primary: 220 30% 45%;
+    --glow-secondary: 200 40% 45%;
+    --shadow-soft: 0 1px 2px hsla(220, 30%, 10%, 0.06), 0 8px 24px -12px hsla(220, 30%, 10%, 0.14);
+    --shadow-deep: 0 1px 2px hsla(220, 30%, 10%, 0.05), 0 24px 48px -24px hsla(220, 30%, 10%, 0.22), 0 48px 96px -48px hsla(220, 30%, 10%, 0.18);
   }
 
   .dark {
-    --background: 240 33% 5%;
-    --foreground: 240 22% 88%;
-    --surface: 240 30% 8%;
-    --surface-elevated: 240 28% 11%;
-    --text-dim: 240 14% 47%;
-    --card: 240 30% 8%;
-    --card-foreground: 240 22% 88%;
-    --popover: 240 30% 8%;
-    --popover-foreground: 240 22% 88%;
-    --primary: 240 22% 88%;
-    --primary-foreground: 240 33% 5%;
-    --secondary: 240 25% 12%;
-    --secondary-foreground: 240 22% 88%;
-    --muted: 240 25% 12%;
-    --muted-foreground: 240 14% 47%;
-    --accent: 240 25% 12%;
-    --accent-foreground: 240 22% 88%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 24% 15%;
-    --input: 240 24% 15%;
-    --ring: 240 22% 88%;
+    --background: 0 0% 100%;
+    --foreground: 220 16% 11%;
+
+    --surface: 220 16% 97%;
+    --surface-elevated: 0 0% 100%;
+    --text-dim: 220 9% 38%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 16% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 16% 11%;
+
+    --primary: 220 16% 11%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 95%;
+    --secondary-foreground: 220 16% 11%;
+
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 9% 38%;
+
+    --accent: 220 14% 93%;
+    --accent-foreground: 220 16% 11%;
+
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 220 16% 11%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 16% 11%;
+    --sidebar-primary: 220 16% 11%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 95%;
+    --sidebar-accent-foreground: 220 16% 11%;
+    --sidebar-border: 220 13% 88%;
+    --sidebar-ring: 220 16% 11%;
+
+    --glow-primary: 220 30% 45%;
+    --glow-secondary: 200 40% 45%;
+    --shadow-soft: 0 1px 2px hsla(220, 30%, 10%, 0.06), 0 8px 24px -12px hsla(220, 30%, 10%, 0.14);
+    --shadow-deep: 0 1px 2px hsla(220, 30%, 10%, 0.05), 0 24px 48px -24px hsla(220, 30%, 10%, 0.22), 0 48px 96px -48px hsla(220, 30%, 10%, 0.18);
   }
 
   .light {
-    --background: 240 100% 99%;
-    --foreground: 240 25% 10%;
-    --surface: 240 100% 98%;
-    --surface-elevated: 240 60% 96%;
-    --text-dim: 240 15% 32%;
-    --card: 240 100% 98%;
-    --card-foreground: 240 25% 10%;
-    --popover: 240 100% 98%;
-    --popover-foreground: 240 25% 10%;
-    --primary: 240 25% 10%;
-    --primary-foreground: 240 100% 99%;
-    --secondary: 240 25% 80%;
-    --secondary-foreground: 240 25% 10%;
-    --muted: 240 25% 80%;
-    --muted-foreground: 240 15% 32%;
-    --accent: 240 25% 75%;
-    --accent-foreground: 240 25% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 20% 80%;
-    --input: 240 100% 98%;
-    --ring: 240 25% 10%;
-    --sidebar-background: 240 100% 99%;
-    --sidebar-foreground: 240 25% 10%;
-    --sidebar-primary: 240 25% 10%;
-    --sidebar-primary-foreground: 240 100% 99%;
-    --sidebar-accent: 240 25% 75%;
-    --sidebar-accent-foreground: 240 25% 10%;
-    --sidebar-border: 240 20% 80%;
-    --sidebar-ring: 240 25% 10%;
-    --glow-primary: 260 60% 55%;
-    --glow-secondary: 200 70% 50%;
+    --background: 0 0% 100%;
+    --foreground: 220 16% 11%;
+
+    --surface: 220 16% 97%;
+    --surface-elevated: 0 0% 100%;
+    --text-dim: 220 9% 38%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 16% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 16% 11%;
+
+    --primary: 220 16% 11%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 95%;
+    --secondary-foreground: 220 16% 11%;
+
+    --muted: 220 14% 95%;
+    --muted-foreground: 220 9% 38%;
+
+    --accent: 220 14% 93%;
+    --accent-foreground: 220 16% 11%;
+
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 88%;
+    --ring: 220 16% 11%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 16% 11%;
+    --sidebar-primary: 220 16% 11%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 95%;
+    --sidebar-accent-foreground: 220 16% 11%;
+    --sidebar-border: 220 13% 88%;
+    --sidebar-ring: 220 16% 11%;
+
+    --glow-primary: 220 30% 45%;
+    --glow-secondary: 200 40% 45%;
+    --shadow-soft: 0 1px 2px hsla(220, 30%, 10%, 0.06), 0 8px 24px -12px hsla(220, 30%, 10%, 0.14);
+    --shadow-deep: 0 1px 2px hsla(220, 30%, 10%, 0.05), 0 24px 48px -24px hsla(220, 30%, 10%, 0.22), 0 48px 96px -48px hsla(220, 30%, 10%, 0.18);
   }
 }
 
@@ -120,7 +162,7 @@
   html,
   body {
     @apply bg-background text-foreground;
-    font-family: "Heebo", "IBM Plex Sans Hebrew", system-ui, sans-serif;
+    font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -128,13 +170,16 @@
 
 @layer utilities {
   .font-serif-display {
-    font-family: "DM Serif Display", Georgia, serif;
+    font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
+    font-weight: 200;
+    letter-spacing: -0.01em;
   }
   .font-mono-dm {
-    font-family: "DM Mono", ui-monospace, monospace;
+    letter-spacing: 0.04em !important;
+    font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", ui-monospace, monospace;
   }
   .font-sans-he {
-    font-family: "Heebo", "IBM Plex Sans Hebrew", system-ui, sans-serif;
+    font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
   }
 
   .app-bg-transition {
@@ -154,23 +199,22 @@
   }
 
   .glass-surface {
-    background: hsla(var(--surface), 0.6);
+    background: hsl(var(--surface) / 0.6);
     backdrop-filter: blur(20px) saturate(1.2);
     -webkit-backdrop-filter: blur(20px) saturate(1.2);
   }
 
   .glass-card {
-    background: hsla(var(--surface), 0.4);
-    backdrop-filter: blur(16px) saturate(1.1);
-    -webkit-backdrop-filter: blur(16px) saturate(1.1);
-    border: 1px solid hsla(var(--foreground), 0.06);
+    background: hsl(var(--surface-elevated));
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-soft);
   }
 
   /* ─── Tool controls: visually distinct from editorial content ─── */
 
   .tool-area {
-    border: 1px solid hsla(var(--foreground), 0.1);
-    background: hsla(var(--foreground), 0.03);
+    border: 1px solid hsl(var(--foreground) / 0.1);
+    background: hsl(var(--foreground) / 0.03);
     border-radius: 14px;
     padding: 20px 22px;
   }
@@ -179,12 +223,12 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-family: "DM Mono", ui-monospace, monospace;
+    font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", ui-monospace, monospace;
     font-size: 12px;
     letter-spacing: 0.12em;
     color: hsl(var(--foreground));
-    background: hsla(var(--foreground), 0.05);
-    border: 1px solid hsla(var(--foreground), 0.16);
+    background: hsl(var(--foreground) / 0.05);
+    border: 1px solid hsl(var(--foreground) / 0.16);
     border-radius: 10px;
     padding: 9px 18px;
     cursor: pointer;
@@ -192,8 +236,8 @@
   }
 
   .tool-btn:hover {
-    background: hsla(var(--foreground), 0.1);
-    border-color: hsla(var(--foreground), 0.3);
+    background: hsl(var(--foreground) / 0.1);
+    border-color: hsl(var(--foreground) / 0.3);
     transform: translateY(-1px);
   }
 
@@ -210,12 +254,12 @@
 
   /* Cover image uploader (merge cards + synthesis result) */
   .cover-chip {
-    font-family: "DM Mono", ui-monospace, monospace;
+    font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", ui-monospace, monospace;
     font-size: 10px;
     letter-spacing: 0.08em;
     color: hsl(var(--foreground));
-    background: hsla(var(--background), 0.72);
-    border: 1px solid hsla(var(--foreground), 0.18);
+    background: hsl(var(--background) / 0.72);
+    border: 1px solid hsl(var(--foreground) / 0.18);
     border-radius: 8px;
     padding: 4px 10px;
     cursor: pointer;
@@ -224,12 +268,12 @@
   }
 
   .cover-chip:hover {
-    background: hsla(var(--background), 0.92);
-    border-color: hsla(var(--foreground), 0.32);
+    background: hsl(var(--background) / 0.92);
+    border-color: hsl(var(--foreground) / 0.32);
   }
 
   .cover-status {
-    font-family: "Heebo", ui-sans-serif, system-ui, sans-serif;
+    font-family: "IBM Plex Sans Hebrew", ui-sans-serif, system-ui, sans-serif;
     font-size: 12px;
     line-height: 1.7;
     color: hsl(var(--text-dim));
@@ -241,14 +285,14 @@
 
   .cover-prompt-btn {
     color: hsl(var(--text-dim));
-    background: hsla(var(--foreground), 0.03);
-    border-bottom: 1px solid hsla(var(--foreground), 0.06);
+    background: hsl(var(--foreground) / 0.03);
+    border-bottom: 1px solid hsl(var(--foreground) / 0.06);
     cursor: pointer;
   }
 
   .cover-prompt-btn:hover {
     color: hsl(var(--foreground));
-    background: hsla(var(--foreground), 0.07);
+    background: hsl(var(--foreground) / 0.07);
   }
 }
 
@@ -270,9 +314,9 @@
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 20%, hsla(260, 80%, 45%, 0.12), transparent),
-    radial-gradient(ellipse 60% 50% at 80% 80%, hsla(200, 90%, 50%, 0.08), transparent),
-    radial-gradient(ellipse 50% 40% at 20% 70%, hsla(340, 70%, 50%, 0.06), transparent);
+    radial-gradient(ellipse 80% 60% at 50% 15%, hsla(220, 20%, 60%, 0.10), transparent),
+    radial-gradient(ellipse 60% 50% at 85% 85%, hsla(220, 15%, 70%, 0.08), transparent),
+    linear-gradient(180deg, hsl(0, 0%, 100%), hsl(220, 20%, 97%));
 }
 
 .hero-grid-lines {
@@ -280,8 +324,8 @@
   inset: 0;
   z-index: 0;
   background-image:
-    linear-gradient(hsla(var(--foreground), 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, hsla(var(--foreground), 0.03) 1px, transparent 1px);
+    linear-gradient(hsl(var(--foreground) / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--foreground) / 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 70% 50% at center, black 20%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse 70% 50% at center, black 20%, transparent 70%);
@@ -338,13 +382,14 @@
 }
 
 .hero-title {
-  font-size: clamp(48px, 8vw, 96px);
+  font-size: clamp(48px, 8vw, 104px);
+  font-weight: 200;
   line-height: 1.05;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   background: linear-gradient(
     135deg,
     hsl(var(--foreground)) 0%,
-    hsla(260, 70%, 70%, 0.9) 50%,
+    hsl(220, 8%, 62%) 50%,
     hsl(var(--foreground)) 100%
   );
   background-size: 200% auto;
@@ -361,7 +406,7 @@
 
 .hero-subtitle {
   font-size: clamp(14px, 2vw, 18px);
-  letter-spacing: 0.35em;
+  letter-spacing: 0.12em;
   animation: heroSubIn 900ms cubic-bezier(0.16, 1, 0.3, 1) 300ms both;
 }
 
@@ -369,12 +414,12 @@
   from {
     opacity: 0;
     transform: translateY(16px);
-    letter-spacing: 0.6em;
+    letter-spacing: 0.3em;
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    letter-spacing: 0.35em;
+    letter-spacing: 0.12em;
   }
 }
 
@@ -405,17 +450,17 @@
   font-weight: 500;
   letter-spacing: 0.02em;
   color: hsl(var(--primary-foreground));
-  background: linear-gradient(135deg, hsla(260, 70%, 60%, 0.9), hsla(200, 80%, 55%, 0.9));
+  background: linear-gradient(180deg, hsl(220, 14%, 22%), hsl(220, 18%, 9%));
   border: none;
   cursor: pointer;
   overflow: hidden;
   transition: transform 200ms ease, box-shadow 300ms ease;
-  box-shadow: 0 4px 24px hsla(260, 80%, 50%, 0.3), 0 0 0 1px hsla(260, 70%, 60%, 0.2);
+  box-shadow: 0 1px 0 hsla(0,0%,100%,0.12) inset, 0 10px 24px -10px hsla(220, 30%, 10%, 0.45), 0 2px 4px hsla(220, 30%, 10%, 0.12);
 }
 
 .hero-cta-primary:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 40px hsla(260, 80%, 50%, 0.4), 0 0 0 1px hsla(260, 70%, 60%, 0.3);
+  box-shadow: 0 1px 0 hsla(0,0%,100%,0.12) inset, 0 18px 36px -14px hsla(220, 30%, 10%, 0.5), 0 2px 4px hsla(220, 30%, 10%, 0.12);
 }
 
 .hero-cta-primary::before {
@@ -438,16 +483,16 @@
   font-weight: 500;
   letter-spacing: 0.02em;
   color: hsl(var(--foreground));
-  background: hsla(var(--surface), 0.5);
-  border: 1px solid hsla(var(--foreground), 0.1);
+  background: hsl(var(--surface) / 0.5);
+  border: 1px solid hsl(var(--foreground) / 0.1);
   cursor: pointer;
   backdrop-filter: blur(8px);
   transition: all 200ms ease;
 }
 
 .hero-cta-secondary:hover {
-  background: hsla(var(--surface), 0.8);
-  border-color: hsla(var(--foreground), 0.2);
+  background: hsl(var(--surface) / 0.8);
+  border-color: hsl(var(--foreground) / 0.2);
   transform: translateY(-2px);
 }
 
@@ -482,7 +527,7 @@
   border-radius: inherit;
   background: linear-gradient(
     135deg,
-    hsla(var(--foreground), 0.05),
+    hsl(var(--foreground) / 0.05),
     transparent 60%
   );
   opacity: 0;
@@ -528,7 +573,7 @@
 .status-bar-glass {
   backdrop-filter: blur(24px) saturate(1.3);
   -webkit-backdrop-filter: blur(24px) saturate(1.3);
-  border-bottom: 1px solid hsla(var(--foreground), 0.06);
+  border-bottom: 1px solid hsl(var(--foreground) / 0.06);
   transition: all 400ms ease;
 }
 
@@ -538,8 +583,8 @@
   position: relative;
   padding: 32px;
   border-radius: 20px;
-  background: hsla(var(--surface), 0.5);
-  border: 1px solid hsla(var(--foreground), 0.06);
+  background: hsl(var(--surface) / 0.5);
+  border: 1px solid hsl(var(--foreground) / 0.06);
   backdrop-filter: blur(12px);
   transition: all 300ms ease;
   overflow: hidden;
@@ -550,12 +595,12 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, hsla(var(--foreground), 0.02), transparent);
+  background: linear-gradient(135deg, hsl(var(--foreground) / 0.02), transparent);
   pointer-events: none;
 }
 
 .feature-card:hover {
-  border-color: hsla(var(--foreground), 0.12);
+  border-color: hsl(var(--foreground) / 0.12);
   transform: translateY(-4px);
   box-shadow: 0 16px 48px hsla(0, 0%, 0%, 0.2);
 }
@@ -596,9 +641,9 @@
   cursor: pointer;
   border: none;
   color: hsl(var(--primary-foreground));
-  background: linear-gradient(135deg, hsla(260, 70%, 55%, 1), hsla(220, 80%, 55%, 1));
+  background: linear-gradient(180deg, hsl(220, 14%, 22%), hsl(220, 18%, 9%));
   box-shadow:
-    0 4px 24px hsla(260, 80%, 50%, 0.3),
+    0 14px 30px -14px hsla(220, 30%, 10%, 0.5),
     inset 0 1px 0 hsla(0, 0%, 100%, 0.15);
   transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
@@ -607,7 +652,7 @@
 .synthesis-btn:hover:not(:disabled) {
   transform: translateY(-3px) scale(1.02);
   box-shadow:
-    0 8px 40px hsla(260, 80%, 50%, 0.4),
+    0 22px 40px -16px hsla(220, 30%, 10%, 0.55),
     inset 0 1px 0 hsla(0, 0%, 100%, 0.2);
 }
 
@@ -781,12 +826,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsla(var(--foreground), 0.1);
+  background: hsl(var(--foreground) / 0.1);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsla(var(--foreground), 0.2);
+  background: hsl(var(--foreground) / 0.2);
 }
 
 /* ─── Magazine article ─── */
@@ -850,7 +895,7 @@
 
 .mag-title {
   margin: 0;
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
   font-size: clamp(52px, 9vw, 132px);
   font-weight: 400;
   line-height: 0.92;
@@ -860,7 +905,7 @@
 
 .mag-subtitle {
   margin-top: 22px;
-  font-family: "DM Mono", ui-monospace, monospace;
+  font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", ui-monospace, monospace;
   font-size: 14px;
   line-height: 1.6;
   letter-spacing: 0.22em;
@@ -870,7 +915,7 @@
 
 .mag-chain {
   margin-top: 10px;
-  font-family: "DM Mono", ui-monospace, monospace;
+  font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", ui-monospace, monospace;
   font-size: 12.5px;
   letter-spacing: 0.06em;
   color: #8a857b;
@@ -879,7 +924,7 @@
 .mag-lead {
   max-width: 900px;
   margin: 40px 0 clamp(56px, 8vw, 104px);
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
   font-size: clamp(22px, 2.4vw, 30px);
   line-height: 1.5;
   color: #26241f;
@@ -907,9 +952,9 @@
 .mag-layer-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mag-layer-media--placeholder {
   background:
-    radial-gradient(130% 120% at 80% 0%, hsla(var(--layer-hue), 0.75), transparent 58%),
-    radial-gradient(120% 130% at 0% 100%, hsla(var(--layer-hue), 0.45), transparent 55%),
-    linear-gradient(135deg, hsla(var(--layer-hue), 0.85), #17161d 70%);
+    radial-gradient(130% 120% at 80% 0%, hsl(var(--layer-hue) / 0.75), transparent 58%),
+    radial-gradient(120% 130% at 0% 100%, hsl(var(--layer-hue) / 0.45), transparent 55%),
+    linear-gradient(135deg, hsl(var(--layer-hue) / 0.85), #17161d 70%);
 }
 .mag-layer-media--drop { cursor: pointer; }
 .mag-layer-media--over::after {
@@ -924,7 +969,7 @@
   inset-inline: 0;
   top: 22px;
   text-align: center;
-  font-family: "DM Mono", ui-monospace, monospace;
+  font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", ui-monospace, monospace;
   font-size: 12px;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.85);
@@ -951,7 +996,7 @@
 }
 .mag-layer-kicker {
   margin: 0 0 14px;
-  font-family: "DM Mono", ui-monospace, monospace;
+  font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", ui-monospace, monospace;
   font-size: 12px;
   letter-spacing: 0.24em;
   text-transform: uppercase;
@@ -960,7 +1005,7 @@
 }
 .mag-layer-heading {
   margin: 0 0 16px;
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
   font-size: clamp(38px, 5.2vw, 76px);
   font-weight: 400;
   line-height: 1.02;
@@ -991,7 +1036,7 @@
   margin: 0;
   font-size: 17px;
   line-height: 1.9;
-  color: hsla(var(--foreground), 0.9);
+  color: hsl(var(--foreground) / 0.9);
 }
 
 .mag-status {
@@ -1005,7 +1050,7 @@
 
 .mag-footer {
   padding-top: 24px;
-  border-top: 1px solid hsla(var(--foreground), 0.12);
+  border-top: 1px solid hsl(var(--foreground) / 0.12);
   font-size: 13px;
   line-height: 1.7;
   color: hsl(var(--text-dim));
@@ -1216,7 +1261,7 @@
 
 .mag-subheading {
   margin: 0 0 12px;
-  font-family: "DM Serif Display", Georgia, serif;
+  font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
   font-size: 28px;
   font-weight: 400;
   line-height: 1.25;
@@ -1243,19 +1288,19 @@
 
 .mag-tag {
   padding: 8px 16px;
-  border: 1px solid hsla(var(--foreground), 0.16);
+  border: 1px solid hsl(var(--foreground) / 0.16);
   border-radius: 999px;
   font-size: 16px;
   line-height: 1.6;
   color: #1b1b1a;
-  background: hsla(var(--foreground), 0.03);
+  background: hsl(var(--foreground) / 0.03);
 }
 
 .mag-quote {
   margin: 0;
   padding-inline-end: 20px;
-  border-inline-end: 3px solid hsla(var(--foreground), 0.25);
-  font-family: "DM Serif Display", Georgia, serif;
+  border-inline-end: 3px solid hsl(var(--foreground) / 0.25);
+  font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
   font-size: 24px;
   font-style: italic;
   line-height: 1.7;
@@ -1271,3 +1316,201 @@
   .mag-tag { padding: 1pt 4pt; border-color: #999; background: transparent !important; font-size: 11pt; }
   .mag-quote { font-size: 14pt; border-color: #999; }
 }
+
+/* ─── Fusion: mind → heart → gut → intuition in action ─── */
+.tool-btn { text-decoration: none; }
+.tool-btn--primary {
+  color: hsl(var(--primary-foreground));
+  background: linear-gradient(180deg, hsl(220, 14%, 22%), hsl(220, 18%, 9%));
+  border-color: transparent;
+  box-shadow: 0 10px 22px -12px hsla(220, 30%, 10%, 0.55);
+}
+.tool-btn--primary:hover { background: linear-gradient(180deg, hsl(220, 14%, 26%), hsl(220, 18%, 12%)); border-color: transparent; }
+
+.fusion {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  text-align: right;
+  font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
+  color: hsl(var(--foreground));
+}
+.fusion .reveal-up { opacity: 0; transform: translateY(18px); transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1), transform 700ms cubic-bezier(0.16, 1, 0.3, 1); }
+.fusion .reveal-up.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .fusion .reveal-up { opacity: 1; transform: none; transition: none; } }
+
+.fusion-hero { position: relative; padding: 56px 0 40px; }
+.fusion-hero::after {
+  content: ""; display: block; height: 3px; width: 160px; margin-top: 36px; border-radius: 3px;
+  background: var(--fusion-band);
+}
+.fusion-sources { display: flex; flex-wrap: wrap; gap: 8px; }
+.fusion-chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px;
+  border: 1px solid; font-size: 13px; font-weight: 500;
+}
+.fusion-chip-no { font-family: "IBM Plex Mono", monospace; font-size: 11px; opacity: 0.75; }
+.fusion-kicker { margin-top: 36px; font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", monospace; font-size: 12px; letter-spacing: 0.04em; color: hsl(var(--text-dim)); }
+.fusion-name { margin-top: 10px; font-weight: 200; font-size: clamp(40px, 7vw, 80px); line-height: 1.02; letter-spacing: -0.02em; }
+.fusion-type { margin-top: 14px; font-size: 17px; color: hsl(var(--text-dim)); }
+.fusion-distill { margin-top: 28px; font-weight: 300; font-size: clamp(22px, 3.2vw, 32px); line-height: 1.35; max-width: 760px; }
+.fusion-distill--compact { margin: 0 0 32px; }
+
+.fusion-arc { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 18px; perspective: 1200px; }
+.fusion-step {
+  position: relative; background: hsl(var(--surface-elevated)); border: 1px solid hsl(var(--border));
+  border-radius: 18px; padding: 26px 30px 28px 30px; padding-inline-start: 34px;
+}
+.fusion-step::before {
+  content: ""; position: absolute; inset-block: 18px; inset-inline-start: 0; width: 3px; border-radius: 3px;
+  background: var(--fusion-rail);
+}
+.fusion-step--1 { margin-inline-end: 12%; box-shadow: 0 1px 2px hsla(220, 30%, 10%, 0.05), 0 10px 24px -18px hsla(220, 30%, 10%, 0.18); }
+.fusion-step--2 { margin-inline: 4% 8%; box-shadow: 0 1px 2px hsla(220, 30%, 10%, 0.05), 0 16px 32px -20px hsla(220, 30%, 10%, 0.22); }
+.fusion-step--3 { margin-inline: 8% 4%; box-shadow: 0 1px 2px hsla(220, 30%, 10%, 0.05), 0 22px 40px -22px hsla(220, 30%, 10%, 0.26); }
+.fusion-step--4 {
+  margin-inline-start: 12%;
+  background: linear-gradient(160deg, hsl(0, 0%, 100%), hsl(220, 20%, 97%));
+  box-shadow: 0 1px 2px hsla(220, 30%, 10%, 0.05), 0 30px 56px -26px hsla(220, 30%, 10%, 0.32);
+}
+.fusion-step-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 14px; }
+.fusion-step-no { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: hsl(var(--text-dim)); }
+.fusion-step-label { font-size: 22px; font-weight: 500; }
+.fusion-step-hint { font-size: 13px; color: hsl(var(--text-dim)); }
+.fusion-step-text { margin-top: 12px; font-size: 17.5px; line-height: 1.85; }
+.fusion-step--4 .fusion-step-text { font-size: 18.5px; }
+@media (max-width: 720px) {
+  .fusion-step--1, .fusion-step--2, .fusion-step--3, .fusion-step--4 { margin-inline: 0; }
+  .fusion-step { padding: 22px 22px 24px; padding-inline-start: 26px; }
+}
+
+.fusion-label { font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", monospace; font-size: 12px; letter-spacing: 0.04em; font-weight: 500; color: hsl(var(--text-dim)); margin-bottom: 12px; }
+.fusion-label--inverse { color: hsla(0, 0%, 100%, 0.72); }
+
+.fusion-layers { margin-top: 28px; padding: 24px 28px; border: 1px dashed hsl(var(--border)); border-radius: 18px; }
+.fusion-layer { font-size: 16.5px; line-height: 1.8; }
+.fusion-layer + .fusion-layer { margin-top: 8px; }
+
+.fusion-practice {
+  margin-top: 36px; padding: 30px 32px; border-radius: 20px; color: hsl(0, 0%, 100%);
+  background: radial-gradient(120% 140% at 100% 0%, hsl(220, 14%, 24%), hsl(220, 20%, 9%));
+  box-shadow: 0 30px 60px -30px hsla(220, 30%, 10%, 0.6);
+}
+.fusion-practice p { font-size: 19px; line-height: 1.75; font-weight: 300; }
+
+.fusion-novelty { margin-top: 24px; padding: 24px 28px; border-radius: 18px; background: hsl(var(--surface)); border: 1px solid hsl(var(--border)); }
+.fusion-novelty p { font-size: 16px; line-height: 1.85; }
+
+.fusion-visual { margin-top: 48px; }
+.fusion-visual-grid { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 820px) { .fusion-visual-grid { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: start; } }
+.fusion-frame {
+  margin: 0; background: hsl(0, 0%, 100%); padding: 14px 14px 18px; border-radius: 6px;
+  border: 1px solid hsl(var(--border)); box-shadow: var(--shadow-deep);
+  transform: rotate(-0.6deg);
+}
+.fusion-frame-image { border-radius: 3px; overflow: hidden; background: hsl(var(--surface)); }
+.fusion-frame-caption { display: flex; flex-direction: column; gap: 4px; padding: 14px 4px 0; }
+.fusion-frame-name { font-size: 18px; font-weight: 500; }
+.fusion-frame-insight { font-size: 14.5px; line-height: 1.6; color: hsl(var(--text-dim)); }
+.fusion-prompt { min-width: 0; }
+.fusion-prompt-visual { font-size: 18px; font-weight: 300; line-height: 1.7; }
+.fusion-prompt-text {
+  margin-top: 16px; padding: 18px 20px; border-radius: 14px; font-size: 14px; line-height: 1.85;
+  background: hsl(var(--surface)); border: 1px solid hsl(var(--border)); overflow-wrap: anywhere;
+}
+.fusion-hint { margin-top: 12px; font-size: 13px; line-height: 1.7; color: hsl(var(--text-dim)); }
+
+.fusion-meta { margin-top: 44px; display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 820px) { .fusion-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fusion-tags { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+.fusion-tag { font-size: 15px; padding: 7px 14px; border-radius: 999px; border: 1px solid hsl(var(--border)); background: hsl(var(--surface-elevated)); }
+.fusion-tag--link { transition: border-color 200ms ease, transform 200ms ease; }
+.fusion-tag--link:hover { border-color: hsl(var(--foreground)); transform: translateY(-1px); }
+
+.fusion-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; min-width: 0; }
+.fusion-actions--end { margin-top: 44px; padding-top: 24px; border-top: 1px solid hsl(var(--border)); }
+
+/* ─── Flyer: one A4 magazine page per new intelligence ─── */
+.flyer-screen { background: linear-gradient(180deg, hsl(220, 16%, 96%), hsl(220, 14%, 92%)); }
+.flyer-main { padding: 104px 16px 64px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.flyer-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; max-width: 210mm; min-width: 0; }
+.flyer-note { font-size: 13px; color: hsl(var(--text-dim)); }
+
+.flyer-page {
+  container-type: inline-size;
+  position: relative;
+  width: min(210mm, 100%);
+  aspect-ratio: 210 / 297;
+  overflow: hidden;
+  background: #fff;
+  color: hsl(220, 16%, 11%);
+  font-family: "IBM Plex Sans Hebrew", system-ui, sans-serif;
+  padding: 7cqw 7cqw 5.5cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 2px hsla(220, 30%, 10%, 0.08), 0 40px 80px -40px hsla(220, 30%, 10%, 0.45);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.flyer-page::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 55%;
+  background: var(--flyer-wash); pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 30%, transparent);
+  mask-image: linear-gradient(180deg, #000 30%, transparent);
+}
+.flyer-page > * { position: relative; }
+.flyer-band { position: absolute !important; top: 0; inset-inline: 0; height: 1.1cqw; background: var(--flyer-band); }
+.flyer-head { display: flex; justify-content: space-between; align-items: baseline; gap: 2cqw; flex-wrap: wrap; }
+.flyer-mono { font-family: "IBM Plex Mono", "IBM Plex Sans Hebrew", monospace; font-size: 1.45cqw; color: hsl(220, 9%, 38%); }
+.flyer-sources { font-size: 1.7cqw; font-weight: 500; }
+.flyer-plus { color: hsl(220, 9%, 55%); font-weight: 300; }
+.flyer-name { margin-top: 4cqw; font-size: calc(10.4cqw * var(--t, 1)); font-weight: 200; line-height: 1; letter-spacing: -0.02em; }
+.flyer-type { margin-top: 1.6cqw; font-size: 2.2cqw; color: hsl(220, 9%, 38%); }
+
+.flyer-grid { margin-top: 4.5cqw; display: grid; grid-template-columns: 43% minmax(0, 1fr); gap: 4.5cqw; align-items: start; }
+.flyer-frame { margin: 0; background: #fff; padding: 1.3cqw 1.3cqw 1.8cqw; border: 1px solid hsl(220, 13%, 88%); box-shadow: 0 2.5cqw 5cqw -2.6cqw hsla(220, 30%, 10%, 0.35); transform: rotate(-0.8deg); }
+.flyer-frame-image { position: relative; aspect-ratio: 1 / 1; overflow: hidden; background: var(--flyer-wash), hsl(220, 16%, 96%); }
+.flyer-frame-fallback { display: none; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 3cqw; text-align: center; font-size: 1.7cqw; line-height: 1.55; font-weight: 300; color: hsl(220, 9%, 38%); }
+.flyer-frame-upload { position: absolute; inset: 0; }
+.flyer-frame-upload > div { height: 100%; }
+.flyer-caption { padding-top: 1.4cqw; font-size: 1.75cqw; line-height: 1.5; font-weight: 500; }
+
+.flyer-copy { min-width: 0; }
+.flyer-distill { font-size: calc(3.9cqw * var(--t, 1)); font-weight: 300; line-height: 1.25; }
+.flyer-steps { list-style: none; margin: 3.4cqw 0 0; padding: 0; display: grid; gap: calc(2.3cqw * var(--t, 1)); }
+.flyer-step { display: grid; gap: 0.5cqw; padding-inline-start: 1.8cqw; border-inline-start: 0.35cqw solid; border-image: var(--flyer-band) 1; }
+.flyer-step-label { font-size: 1.7cqw; font-weight: 600; color: hsl(220, 16%, 11%); }
+.flyer-step-label--inverse { color: hsla(0, 0%, 100%, 0.75); font-weight: 500; }
+.flyer-step-no { font-family: "IBM Plex Mono", monospace; font-weight: 400; color: hsl(220, 9%, 45%); }
+.flyer-step-text { font-size: calc(1.85cqw * var(--t, 1)); line-height: 1.6; }
+
+.flyer-practice { margin-top: 3.4cqw; padding: 2.6cqw 3.2cqw; border-radius: 1.6cqw; color: #fff; background: radial-gradient(120% 160% at 100% 0%, hsl(220, 14%, 24%), hsl(220, 20%, 9%)); }
+.flyer-practice p { margin-top: 0.6cqw; font-size: calc(1.95cqw * var(--t, 1)); line-height: 1.55; font-weight: 300; }
+.flyer-foot { margin-top: 2.6cqw; padding-top: 1.8cqw; border-top: 1px solid hsl(220, 13%, 88%); display: grid; gap: 1cqw; }
+.flyer-novelty { font-size: calc(1.4cqw * var(--t, 1)); line-height: 1.55; color: hsl(220, 9%, 32%); }
+.flyer-url { font-size: 1.2cqw; overflow-wrap: anywhere; }
+
+@media (max-width: 640px) {
+  .flyer-main { padding-inline: 8px; }
+}
+
+@media print {
+  .fusion .reveal-up { opacity: 1 !important; transform: none !important; }
+  body:has(.flyer-page) > *:not(#root) { display: none !important; }
+  body:has(.flyer-page) #root { display: block !important; }
+  body:has(.flyer-page) .no-print,
+  body:has(.flyer-page) nav { display: none !important; }
+  body:has(.flyer-page) .flyer-screen { background: #fff !important; }
+  body:has(.flyer-page) .flyer-main { padding: 0 !important; display: block; }
+  body:has(.flyer-page) .flyer-page { width: 210mm; height: 297mm; aspect-ratio: auto; box-shadow: none; margin: 0; }
+  body:has(.flyer-page) .flyer-frame-image:not(:has(img)) .flyer-frame-upload { display: none; }
+  body:has(.flyer-page) .flyer-frame-image:not(:has(img)) .flyer-frame-fallback { display: flex; }
+}
+@page flyer { size: A4 portrait; margin: 0; }
+body:has(.flyer-page) { page: flyer; }
+
+.flyer-pull { margin: 0; font-size: calc(3.2cqw * var(--t, 1)); font-weight: 200; line-height: 1.3; letter-spacing: -0.01em; padding-inline-start: 3cqw; border-inline-start: 0.5cqw solid; border-image: var(--flyer-band) 1; }
+.flyer-roles { display: flex; flex-wrap: wrap; gap: 1cqw; margin-top: 2cqw; }
+.flyer-roles span { font-size: 1.45cqw; padding: 0.5cqw 1.4cqw; border: 1px solid hsl(220, 13%, 85%); border-radius: 999px; }

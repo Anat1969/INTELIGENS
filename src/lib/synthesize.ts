@@ -7,6 +7,7 @@ import {
 } from '@/data/intelligences'
 import { LAYERS, type LayerSlots } from '@/data/intelligenceLayers'
 import { DESIGN_LAYERS, type DesignSlots } from '@/data/intelligenceDesign'
+import { composeFusion } from '@/lib/fusion'
 
 export interface SynthesizedIntelligence {
   name: string
@@ -72,6 +73,8 @@ function buildVisualPrompt(ids: IntelligenceId[]): string {
  * were created before this prompt was surfaced.
  */
 export function mergeCoverPrompt(sourceIds: IntelligenceId[]): string {
+  const fusion = composeFusion(sourceIds)
+  if (fusion) return fusion.imagePrompt
   return `${buildVisualPrompt(sortedIds(sourceIds))} A single square 1:1 composition, centered and filling the frame edge to edge. Professional photography, documentary realism, natural light. No text, no words, no writing, no frame divisions.`
 }
 
@@ -129,6 +132,21 @@ export function composeIntelligence(
   const key = ids.join('+')
   const base = lookupCombo(ids)
   const isPredefined = key in COMBOS
+  const fusion = composeFusion(ids)
+  if (fusion) {
+    return {
+      name: fusion.name,
+      type: fusion.type,
+      essence: fusion.mind,
+      power: fusion.intuition,
+      roles: [...fusion.roles],
+      quote: fusion.distillation,
+      keyQuestion: fusion.insight,
+      visualPrompt: fusion.imagePrompt,
+      source_ids: ids,
+      source: 'fusion',
+    }
+  }
 
   return {
     name: isPredefined ? base.name : uniqueMergeName(ids),

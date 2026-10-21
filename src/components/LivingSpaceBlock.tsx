@@ -135,7 +135,7 @@ export function LivingSpaceBlock({
       {interpretation && (
         <p
           className="font-sans-he text-[16px] leading-[1.9] mb-6"
-          style={{ color: 'hsla(var(--foreground), 0.9)' }}
+          style={{ color: 'hsl(var(--foreground) / 0.9)' }}
         >
           {interpretation}
         </p>
@@ -162,8 +162,8 @@ export function LivingSpaceBlock({
           <div
             className="p-6 rounded-xl"
             style={{
-              background: 'hsla(var(--foreground), 0.03)',
-              border: '1px solid hsla(var(--foreground), 0.08)',
+              background: 'hsl(var(--foreground) / 0.03)',
+              border: '1px solid hsl(var(--foreground) / 0.08)',
             }}
           >
             <p
@@ -179,7 +179,7 @@ export function LivingSpaceBlock({
 
       <p
         className="no-print font-sans-he text-[14px] leading-[1.9] mb-5"
-        style={{ color: 'hsla(var(--foreground), 0.8)' }}
+        style={{ color: 'hsl(var(--foreground) / 0.8)' }}
       >
         {description ?? DEFAULT_HELP}
       </p>
@@ -188,7 +188,7 @@ export function LivingSpaceBlock({
         <div>
           <div
             className="rounded-2xl overflow-hidden"
-            style={{ border: '1px solid hsla(var(--foreground), 0.06)' }}
+            style={{ border: '1px solid hsl(var(--foreground) / 0.06)' }}
           >
             <img
               src={src}
@@ -230,11 +230,11 @@ export function LivingSpaceBlock({
           onDragLeave={() => setDragOver(false)}
           onClick={() => inputRef.current?.click()}
           style={{
-            border: `2px dashed ${dragOver ? 'hsla(var(--foreground), 0.3)' : 'hsla(var(--foreground), 0.08)'}`,
-            background: dragOver ? 'hsla(var(--foreground), 0.03)' : 'transparent',
+            border: `2px dashed ${dragOver ? 'hsl(var(--foreground) / 0.3)' : 'hsl(var(--foreground) / 0.08)'}`,
+            background: dragOver ? 'hsl(var(--foreground) / 0.03)' : 'transparent',
           }}
         >
-          <p className="font-sans-he text-[15px]" style={{ color: 'hsla(var(--foreground), 0.8)' }}>
+          <p className="font-sans-he text-[15px]" style={{ color: 'hsl(var(--foreground) / 0.8)' }}>
             גררו תמונה לכאן, הדביקו (Ctrl+V) או לחצו להעלאה
           </p>
         </div>

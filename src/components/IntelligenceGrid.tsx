@@ -36,7 +36,7 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
       <div className="space-y-4">
         <div
           className="h-px w-full"
-          style={{ background: "linear-gradient(90deg, transparent, hsla(var(--foreground), 0.08), transparent)" }}
+          style={{ background: "linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.08), transparent)" }}
         />
         <div className="flex items-baseline justify-between gap-4">
           <h2
@@ -54,7 +54,7 @@ export const IntelligenceGrid = ({ selected, onToggle }: Props) => {
         </div>
         <div
           className="h-px w-full"
-          style={{ background: "linear-gradient(90deg, transparent, hsla(var(--foreground), 0.08), transparent)" }}
+          style={{ background: "linear-gradient(90deg, transparent, hsl(var(--foreground) / 0.08), transparent)" }}
         />
       </div>
 
