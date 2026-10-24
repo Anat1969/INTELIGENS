@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useGitHubAuth } from "@/hooks/useGitHubAuth";
+import { flushPendingImages } from "@/lib/github-store";
+import { pendingCount, subscribePending } from "@/lib/pending-images";
 import { DEV_CHAT_URL, RESEARCH_PROJECT_URL } from "@/lib/app-links";
 
 const links = [
@@ -36,6 +38,12 @@ export const AppNav = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { hasToken } = useGitHubAuth();
+  const pending = useSyncExternalStore(subscribePending, pendingCount, () => 0);
+
+  // Retry images that were kept locally after a failed save (e.g. once the token is fixed).
+  useEffect(() => {
+    if (hasToken) void flushPendingImages();
+  }, [hasToken]);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -153,6 +161,24 @@ export const AppNav = () => {
               );
             })}
           </div>
+        </div>
+      )}
+
+      {hasToken && pending > 0 && (
+        <div
+          dir="rtl"
+          className="border-t text-center"
+          style={{
+            borderColor: "hsl(var(--foreground) / 0.06)",
+            background: "hsl(38 92% 55% / 0.12)",
+          }}
+        >
+          <p className="mx-auto max-w-[1400px] px-6 py-1.5 text-[11px]" style={{ color: "hsl(var(--foreground))" }}>
+            {pending === 1 ? "תמונה אחת שמורה במחשב זה וממתינה" : `${pending} תמונות שמורות במחשב זה וממתינות`} למאגר, כי לטוקן אין הרשאת כתיבה. לעדכון הטוקן:{" "}
+            <Link to="/settings" className="underline hover:opacity-80">
+              הגדרות
+            </Link>
+          </p>
         </div>
       )}
 
