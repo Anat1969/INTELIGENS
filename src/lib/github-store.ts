@@ -238,6 +238,40 @@ export async function saveImage(id: string, pngBase64: string): Promise<void> {
 
 let flushing = false;
 
+const RECONCILED_KEY = "reconciled_images";
+const reconciled = (): string[] => {
+  try {
+    return JSON.parse(localStorage.getItem(RECONCILED_KEY) ?? "[]") as string[];
+  } catch {
+    return [];
+  }
+};
+const markReconciled = (id: string) => {
+  try {
+    localStorage.setItem(RECONCILED_KEY, JSON.stringify(Array.from(new Set([...reconciled(), id]))));
+  } catch {
+    // ignore
+  }
+};
+
+/** True when the copy saved in this browser is not the one in the repo. */
+async function differsFromRepo(id: string): Promise<boolean> {
+  const local = await getLocalImage(id);
+  if (!local) return false;
+  try {
+    const res = await fetch(bust(imageUrl(id)), { cache: "no-store" });
+    if (!res.ok) return true;
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    let binary = "";
+    bytes.forEach((b) => {
+      binary += String.fromCharCode(b);
+    });
+    return btoa(binary) !== (local.includes(",") ? local.split(",")[1] : local);
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Uploads images that exist only in this browser: the failed-save queue, plus any
  * locally saved image missing from the repo index (uploads from before the queue existed).
@@ -251,8 +285,15 @@ export async function flushPendingImages(): Promise<number> {
     const index = await fetchIndex();
     // An empty index means it failed to load; don't mistake every local image for missing.
     const remote = new Set(index.images);
-    const localOnly = index.updatedAt ? (await listLocalImageIds()).filter((id) => !remote.has(id)) : [];
-    const queue = Array.from(new Set([...pendingImages(), ...localOnly]));
+    const local = index.updatedAt ? await listLocalImageIds() : [];
+    const localOnly = local.filter((id) => !remote.has(id));
+    // Images replaced in this browser while saving failed: the repo still has the older version.
+    const replaced: string[] = [];
+    for (const id of local.filter((x) => remote.has(x) && !reconciled().includes(x))) {
+      if (await differsFromRepo(id)) replaced.push(id);
+      else markReconciled(id);
+    }
+    const queue = Array.from(new Set([...pendingImages(), ...localOnly, ...replaced]));
     for (const id of queue) {
       const dataUrl = await getLocalImage(id);
       if (!dataUrl) {
@@ -262,6 +303,7 @@ export async function flushPendingImages(): Promise<number> {
       try {
         await uploadImage(id, dataUrl);
         clearPending(id);
+        markReconciled(id);
         done++;
       } catch {
         break; // still no access; keep the queue for the next attempt
