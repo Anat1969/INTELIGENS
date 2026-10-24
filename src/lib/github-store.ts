@@ -1,5 +1,7 @@
-import { API_BASE, DATA_BRANCH, RAW_BASE } from "./repo-config";
-import { getToken } from "./gh-token";
+import { API_BASE, DATA_BRANCH, DATA_OWNER, DATA_REPO, RAW_BASE } from "./repo-config";
+import { getToken, hasToken } from "./gh-token";
+import { getLocalImage } from "./living-image";
+import { clearPending, markPending, pendingImages } from "./pending-images";
 
 export type IndexEntry = {
   id: string;
@@ -84,6 +86,16 @@ function requireToken(): string {
   return token;
 }
 
+const NO_ACCESS = `לטוקן השמור אין הרשאת כתיבה למאגר ${DATA_OWNER}/${DATA_REPO}. יש לעדכן אותו בעמוד ההגדרות.`;
+
+/** Turns a failed GitHub write into a readable Hebrew message instead of raw JSON. */
+async function writeError(res: Response, what: string): Promise<Error> {
+  if (res.status === 401) return new Error("הטוקן השמור אינו תקין או שפג תוקפו. יש לעדכן אותו בעמוד ההגדרות.");
+  if (res.status === 403 || res.status === 404) return new Error(NO_ACCESS);
+  if (res.status === 409 || res.status === 422) return new Error(`${what} נכשלה כי הקובץ השתנה במקביל. נסו שוב.`);
+  return new Error(`${what} נכשלה (שגיאה ${res.status}). נסו שוב מאוחר יותר.`);
+}
+
 function ghHeaders(token: string): Record<string, string> {
   return {
     Authorization: `Bearer ${token}`,
@@ -113,10 +125,7 @@ async function putFile(path: string, contentBase64: string, message: string): Pr
     headers: ghHeaders(token),
     body: JSON.stringify({ message, content: contentBase64, branch: DATA_BRANCH, ...(sha ? { sha } : {}) }),
   });
-  if (!res.ok) {
-    const details = await res.text();
-    throw new Error(`שמירה נכשלה (${res.status}): ${details}`);
-  }
+  if (!res.ok) throw await writeError(res, "השמירה");
 }
 
 async function fetchIndexViaApi(token: string): Promise<{ index: Index; sha?: string }> {
@@ -166,10 +175,7 @@ async function updateIndex(
       ...(sha ? { sha } : {}),
     }),
   });
-  if (!res.ok) {
-    const details = await res.text();
-    throw new Error(`עדכון האינדקס נכשל (${res.status}): ${details}`);
-  }
+  if (!res.ok) throw await writeError(res, "עדכון האינדקס");
 }
 
 export type SaveItem = {
@@ -208,7 +214,7 @@ export function saveProfile(item: SaveItem): Promise<void> {
   return saveEntity("profiles", item);
 }
 
-export async function saveImage(id: string, pngBase64: string): Promise<void> {
+async function uploadImage(id: string, pngBase64: string): Promise<void> {
   const clean = pngBase64.includes(",") ? pngBase64.split(",")[1] : pngBase64;
   const path = `data/images/${id}.png`;
   await putFile(path, clean, `save image ${id}`);
@@ -216,6 +222,46 @@ export async function saveImage(id: string, pngBase64: string): Promise<void> {
     (index) => ({ ...index, images: Array.from(new Set([...index.images, id])) }),
     `update index (image ${id})`,
   );
+}
+
+/** Saves to the repo; on failure the image stays queued and is retried by flushPendingImages. */
+export async function saveImage(id: string, pngBase64: string): Promise<void> {
+  markPending(id);
+  try {
+    await uploadImage(id, pngBase64);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "שמירת התמונה למאגר נכשלה.";
+    throw new Error(`${msg} התמונה שמורה במחשב זה ותעלה למאגר אוטומטית אחרי התיקון.`);
+  }
+  clearPending(id);
+}
+
+let flushing = false;
+
+/** Uploads images that were kept locally after a failed save. Returns how many were uploaded. */
+export async function flushPendingImages(): Promise<number> {
+  if (flushing || !hasToken()) return 0;
+  flushing = true;
+  let done = 0;
+  try {
+    for (const id of pendingImages()) {
+      const dataUrl = await getLocalImage(id);
+      if (!dataUrl) {
+        clearPending(id);
+        continue;
+      }
+      try {
+        await uploadImage(id, dataUrl);
+        clearPending(id);
+        done++;
+      } catch {
+        break; // still no access; keep the queue for the next attempt
+      }
+    }
+  } finally {
+    flushing = false;
+  }
+  return done;
 }
 
 /* ---------- connection check ---------- */
@@ -233,7 +279,7 @@ export async function validateConnection(): Promise<ConnectionResult> {
       return { ok: false, canWrite: false, message: "הטוקן אינו תקין או שפג תוקפו." };
     }
     if (res.status === 404) {
-      return { ok: false, canWrite: false, message: "המאגר לא נמצא, או שלטוקן אין הרשאה אליו." };
+      return { ok: false, canWrite: false, message: `לטוקן אין גישה למאגר ${DATA_OWNER}/${DATA_REPO}. כנראה שהוא הוגדר למאגר הישן INTELIGENS-DATA.` };
     }
     if (!res.ok) {
       return { ok: false, canWrite: false, message: `שגיאת חיבור (${res.status}).` };

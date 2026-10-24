@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppNav } from "@/components/AppNav";
 import { clearToken, getToken, setToken } from "@/lib/gh-token";
-import { validateConnection, type ConnectionResult } from "@/lib/github-store";
+import { flushPendingImages, validateConnection, type ConnectionResult } from "@/lib/github-store";
 import { DATA_BRANCH, DATA_OWNER, DATA_REPO } from "@/lib/repo-config";
 
 const Settings = () => {
@@ -32,7 +32,12 @@ const Settings = () => {
     setChecking(true);
     setStatus("");
     try {
-      setResult(await validateConnection());
+      const r = await validateConnection();
+      setResult(r);
+      if (r.ok && r.canWrite) {
+        const uploaded = await flushPendingImages();
+        if (uploaded > 0) setStatus(uploaded === 1 ? "תמונה אחת שהמתינה הועלתה למאגר." : `${uploaded} תמונות שהמתינו הועלו למאגר.`);
+      }
     } finally {
       setChecking(false);
     }
@@ -146,6 +151,21 @@ const Settings = () => {
           >
             {open ? "הסתר הוראות ליצירת טוקן" : "כיצד יוצרים טוקן?"}
           </button>
+
+          <div className="mt-4 text-[14px] leading-relaxed" style={{ color: "hsl(var(--text-dim))" }}>
+            <p>
+              כבר יש טוקן שעבד בעבר? התוכן עבר מהמאגר INTELIGENS-DATA למאגר {DATA_OWNER}/{DATA_REPO}, ולכן הטוקן הישן לא מורשה לשמור. אין צורך בטוקן חדש: פותחים את הטוקן הקיים ב-GitHub, מוסיפים ב-Repository access את המאגר {DATA_REPO}, ושומרים. אחר כך לוחצים כאן בדיקת חיבור, והתמונות שהמתינו עולות למאגר.
+            </p>
+            <a
+              href="https://github.com/settings/personal-access-tokens"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-3 underline hover:opacity-80"
+              style={{ color: "hsl(var(--foreground))" }}
+            >
+              פתיחת רשימת הטוקנים ב-GitHub
+            </a>
+          </div>
 
           {open && (
             <ol
