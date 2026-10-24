@@ -14,6 +14,8 @@
 ## כתובות
 - Lovable: https://inteligens.lovable.app (Publish ידני ב-Lovable).
 - Vercel: נבנה אוטומטית מכל מיזוג ל-main (`vercel.json` מגדיר rewrites ל-SPA).
+- GitHub Pages: https://anat1969.github.io/INTELIGENS/ נבנה מכל מיזוג ל-main (`.github/workflows/deploy-pages.yml`, `GH_PAGES=true`, בסיס `/INTELIGENS/`). לא תלוי במכסת הבנייה היומית של Vercel.
+- נתיבי PWA יחסיים (manifest, sw.js, רישום ה-SW לפי `BASE_URL`) כדי שההתקנה תעבוד גם בשורש וגם תחת `/INTELIGENS/`.
 
 ## רכיבים קבועים (לפי הסקיל end-to-end-builder)
 - בלי אייקונים בכלל. כל כפתור הוא טקסט. אין להוסיף lucide-react מחוץ ל-`src/components/ui`.

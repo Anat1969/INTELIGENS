@@ -4,7 +4,7 @@ export function initPwa() {
   const inPreview = window.self !== window.top || location.hostname.startsWith("id-preview--");
   if (import.meta.env.PROD && "serviceWorker" in navigator && !inPreview) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
+      navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {});
     });
   }
 }

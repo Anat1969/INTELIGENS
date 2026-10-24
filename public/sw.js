@@ -1,6 +1,8 @@
 // Pages from the network (cached copy only when offline);
 // images and built assets from the cache, refreshed in the background.
 const CACHE = "inteligens-v1";
+// Works at the site root (Vercel, Lovable) and under /INTELIGENS/ (GitHub Pages).
+const HOME = new URL("./", self.registration.scope).pathname;
 
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => {
@@ -13,7 +15,7 @@ self.addEventListener("activate", (event) => {
 });
 
 const isAsset = (url) =>
-  url.pathname.startsWith("/assets/") || /\.(png|jpe?g|webp|svg|ico|woff2?)$/i.test(url.pathname);
+  url.pathname.includes("/assets/") || /\.(png|jpe?g|webp|svg|ico|woff2?)$/i.test(url.pathname);
 
 self.addEventListener("fetch", (event) => {
   const { request } = event;
@@ -25,10 +27,10 @@ self.addEventListener("fetch", (event) => {
       fetch(request)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put("/", copy));
+          caches.open(CACHE).then((c) => c.put(HOME, copy));
           return res;
         })
-        .catch(() => caches.match("/")),
+        .catch(() => caches.match(HOME)),
     );
     return;
   }
