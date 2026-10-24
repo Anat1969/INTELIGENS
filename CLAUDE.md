@@ -17,7 +17,7 @@
 
 ## רכיבים קבועים (לפי הסקיל end-to-end-builder)
 - בלי אייקונים בכלל. כל כפתור הוא טקסט. אין להוסיף lucide-react מחוץ ל-`src/components/ui`.
-- סרגל עליון קבוע בכל הדפים (`src/components/AppNav.tsx`): שם האפליקציה מקשר לבית, "העתקת קישור", "שיחת הפיתוח", "פרויקט המחקר" (מוסתר עד שיש קישור), "התקנת האפליקציה" כש-Chrome מציע.
+- סרגל עליון קבוע בכל הדפים (`src/components/AppNav.tsx`): שם האפליקציה מקשר לבית, ניווט, וכפתור הלוגו A&I (`<ai-menu>`). בתוכו: "העתקת קישור", "שיחת הפיתוח", "פרויקט המחקר" (מוסתר עד שיש קישור), "התקנת האפליקציה".
 - הקישורים החיצוניים ב-`src/lib/app-links.ts`.
 - מצב המפה נשמר בכתובת (`/composer?selected=a,b`) כדי ש"העתקת קישור" ישתף אותו.
 - PWA: `public/manifest.webmanifest`, `public/sw.js` (דפים מהרשת, תמונות ונכסים מהמטמון), אייקונים בלי טקסט. ה-SW לא נרשם בתצוגה המקדימה של Lovable.
@@ -38,3 +38,6 @@
 
 ## פריסה
 - רכיבים שמוצגים גם בעמודת המאמר הצרה (כמו FusionView) מחליפים עמודות לפי רוחב המיכל (`@container`), לא לפי רוחב המסך. `.fusion` מוגדר כ-`container-type: inline-size`. (תיקון: בעמוד המאמר הטקסט ליד "המחשה" נדחס לעמודה של מילה בשורה.)
+
+## A&I logo button
+The top bar holds only the app name (links home), content navigation, and ONE logo button "אד' ענת שטיבלמן A&I" (`<ai-menu>` from https://appofapp-gh.vercel.app/ai-menu.js). Every editing and development action (העתקת קישור, שיחת הפיתוח, פרויקט המחקר, התקנת האפליקציה, edit mode, add, delete) lives only inside it, never as loose buttons. Standard: https://github.com/Anat1969/AppOfApp-GH/blob/main/docs/ai-menu-standard.md

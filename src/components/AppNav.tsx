@@ -1,9 +1,8 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 import { DEV_CHAT_URL, RESEARCH_PROJECT_URL } from "@/lib/app-links";
-import { canInstall, promptInstall, subscribeInstall } from "@/lib/pwa";
 
 const links = [
   { to: "/", label: "בית" },
@@ -22,54 +21,14 @@ const toolStyle = {
   boxShadow: "0 1px 2px hsla(220, 30%, 10%, 0.06)",
 };
 
-/** Copies the current address, including state such as ?selected= on the composer. */
-const CopyLinkButton = () => {
-  const [copied, setCopied] = useState(false);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = window.location.href;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      ta.remove();
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      "ai-menu": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { chat?: string; research?: string };
     }
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1600);
-  };
-
-  return (
-    <button type="button" onClick={copy} className={toolClass} style={toolStyle} aria-live="polite">
-      {copied ? "הקישור הועתק" : "העתקת קישור"}
-    </button>
-  );
-};
-
-const InstallButton = () => {
-  const available = useSyncExternalStore(subscribeInstall, canInstall, () => false);
-  if (!available) return null;
-  return (
-    <button type="button" onClick={promptInstall} className={toolClass} style={toolStyle}>
-      התקנת האפליקציה
-    </button>
-  );
-};
-
-const ExternalTools = () => (
-  <>
-    <a href={DEV_CHAT_URL} target="_blank" rel="noopener noreferrer" className={toolClass} style={toolStyle}>
-      שיחת הפיתוח
-    </a>
-    {RESEARCH_PROJECT_URL && (
-      <a href={RESEARCH_PROJECT_URL} target="_blank" rel="noopener noreferrer" className={toolClass} style={toolStyle}>
-        פרויקט המחקר
-      </a>
-    )}
-  </>
-);
+  }
+}
 
 export const AppNav = () => {
   const { pathname } = useLocation();
@@ -139,11 +98,6 @@ export const AppNav = () => {
         </div>
 
         <div className="flex items-center gap-2 flex-none">
-          <CopyLinkButton />
-          <div className="hidden xl:flex items-center gap-2">
-            <ExternalTools />
-            <InstallButton />
-          </div>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -153,6 +107,8 @@ export const AppNav = () => {
           >
             {open ? "סגירה" : "תפריט"}
           </button>
+          {/* A&I logo button: copy link, dev chat, research, install (https://appofapp-gh.vercel.app/ai-menu.js) */}
+          <ai-menu chat={DEV_CHAT_URL} research={RESEARCH_PROJECT_URL || undefined} />
         </div>
       </div>
 
@@ -196,10 +152,6 @@ export const AppNav = () => {
                 </Link>
               );
             })}
-            <div className="pt-3 border-t flex flex-wrap justify-start gap-2" style={{ borderColor: "hsl(var(--foreground) / 0.06)" }}>
-              <ExternalTools />
-              <InstallButton />
-              </div>
           </div>
         </div>
       )}
