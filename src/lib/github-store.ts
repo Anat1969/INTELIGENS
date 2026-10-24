@@ -1,6 +1,6 @@
 import { API_BASE, DATA_BRANCH, DATA_OWNER, DATA_REPO, RAW_BASE } from "./repo-config";
 import { getToken, hasToken } from "./gh-token";
-import { getLocalImage } from "./living-image";
+import { getLocalImage, listLocalImageIds } from "./living-image";
 import { clearPending, markPending, pendingImages } from "./pending-images";
 
 export type IndexEntry = {
@@ -238,13 +238,22 @@ export async function saveImage(id: string, pngBase64: string): Promise<void> {
 
 let flushing = false;
 
-/** Uploads images that were kept locally after a failed save. Returns how many were uploaded. */
+/**
+ * Uploads images that exist only in this browser: the failed-save queue, plus any
+ * locally saved image missing from the repo index (uploads from before the queue existed).
+ * Returns how many were uploaded.
+ */
 export async function flushPendingImages(): Promise<number> {
   if (flushing || !hasToken()) return 0;
   flushing = true;
   let done = 0;
   try {
-    for (const id of pendingImages()) {
+    const index = await fetchIndex();
+    // An empty index means it failed to load; don't mistake every local image for missing.
+    const remote = new Set(index.images);
+    const localOnly = index.updatedAt ? (await listLocalImageIds()).filter((id) => !remote.has(id)) : [];
+    const queue = Array.from(new Set([...pendingImages(), ...localOnly]));
+    for (const id of queue) {
       const dataUrl = await getLocalImage(id);
       if (!dataUrl) {
         clearPending(id);
