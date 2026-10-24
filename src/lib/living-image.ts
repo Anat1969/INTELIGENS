@@ -202,6 +202,35 @@ function lsDel(id: string): void {
 /* Public API (Promise-based)                                          */
 /* ------------------------------------------------------------------ */
 
+/** Ids of every image saved in this browser (IndexedDB and the localStorage fallback). */
+export async function listLocalImageIds(): Promise<string[]> {
+  const ids = new Set<string>();
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k?.startsWith("img-")) ids.add(k.slice(4));
+    }
+  } catch {
+    // ignore
+  }
+  const db = await openDB();
+  if (db) {
+    await new Promise<void>((resolve) => {
+      try {
+        const req = db.transaction(STORE, "readonly").objectStore(STORE).getAllKeys();
+        req.onsuccess = () => {
+          for (const k of req.result) if (typeof k === "string" && k.startsWith("img-")) ids.add(k.slice(4));
+          resolve();
+        };
+        req.onerror = () => resolve();
+      } catch {
+        resolve();
+      }
+    });
+  }
+  return [...ids];
+}
+
 export function getLocalImage(id: string): Promise<string | null> {
   return idbGet(id);
 }
