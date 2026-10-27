@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-20T13:38:29.655Z",
+  "updatedAt": "2026-10-27T18:19:23.684Z",
   "merges": [
     {
       "id": "digital-emotional",
@@ -110,6 +110,7 @@
     "digital-kinesthetic-persona",
     "digital-kinesthetic-design",
     "digital-kinesthetic-space",
-    "digital-kinesthetic-building"
+    "digital-kinesthetic-building",
+    "base-existential-design"
   ]
 }
