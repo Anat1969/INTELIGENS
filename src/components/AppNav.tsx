@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useGitHubAuth } from "@/hooks/useGitHubAuth";
 import { flushPendingImages } from "@/lib/github-store";
 import { pendingCount, subscribePending } from "@/lib/pending-images";
+import { CANONICAL_URL, isMirror } from "@/lib/canonical";
 import { DEV_CHAT_URL, RESEARCH_PROJECT_URL } from "@/lib/app-links";
 
 const links = [
@@ -44,6 +45,8 @@ export const AppNav = () => {
   useEffect(() => {
     if (hasToken) void flushPendingImages();
   }, [hasToken]);
+
+  const mirror = isMirror();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -178,6 +181,22 @@ export const AppNav = () => {
             <Link to="/settings" className="underline hover:opacity-80">
               הגדרות
             </Link>
+          </p>
+        </div>
+      )}
+
+      {mirror && pending > 0 && (
+        <div
+          dir="rtl"
+          className="border-t text-center"
+          style={{ borderColor: "hsl(var(--foreground) / 0.06)", background: "hsl(var(--surface) / 0.6)" }}
+        >
+          <p className="mx-auto max-w-[1400px] px-6 py-1.5 text-[11px]" style={{ color: "hsl(var(--text-dim))" }}>
+            הכתובת הראשית של האפליקציה היא{" "}
+            <a href={CANONICAL_URL} className="underline hover:opacity-80" style={{ color: "hsl(var(--foreground))" }}>
+              anat1969.github.io/INTELIGENS
+            </a>
+            . אחרי שהתמונות הממתינות כאן יעלו למאגר, המעבר לשם יהיה אוטומטי.
           </p>
         </div>
       )}

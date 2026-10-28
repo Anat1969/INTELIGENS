@@ -12,6 +12,7 @@
 - טוקן לשמירה: Fine-grained, מאגר Anat1969/INTELIGENS, הרשאת Contents: Read and write.
 
 ## כתובות
+- כתובת ראשית אחת: https://anat1969.github.io/INTELIGENS/ (`src/lib/canonical.ts`). inteligens.lovable.app ו-inteligens.vercel.app מעבירות אליה אוטומטית עם אותו נתיב ופרמטרים. לפני המעבר, תמונות שממתינות בדפדפן בכתובת הישנה עולות למאגר, והמעבר קורה כשהתור מתרוקן. תצוגות העורך של Lovable ו-localhost לא מועברות. (ענת: "לא יתכן שהן מפוזרות" — טוקן ותמונות נשמרים לכל כתובת בנפרד.)
 - Lovable: https://inteligens.lovable.app (Publish ידני ב-Lovable).
 - Vercel: נבנה אוטומטית מכל מיזוג ל-main (`vercel.json` מגדיר rewrites ל-SPA).
 - GitHub Pages: https://anat1969.github.io/INTELIGENS/ נבנה מכל מיזוג ל-main (`.github/workflows/deploy-pages.yml`, `GH_PAGES=true`, בסיס `/INTELIGENS/`). לא תלוי במכסת הבנייה היומית של Vercel.
