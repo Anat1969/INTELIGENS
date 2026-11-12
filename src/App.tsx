@@ -3,7 +3,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { hydrateFromSupabase } from "./lib/local-library";
 import Landing from "./pages/Landing.tsx";
+
+hydrateFromSupabase();
 import Index from "./pages/Index.tsx";
 import Profile from "./pages/Profile.tsx";
 import ProfileReport from "./pages/ProfileReport.tsx";
