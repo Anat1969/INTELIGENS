@@ -32,6 +32,13 @@ function namesOf(ids: string[]): string {
 export default function SynthesisLibrary({ refreshKey }: Props) {
   const navigate = useNavigate()
   const [cards, setCards] = useState<Card[] | null>(null)
+  const [hydrationKey, setHydrationKey] = useState(0)
+
+  useEffect(() => {
+    const onHydrated = () => setHydrationKey(k => k + 1)
+    window.addEventListener('library-hydrated', onHydrated)
+    return () => window.removeEventListener('library-hydrated', onHydrated)
+  }, [])
 
   useEffect(() => {
     let alive = true
@@ -83,7 +90,7 @@ export default function SynthesisLibrary({ refreshKey }: Props) {
       alive = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refreshKey])
+  }, [refreshKey, hydrationKey])
 
   const grouped = useMemo(() => {
     if (!cards) return []
